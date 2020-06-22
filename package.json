@@ -1,0 +1,12 @@
+{
+  "main": "src/main.js",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dblapi.js": "^2.4.0",
+    "discord.js": "^11.4.2",
+    "enum": "^3.0.4",
+    "larg": "0.0.4",
+    "lodash": "^4.17.15",
+    "wumpfetch": "^0.2.13"
+  }
+}
