@@ -73,7 +73,7 @@ To send scores to the server, use [this](https://github.com/Qkrisi/tp-score-save
 
 Contributions are highly appreciated, but under the following rule(s):
 
--Do not submit pull requests for the master, nor the Beta branch! Pull requests are only accepted for the Test branch, which will be merged with the Beta branch later on.
+-Do not submit pull requests for the master, nor the Beta branch! Pull requests are only accepted for the Test branch, which will be merged with the Beta branch later on. To switch to the Test branch, simply run `git checkout Test`
 
 ## Support
 
