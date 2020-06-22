@@ -1,5 +1,7 @@
 # KTaNE Discord Bot
 
+[Invite](https://top.gg/bot/546017180865789962)
+
 ## Setup
 
 ### Compile the bot
@@ -72,3 +74,13 @@ To send scores to the server, use [this](https://github.com/Qkrisi/tp-score-save
 Contributions are highly appreciated, but under the following rule(s):
 
 -Do not submit pull requests for the master, nor the Beta branch! Pull requests are only accepted for the Test branch, which will be merged with the Beta branch later on.
+
+## Support
+
+Join our [Discord Server](https://discord.gg/gJVy2Rt) to test out new feauters, give feedback about the bot!
+
+If you're a streamer and wish to be the part of the tp stats system, ping me on Disord (Qkrisi#4982)
+
+
+<br><br>
+<p style="font-size:12;"><i>Bot made by <a href="https://github.com/cyber28">Cyber28</a> and <a href="https://github.com/qkrisi">Qkrisi</a>, maintained by <a href="https://github.com/qkrisi">Qkrisi</a></i></p>
