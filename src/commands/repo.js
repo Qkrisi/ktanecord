@@ -74,7 +74,7 @@ module.exports.run = async(client, message, args) => {
 	let Updated = "No data"
 	
 	await axios.get(encodeURI(`https://ktane.timwi.de/ManualLastUpdated/${inputmodule.Name}.html`)).then(async(resp) =>{
-		let LastUpdatedDate = new Date(resp)
+		let LastUpdatedDate = new Date(resp.data)
 		Updated = `${LastUpdatedDate.getUTCFullYear()}/${LastUpdatedDate.getUTCMonth()+1}/${LastUpdatedDate.getUTCDate()}`
 	}).catch()
 	
