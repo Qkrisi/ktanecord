@@ -8,8 +8,6 @@
 #Help
   @title
     List of commands
-  @color
-    |somecolor
   @field
     @name
       |helpCMD
