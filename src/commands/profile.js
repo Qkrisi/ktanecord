@@ -64,7 +64,7 @@ module.exports.run = async(client, message, args) => {
 		}
 		message.channel.send(embed.getEmbed("Profile",{
 				name:`Profile of ${message.author.username}`,
-				diff: avgDef == "No data" || avgExp == "No data" ? 0x7289DA : getColor({DefuserDifficulty:avgDef, ExpertDifficulty:avgExp}),
+				diff: avgDef == "No data" || avgExp == "No data" ? 0x7289DA : getColor({DefuserDifficulty:avgDef.replace(' ',''), ExpertDifficulty:avgExp.replace(' ','')}),
 				enableds:result.EnabledList.length,
 				disableds:result.DisabledList.length,
 				defDif:avgDef,

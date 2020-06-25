@@ -34,6 +34,12 @@
   @end
   @field
     @name
+      |profileCMD
+    @value
+      📝 Shows the statistics of the profile attached to the command
+  @end
+  @field
+    @name
       `Inline module lookup`
     @value
       📙 Get (condensed) information about a module without running a command with `{module}`. Example: `Ok but {V} is a pretty cool module`
@@ -188,7 +194,7 @@
     |name
   @field
     @name
-      Enabled modules
+      Enabled mods
     @value
       |enableds
     @inline
@@ -206,7 +212,7 @@
   @end
   @field
     @name
-      Disabled modules
+      Disabled mods
     @value
       |disableds
     @inline

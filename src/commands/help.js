@@ -8,6 +8,7 @@ module.exports.run = (client, message, args) => {
 			repoCMD: `\`${config.token}repo\``,
 			statsCMD: `\`${config.token}tp stats [player] [streamer]\``,
 			statsValue: `<:Twitch:702495822281048129> Shows player statistics on Twitch Plays (For a list of streamers use \`${config.token}tp streamers\`)`,
+			profileCMD: `\`${config.token}profile\``,
 			b: '\u200b'
 		}))
 }
