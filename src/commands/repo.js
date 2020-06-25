@@ -103,3 +103,5 @@ module.exports.run = async(client, message, args) => {
         diffColor: getColor(inputmodule)
     }))
 }
+
+exports.mostSimilarModule = mostSimilarModule

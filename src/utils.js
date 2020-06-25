@@ -39,6 +39,7 @@ const difficulties = new Map([
     ['VeryHard', 4]
 ])
 
+exports.difficulties = difficulties
 exports.getColor = inputmodule => colors[Math.max(...new Array(inputmodule.DefuserDifficulty, inputmodule.ExpertDifficulty).map(e => difficulties.get(e)))]
 
 exports.months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']

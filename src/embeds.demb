@@ -177,6 +177,67 @@
     |moduleIcon
 #end
 
+#Profile
+  @title
+    Profile statistics
+  @color
+    |diff
+  @description
+    "
+  @footer
+    |name
+  @field
+    @name
+      Enabled modules
+    @value
+      |enableds
+    @inline
+      true
+  @end
+  @field
+    @name
+      ​
+    @value
+      ​
+    @inline
+      true
+    @comment
+      Empty field just for alignment
+  @end
+  @field
+    @name
+      Disabled modules
+    @value
+      |disableds
+    @inline
+      true
+  @end
+  @field
+    @name
+      Average defuser difficulty
+    @value
+      |defDif
+    @inline
+      true
+  @end
+  @field
+    @name
+      Average expert difficulty
+    @value
+      |expDif
+    @inline
+      true
+  @end
+  @field
+    @name
+      Profile type
+    @value
+      |operation
+    @inline
+      false
+  @end
+#end
+
 #IML
   @title
     |imlT
