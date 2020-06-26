@@ -1,5 +1,5 @@
 const { embed, difficulties, getColor } = require('../utils')
-const { ktaneModules } = require('../main.js')
+const { ktaneModules, modIDs } = require('../main.js')
 const fetch = require('wumpfetch')
 const { mostSimilarModule } = require('./repo.js')
 const aliases = require('../map.js').aliases
@@ -27,14 +27,22 @@ module.exports.run = async(client, message, args) => {
 		{
 			return message.channel.send(`Your profile is invalid, <@${message.author.id}>`)
 		}
-		if(result.EnabledList==undefined || result.DisabledList==undefined || result.Operation==undefined)
+		if(result.DisabledList==undefined || result.Operation==undefined)
 		{
 			return message.channel.send(`Your profile is invalid, <@${message.author.id}>`)
 		}
 		let len = 0
 		let avgDef = 0
 		let avgExp = 0
-		result.EnabledList.forEach(module => {
+		let EnabledList = result.EnabledList
+		if(EnabledList==undefined)
+		{
+			EnabledList = []
+			modIDs.forEach(module => {
+					if(!result.DisabledList.includes(module)) EnabledList.push(module) 
+				})
+		}
+		EnabledList.forEach(module => {
 				if(module)
 				{
 					let inputmodule
@@ -51,7 +59,7 @@ module.exports.run = async(client, message, args) => {
 						len += 1
 					}
 				}
-			})
+		})
 		if(len>0)
 		{
 			avgDef = difficulties2[Math.round(avgDef/len)]
@@ -65,7 +73,7 @@ module.exports.run = async(client, message, args) => {
 		message.channel.send(embed.getEmbed("Profile",{
 				name:`Profile of ${message.author.username}`,
 				diff: avgDef == "No data" || avgExp == "No data" ? 0x7289DA : getColor({DefuserDifficulty:avgDef.replace(' ',''), ExpertDifficulty:avgExp.replace(' ','')}),
-				enableds:result.EnabledList.length,
+				enableds:EnabledList.length,
 				disableds:result.DisabledList.length,
 				defDif:avgDef,
 				expDif:avgExp,

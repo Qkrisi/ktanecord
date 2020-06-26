@@ -8,6 +8,7 @@ const profileWhitelist = require('./map.js').profileWhitelist
 const lookup = require('./lookup')
 
 let ktaneModules = new Map()
+let modIDs = []
 
 function getKtaneModules() {
     fetch({ url: 'https://ktane.timwi.de/json/raw', parse: 'json' }).send().then(res => {
@@ -17,6 +18,7 @@ function getKtaneModules() {
             symbolBan.add(m.Name.toLowerCase())
             symbolBan.add(m.ModuleID)
             ktaneModules.set(m.ModuleID, m)
+            modIDs.push(m.ModuleID)
             ktaneModules.set(m.Name.toLowerCase(), m)
             if (m.Name.toLowerCase().startsWith("the ")) ktaneModules.set(m.Name.toLowerCase().substr(4), m)
             if (m.Symbol != undefined && !aliases.has(m.Symbol) && !ktaneModules.has(m.Symbol) && !symbolBan.has(m.Symbol)) ktaneModules.set(m.Symbol, m)
@@ -66,3 +68,4 @@ client.on('message', message => {
 client.login(config.discord)
 
 module.exports.ktaneModules = ktaneModules
+module.exports.modIDs = modIDs
