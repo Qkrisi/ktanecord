@@ -56,7 +56,8 @@ const aliases = new Map([
     ['mmc', 'Mastermind Cruel'],
     ['mms', 'Mastermind Simple'],
     ['scf', 'sevenChooseFour'],
-    ['fcm', 'Krit4CardMonte']
+    ['fcm', 'Krit4CardMonte'],
+    ['π', 'pieModule']
 ])
 
 const subjectOverrides = new Map([
