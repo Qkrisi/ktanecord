@@ -26,7 +26,7 @@ module.exports = async (modules, message) => {
 	
 	await axios.get(encodeURI(`https://ktane.timwi.de/ManualLastUpdated/${inputmodule.Name}.html`)).then(async(resp) =>{
 		let LastUpdatedDate = new Date(resp.data)
-		Updated = `${LastUpdatedDate.getUTCFullYear()}/${LastUpdatedDate.getUTCMonth()+1}/${LastUpdatedDate.getUTCDate()}`
+		Updated = `${LastUpdatedDate.getUTCFullYear()}-${LastUpdatedDate.getUTCMonth()+1}-${LastUpdatedDate.getUTCDate()}`
 	}).catch()
     message.channel.send('', {
         embed: embed.getEmbed("IML", {
