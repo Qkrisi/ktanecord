@@ -107,5 +107,4 @@ module.exports.run = async(client, message, args) => {
     }))
 }
 
-exports.clearCooldown = _ => cooldown = new Map()
 exports.mostSimilarModule = mostSimilarModule
