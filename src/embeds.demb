@@ -1,6 +1,6 @@
 #Default
   @footer
-    Bot created by Cyber28#2864 & Qkrisi#4982
+    Bot created by Qkrisi#4982 & Cyber28#2864
   @color
     0x7289DA
 #end
@@ -12,7 +12,7 @@
     @name
       |helpCMD
     @value
-      ❕ Displays this message
+      ❕ Displays this message (or the admin help message if `--admin` is given)
   @end
   @field
     @name
@@ -49,6 +49,17 @@
       |b
     @value
       Have a question or suggestion? Join our [Discord server](https://discord.gg/gJVy2Rt)!
+  @end
+#end
+
+#AdminHelp
+  @title
+    List of admin commands
+  @field
+    @name
+      |cooldownCMD
+    @value
+      |cooldownValue
   @end
 #end
 
@@ -101,6 +112,21 @@
       |sRank
     @inline
       true
+  @end
+#end
+
+#TPStatus
+  @title
+    Available streamers
+  @description
+    "
+  @footer
+    "
+  @field
+    @name
+      MrPeanut1028 (Weekday + Whitelist)
+    @value
+      |MrPeanut1028
   @end
 #end
 

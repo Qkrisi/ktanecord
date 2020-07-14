@@ -2,6 +2,10 @@ const { embed } = require('../utils')
 const config = require('../../config.json')
 
 module.exports.run = (client, message, args) => {
+	if(args.admin) return message.channel.send(embed.getEmbed("AdminHelp", {
+		cooldownCMD: `\`${config.token}setcooldown <seconds>\``,
+		cooldownValue: `🕒 Sets the cooldown value of  \`${config.token}repo --random\` (at least 0)`
+	}))
     message.channel.send(embed.getEmbed("Help",{
 			helpCMD: `\`${config.token}help\``,
 			pingCMD: `\`${config.token}ping\``,

@@ -1,11 +1,12 @@
 const { embed } = require('../utils')
 const fetch = require('wumpfetch')
 const config = require('../../config.json')
+const Discord = require('discord.js')
 
 const Streamers = new Map([
 	["MrPeanut1028", "MrPeanut1028 (Weekday + Whitelist)"],
 	["Derfer99", "Derfer99 (Weekend)"],
-	["Strike_Kaboom", "Strike_Kaboom (Training"],
+	["Strike_Kaboom", "Strike_Kaboom (Training)"],
 	["Heres_Fangy", "Heres_Fangy (Backup)"],
 	["eXish", "eXish (Backup)"],
 	["MrMelon54", "MrMelon54 (Backup)"],
@@ -16,7 +17,7 @@ const available = [
 	"MrPeanut1028",
 	"eXish",
 	"Heres_Fangy",
-	"Qkrisi"
+	"Strike_Kaboom",
 ]
 
 function componentToHex(c) {
@@ -37,43 +38,15 @@ function getDecimal(num) {
 module.exports.run = async (client, message, args) => {
 	let argList = args._
 	if (argList.length == 0) {
-		/*let fields = []
-		Streamers.forEach(async(name, streamer, map) => {
-				let url = `https://pwn.sh/tools/streamapi.py?url=twitch.tv/${streamer}`
-				await fetch({url: url, parse: 'json'}).send().then(res => {
-						let resp = res.body
-						console.log(resp)
-						if(!resp.success && !args.online)
-						{
-							fields.push({
-									name: name,
-									value: "Offline",
-									inline: false
-								})
-						}
-						else if(resp.success && !args.offline)
-						{
-							fields.push({
-									name: name,
-									value: "Online",
-									inline: false
-								})
-						}
-						if(streamer == Array.from(Streamers)[Streamers.size-1][0]) message.channel.send(embed(
-				"Streamer list",
-				"Streamers",
-				fields,
-				{}
-			))
+		let dEmbed = new Discord.MessageEmbed().setTitle('Available streamers').setColor('#0x7289DA')
+		Streamers.forEach(async(value, key, map) => {
+				await fetch({url: `https://pwn.sh/tools/streamapi.py?url=twitch.tv/${key}`, parse:'json'}).send().then(async(res) => {
+						dEmbed.addFields(
+							{name: value, value: res.success ? ":green_circle: Online" : ":red_circle: Offline"}
+						)
 					})
 			})
-			return message.channel.send(embed(
-				"Streamer list",
-				"Streamers",
-				fields,
-				{}
-			))*/
-		return
+		return message.channel.send(dEmbed)
 	}
 	if (argList[0] == "streamers") return message.channel.send(`Current available streamers: ${available.join(', ')}`)
 	if (argList[0] != "stats") return

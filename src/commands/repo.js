@@ -1,5 +1,5 @@
 const { embed, levenshteinRatio, parseDifficulty, getColor, months } = require('../utils.js')
-const { ktaneModules } = require('../main.js')
+const { ktaneModules, getCooldown } = require('../main.js')
 const aliases = require('../map.js').aliases
 const subjectOverrides = require('../map.js').subjectOverrides
 const config = require('../../config.json')
@@ -39,7 +39,10 @@ module.exports.run = async(client, message, args) => {
             return message.channel.send(`You are on cooldown for ${Math.round((cooldown.get(message.author.id) - Date.now()) / 1000)} seconds! You can still use the repo command with specified modules.`)
         inputmodule = getRandomModule()
         if (message.guild)
-            cooldown.set(message.author.id, Date.now() + 45000)
+        {	
+			let Cooldown = getCooldown()
+            cooldown.set(message.author.id, Date.now() + (Cooldown.hasOwnProperty(message.guild.id.toString()) ? Cooldown[message.guild.id.toString()]*1000 : 45000))
+		}
     }
     if (!inputmodule) inputmodule = ktaneModules.get(aliases.get(args._[0].toString().toLowerCase()))
     if (!inputmodule) inputmodule = ktaneModules.get(args._.join(' ').toLowerCase())

@@ -6,9 +6,15 @@ const larg = require('larg')
 const aliases = require('./map.js').aliases
 const profileWhitelist = require('./map.js').profileWhitelist
 const lookup = require('./lookup')
+const fs = require('fs')
 
 let ktaneModules = new Map()
 let modIDs = []
+
+function getCooldown() {
+	let path = [__dirname, "cooldown.json"].join("/")
+	return fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, "utf8")) : {}
+}
 
 function getKtaneModules() {
     fetch({ url: 'https://ktane.timwi.de/json/raw', parse: 'json' }).send().then(res => {
@@ -26,6 +32,7 @@ function getKtaneModules() {
         console.log('fetching complete')
     })
 }
+
 
 client.on('ready', () => {
     console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.size} servers`)
@@ -69,3 +76,4 @@ client.login(config.discord)
 
 module.exports.ktaneModules = ktaneModules
 module.exports.modIDs = modIDs
+module.exports.getCooldown = getCooldown
