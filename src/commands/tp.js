@@ -38,7 +38,7 @@ function getDecimal(num) {
 module.exports.run = async (client, message, args) => {
 	let argList = args._
 	if (argList.length == 0) {
-		let dEmbed = new Discord.MessageEmbed().setTitle('Available streamers').setColor('#0x7289DA')
+		/*let dEmbed = new Discord.MessageEmbed().setTitle('Available streamers').setColor('#0x7289DA')
 		Streamers.forEach(async(value, key, map) => {
 				await fetch({url: `https://pwn.sh/tools/streamapi.py?url=twitch.tv/${key}`, parse:'json'}).send().then(async(res) => {
 						dEmbed.addFields(
@@ -46,7 +46,8 @@ module.exports.run = async (client, message, args) => {
 						)
 					})
 			})
-		return message.channel.send(dEmbed)
+		return message.channel.send(dEmbed)*/
+		return
 	}
 	if (argList[0] == "streamers") return message.channel.send(`Current available streamers: ${available.join(', ')}`)
 	if (argList[0] != "stats") return
