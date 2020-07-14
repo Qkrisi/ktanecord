@@ -115,21 +115,6 @@
   @end
 #end
 
-#TPStatus
-  @title
-    Available streamers
-  @description
-    "
-  @footer
-    "
-  @field
-    @name
-      MrPeanut1028 (Weekday + Whitelist)
-    @value
-      |MrPeanut1028
-  @end
-#end
-
 #Repo
   @title
     |moduleName
