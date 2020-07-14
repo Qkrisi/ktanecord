@@ -44,4 +44,4 @@ exports.getColor = inputmodule => colors[Math.max(...new Array(inputmodule.Defus
 
 exports.months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
-exports.embed = new dembParser([__dirname, "/embeds.demb"].join(""))
+exports.embed = new dembParser([__dirname, "embeds.demb"].join("/"))

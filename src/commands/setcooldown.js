@@ -1,5 +1,6 @@
 const Permissions = require("discord.js").Permissions.FLAGS
 const {getCooldown} = require("../main.js")
+const {clearCooldown} = require("./repo.js")
 const fs = require("fs")
 
 module.exports.run = (client, message, args) => {
@@ -12,5 +13,6 @@ module.exports.run = (client, message, args) => {
 	let Cooldown = getCooldown()
 	Cooldown[message.guild.id.toString()] = secs
 	fs.writeFileSync([__dirname, "../cooldown.json"].join("/"), JSON.stringify(Cooldown))
+	clearCooldown()
 	message.channel.send(`Cooldown on this server is now set to ${secs} seconds.`)
 }
