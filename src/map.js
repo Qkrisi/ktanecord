@@ -60,6 +60,10 @@ const aliases = new Map([
     ['π', 'pieModule']
 ])
 
+const manualOverride = new Map([
+	["A>N<D", "A_N_D"]
+])
+
 const subjectOverrides = new Map([
     ['Friendship', 'On the Magic of Friendship'],
     ['7', 'The Subject of 7'],
@@ -83,5 +87,6 @@ const profileWhitelist = [
 ]
 
 module.exports.aliases = aliases
+module.exports.manualOverride = manualOverride
 module.exports.subjectOverrides = subjectOverrides
 module.exports.profileWhitelist = profileWhitelist

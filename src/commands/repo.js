@@ -1,7 +1,6 @@
 const { embed, levenshteinRatio, parseDifficulty, getColor, months } = require('../utils.js')
 const { ktaneModules, getCooldown } = require('../main.js')
-const aliases = require('../map.js').aliases
-const subjectOverrides = require('../map.js').subjectOverrides
+const { aliases, subjectOverrides, manualOverride } = require('../map.js')
 const config = require('../../config.json')
 const axios = require('axios')
 
@@ -64,19 +63,20 @@ module.exports.run = async(client, message, args) => {
     //adding the manuals of the module
     let manuals = []
     let base
+    let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
     inputmodule.Sheets.forEach(e => {
         let v = e.split('|')
         if (v[1] == 'html') {
-            base = `[${inputmodule.Name}${v[0]} (${v[1].toUpperCase()})](` + encodeURI(`https://ktane.timwi.de/HTML/${inputmodule.Name}${v[0]}.html`).replace(/[)]/g, '%29') + ')'
+            base = `[${inputmodule.Name}${v[0]} (${v[1].toUpperCase()})](` + encodeURI(`https://ktane.timwi.de/HTML/${manualId}${v[0]}.html`).replace(/[)]/g, '%29') + ')'
         } else if (v[1] == 'pdf') {
-            base = `[${inputmodule.Name}${v[0]} (${v[1].toUpperCase()})](` + encodeURI(`https://ktane.timwi.de/PDF/${inputmodule.Name}${v[0]}.pdf`).replace(/[)]/g, '%29') + ')'
+            base = `[${inputmodule.Name}${v[0]} (${v[1].toUpperCase()})](` + encodeURI(`https://ktane.timwi.de/PDF/${manualId}${v[0]}.pdf`).replace(/[)]/g, '%29') + ')'
         }
         manuals.push(base)
     })
 	
 	let Updated = "No data"
 	
-	await axios.get(encodeURI(`https://ktane.timwi.de/ManualLastUpdated/${inputmodule.Name}.html`)).then(async(resp) =>{
+	await axios.get(encodeURI(`https://ktane.timwi.de/ManualLastUpdated/${manualId}.html`)).then(async(resp) =>{
 		let LastUpdatedDate = new Date(resp.data)
 		Updated = `${LastUpdatedDate.getUTCFullYear()}-${LastUpdatedDate.getUTCMonth()+1}-${LastUpdatedDate.getUTCDate()}`
 	}).catch()
@@ -102,7 +102,7 @@ module.exports.run = async(client, message, args) => {
         manuals: manuals.join('\n'),
         links: links.join(' | '),
         creator: `${inputmodule.Type == 'Widget' ? 'Widget' : 'Module'} made by ${inputmodule.Author}`,
-        moduleIcon: `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${inputmodule.Name}.png`,
+        moduleIcon: `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`,
         diffColor: getColor(inputmodule)
     }))
 }
