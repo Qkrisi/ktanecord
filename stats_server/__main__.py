@@ -23,7 +23,7 @@ class Color():
 	def getDict(self): return {"r": self.r, "g": self.g, "b": self.b}
 
 class Player():
-	def __init__(self, name, r, g, b, solve, strike, score, rank, soloClears, soloRank):
+	def __init__(self, name, r, g, b, solve, strike, score, rank, soloClears, soloRank, OptOut):
 		self.name = name
 		self.color = Color(r,g,b)
 		self.solve = solve
@@ -32,9 +32,21 @@ class Player():
 		self.rank = rank
 		self.soloClears = soloClears
 		self.soloRank = soloRank
-	def getDict(self):return {"name": self.name, "color": self.color.getDict(), "solve": self.solve, "strike": self.strike, "score": self.score, "rank": self.rank, "soloClears": self.soloClears, "soloRank": self.soloRank}
+		self.OptedOut = OptOut
+	def getDict(self):return {"name": self.name, "color": self.color.getDict(), "solve": self.solve, "strike": self.strike, "score": self.score, "rank": self.rank, "soloClears": self.soloClears, "soloRank": self.soloRank, "OptedOut":self.OptedOut}
 
 players = {}
+
+updateAdded = {
+	"OptedOut":False
+}
+
+def Updated(p: dict) -> dict:
+	for k in updateAdded:
+		if not k in p:p[k]=updateAdded[k]
+	return p
+	
+UpdateResult = lambda d : str(d).replace("'",'"').replace("True","true").replace("False","false")
 
 @app.route("/get/<streamer>/<player>")
 def GetStats(streamer, player):
@@ -42,26 +54,26 @@ def GetStats(streamer, player):
 	player = player.lower()
 	if not streamer in players: return str({"error": "Streamer not found"}).replace("'",'"')
 	if not player in players[streamer]: return str({"error": "Player not found"}).replace("'",'"')
-	return players[streamer][player].getDict()
+	return UpdateResult(players[streamer][player].getDict())
 
 #Old method, use the next one instead!
 @app.route("/set/<password>/<streamer>/<player>/<r>/<g>/<b>/<solve>/<strike>/<score>/<rank>/<soloClears>/<soloRank>")
-def SetStats(password, streamer, player, r, g, b, solve, strike, score, rank, soloClears, soloRank):
+def SetStats(password, streamer, player, r, g, b, solve, strike, score, rank, soloClears, soloRank, OptOut):
 	streamer = streamer.lower()
 	player = player.lower()
 	if not password == passwd: return str({"error": "Invalid password"})
 	if not streamer in players: players[streamer] = {}
-	players[streamer][player] = Player(player, int(r), int(g), int(b), int(solve), int(strike), int(score), int(rank), int(soloClears), int(soloRank))
+	players[streamer][player] = Player(player, int(r), int(g), int(b), int(solve), int(strike), int(score), int(rank), int(soloClears), int(soloRank), OptOut)
 	return "Player stats set!"
 
 @app.route("/setReq/<password>/<streamer>", methods=['POST'])
 def setReq(password, streamer):
-	global streamerOverride
 	streamer = streamer.lower()
 	if not password == passwd: return str({"error": "Invalid password"})
-	if streamer in streamerOverride:streamer = streamerOverride[streamer]
 	got = request.json
-	for player in got['Players']:SetStats(password, streamer, player["UserName"].lower(), player["UserColor"]["r"], player["UserColor"]["g"], player["UserColor"]["b"], player["SolveCount"], player["StrikeCount"], player["SolveScore"], player["Rank"], player["TotalSoloClears"], player["SoloRank"])
+	for player in got['Players']:
+		player = Updated(player)
+		SetStats(password, streamer, player["UserName"].lower(), player["UserColor"]["r"], player["UserColor"]["g"], player["UserColor"]["b"], player["SolveCount"], player["StrikeCount"], player["SolveScore"], player["Rank"], player["TotalSoloClears"], player["SoloRank"], player["OptedOut"])
 	return "Player stats set!"
 
 @app.route("/dump")
@@ -78,7 +90,7 @@ def Dump() -> dict:
 def SaveStats(password):
 	if not password == passwd: return str({"error": "Invalid password"}).replace("'",'"')
 	f = open("stats.json","w+")
-	f.write(str(Dump()).replace("'",'"'))
+	f.write(UpdateResult(Dump()))
 	f.close()
 	return "Save sucessful"
 	
@@ -94,8 +106,9 @@ def LoadStats(password):
 		players[streamer] = {}
 		for player in stats["Stats"][streamer]:
 			base = stats["Stats"][streamer][player]
+			base = Updated(base)
 			getInt = lambda n : int(base[n])
-			players[streamer][player] = Player(player, int(base["color"]["r"]), int(base["color"]["g"]), int(base["color"]["b"]), getInt("solve"), getInt("strike"), getInt("score"), getInt("rank"), getInt("soloClears"), getInt("soloRank"))
+			players[streamer][player] = Player(player, int(base["color"]["r"]), int(base["color"]["g"]), int(base["color"]["b"]), getInt("solve"), getInt("strike"), getInt("score"), getInt("rank"), getInt("soloClears"), getInt("soloRank"), base["OptedOut"])
 	return "Load successful"
 
 app.run(host=host, port=port)

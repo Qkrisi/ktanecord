@@ -92,14 +92,19 @@ module.exports.run = async (client, message, args) => {
 		let hex = rgbToHex(resp.color.r, resp.color.g, resp.color.b)
 
 		let r1 = resp.strike > 0 ? getDecimal(resp.solve / resp.strike) : resp.solve
-
 		let r2 = resp.strike > 0 ? getDecimal(resp.score / resp.strike) : resp.score
-		message.channel.send(embed.getEmbed("TwitchPlays", {
+		
+		let SS = `${resp.solve} **/** ${resp.strike}`
+		let SSRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
+		
+		message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
 			name: `${originalName}`,
 			userColor: hex,
 			streamer: `Statistics from ${originalStreamer}'s stream`,
-			sss: `${resp.solve} **/** ${resp.strike} **/** ${resp.score}`,
-			sssRatio: `${r1} **:** ${resp.strike > 0 ? 1 : 0} **:** ${r2}`,
+			sss: `${SS} **/** ${resp.score}`,
+			ss: SS,
+			sssRatio: `${SSRatio} **:** ${r2}`,
+			ssRatio: SSRatio,
 			rank: `${resp.rank}`,
 			sDef: `${resp.soloClears}`,
 			sRank: `${resp.soloRank}`

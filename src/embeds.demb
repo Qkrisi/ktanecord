@@ -115,6 +115,39 @@
   @end
 #end
 
+#TPOptedOut
+  @comment
+    For players who have opted out in Twitch Plays
+  @title
+    |name
+  @description
+    "
+  @color
+    |userColor
+  @footer
+    |streamer
+  @field
+    @name
+      Solve / Strike
+    @value
+      |ss
+  @end
+  @field
+    @name
+      Ratio
+    @value
+      |ssRatio
+  @end
+  @field
+    @name
+      Solo Defusals
+    @value
+      |sDef
+    @inline
+      true
+  @end
+#end
+
 #Repo
   @title
     |moduleName
