@@ -67,7 +67,7 @@ You also need Python3.8+
 
 To run the server, run the following command: `python ./stats_server/__main__.py`
 
-To send scores to the server, use [this](https://github.com/Qkrisi/tp-score-saver) mod. (Keep in mind, it only works on Windows for now; more about it in the readme of its repo)
+To send scores to the server, use [this](https://github.com/Qkrisi/tp-score-saver) mod. (More about it in the readme of its repo)
 
 ## Contributions
 
