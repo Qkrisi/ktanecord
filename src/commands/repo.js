@@ -96,7 +96,7 @@ module.exports.run = async(client, message, args) => {
         moduleDesc: `${inputmodule.Description.split('Tags')[0].trim()}`,
         diff: `Defuser: ${parseDifficulty(inputmodule.DefuserDifficulty)}\nExpert: ${parseDifficulty(inputmodule.ExpertDifficulty)}`,
         moduleID: inputmodule.ModuleID,
-        symbol: inputmodule.Symbol == undefined ? "none" : inputmodule.Symbol,
+        symbol: inputmodule.Symbol == undefined ? "-" : inputmodule.Symbol,
         pDate: inputmodule.Published,
         uDate: Updated,
         manuals: manuals.join('\n'),

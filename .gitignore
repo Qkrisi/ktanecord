@@ -1,3 +1,4 @@
 node_modules/
 config.json
 src/cooldown.json
+stats_server/credentials.json

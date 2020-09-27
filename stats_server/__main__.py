@@ -1,11 +1,19 @@
 from flask import Flask, request
 from json import loads
+from threading import Thread
+from asyncio import run, sleep
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from urllib.parse import unquote
+from Levenshtein import distance
+from functools import cmp_to_key
 
 app = Flask("tpScoreServer")
 
 passwd = None
 host = None
 port = None
+ScoreSheetID = None
 
 with open("../config.json","r") as f:
 	lines = f.readlines()
@@ -14,6 +22,16 @@ with open("../config.json","r") as f:
 	passwd = parsed["tpServerPass"]
 	host = parsed["tpServerIP"]
 	port = parsed["tpServerPort"]
+	ScoreSheetID = parsed["ScoreSheet"]
+
+creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', gspread.auth.READONLY_SCOPES)
+client = gspread.authorize(creds)
+
+sheetInfo = client.open_by_key(ScoreSheetID)
+sheet = sheetInfo.sheet1
+
+Records = []
+
 
 class Color():
 	def __init__(self, r, g, b):
@@ -35,11 +53,16 @@ class Player():
 		self.OptedOut = OptOut
 	def getDict(self):return {"name": self.name, "color": self.color.getDict(), "solve": self.solve, "strike": self.strike, "score": self.score, "rank": self.rank, "soloClears": self.soloClears, "soloRank": self.soloRank, "OptedOut":self.OptedOut}
 
+async def wait(secs = 1):
+	await sleep(secs)
+
 players = {}
 
 updateAdded = {
 	"OptedOut":False
 }
+
+FetchQueue = 1
 
 def Updated(p: dict) -> dict:
 	for k in updateAdded:
@@ -110,5 +133,28 @@ def LoadStats(password):
 			getInt = lambda n : int(base[n])
 			players[streamer][player] = Player(player, int(base["color"]["r"]), int(base["color"]["g"]), int(base["color"]["b"]), getInt("solve"), getInt("strike"), getInt("score"), getInt("rank"), getInt("soloClears"), getInt("soloRank"), base["OptedOut"])
 	return "Load successful"
+	
+@app.route("/fetchScores")
+def FetchScores():
+	global Records
+	Records = sheet.get_all_records()
+	del Records[0]
+	return str({"Response": "Modules successfully fetched!"}).replace("'",'"')
+
+@app.route("/Score/<module>")
+def GetScore(module):
+	module = unquote(module)
+	for record in Records:
+		if(str(record["ModuleID"])==module):return str(record).replace("'",'"')
+	module = module.lower()
+	similar = sorted(Records, key = cmp_to_key(lambda a, b : distance(str(a["ModuleID"]).lower(), module) - distance(str(b["ModuleID"]).lower(), module)))[0]
+	if(distance(str(similar["ModuleID"]).lower(), module) >= 0.7):return str(similar).replace("'",'"')
+	return str({"error":"Module not found"}).replace("'",'"')
+
+@app.route("/ScoreDump")
+def ScoreDump():
+	return str(Records)
+
+FetchScores()
 
 app.run(host=host, port=port)

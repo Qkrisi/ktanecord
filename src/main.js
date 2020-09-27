@@ -29,6 +29,7 @@ function getKtaneModules() {
             if (m.Name.toLowerCase().startsWith("the ")) ktaneModules.set(m.Name.toLowerCase().substr(4), m)
             if (m.Symbol != undefined && !aliases.has(m.Symbol) && !ktaneModules.has(m.Symbol) && !symbolBan.has(m.Symbol)) ktaneModules.set(m.Symbol, m)
         }
+        fetch({url: `http://${config.tpServerIP}:${config.tpServerPort}/fetchScores`}).send()
         console.log('fetching complete')
     })
 }
