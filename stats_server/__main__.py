@@ -1,7 +1,5 @@
 from flask import Flask, request
 from json import loads
-from threading import Thread
-from asyncio import run, sleep
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from urllib.parse import unquote
@@ -52,9 +50,6 @@ class Player():
 		self.soloRank = soloRank
 		self.OptedOut = OptOut
 	def getDict(self):return {"name": self.name, "color": self.color.getDict(), "solve": self.solve, "strike": self.strike, "score": self.score, "rank": self.rank, "soloClears": self.soloClears, "soloRank": self.soloRank, "OptedOut":self.OptedOut}
-
-async def wait(secs = 1):
-	await sleep(secs)
 
 players = {}
 
