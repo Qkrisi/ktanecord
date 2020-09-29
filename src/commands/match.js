@@ -84,7 +84,8 @@ function GetMatching(regex)
 }
 
 module.exports.run = (client, message, args) => {
-	let regex = `${args.simple ? `${args.simple}${args._.length > 0 ? " " : ""}` : ""}` + args._.join(" ")
+	if(args._.length==0) return message.channel.send("🚫 You need to specify a regular expression!")
+	let regex = (`${args.simple ? `${args.simple}${args._.length > 0 ? " " : ""}` : ""}` + args._.join(" ")).trim()
 	let regexString = regex
 	console.log(args)
 	if(args.simple) regex = ConvertToFull(regex)
