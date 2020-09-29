@@ -60,7 +60,7 @@
     @name
       __**Reference**__
     @value
-      Modules can be the name, the ID, the periodic symbol or a Regular Expression to the module
+      |Reference
   @end
   @field
     @name

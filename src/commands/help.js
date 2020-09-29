@@ -14,8 +14,9 @@ module.exports.run = (client, message, args) => {
 			statsValue: `<:Twitch:702495822281048129> Shows player statistics on Twitch Plays (For a list of streamers use \`${config.token}tp streamers\`)`,
 			profileCMD: `\`${config.token}profile\``,
 			matchCMD: `\`${config.token}match <regular expression (simple if --simple is specified)>\``,
-			matchDesc: "🔑 Shows the number of modules that matches the specified expression and list up to 10 ones.\n[Full RegEx](https://regexr.com/)\n[Simple RegEx](https://docs.microsoft.com/en-us/previous-versions/windows/desktop/indexsrv/ms-dos-and-windows-wildcard-characters)",
+			matchDesc: "🔑 Shows the number of modules that matches the specified expression and list up to 10 ones.\n[Full RegEx](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Cheatsheet)\n[Simple RegEx](https://kb.iu.edu/d/ahsf)",
 			scoreCMD: `\`${config.token}score <module>\``,
+			Reference: "**-**Modules can be the name, the ID, the periodic symbol or a Regular Expression to the module\n**-**Simple RegEx also has a `#` wildcard here which represents any numeric character (0-9)",
 			b: '\u200b'
 		}))
 }
