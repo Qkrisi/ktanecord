@@ -8,15 +8,10 @@ function GetMultiplier(m, mu)
 	let splitted = m.split(":")
 	let minutes = parseInt(splitted[0])
 	let seconds = parseInt(splitted[1])
-	let secs = minutes*60+seconds
-	secs/=6
-	let tempMinutes = Math.floor(secs/60)
-	secs-=tempMinutes*60
-	tempMinutes*=mu
-	secs = Math.round(secs) * mu
-	tempMinutes = Math.floor(secs/60)
-	secs = Math.round(secs%60)
-	return `${tempMinutes}**:**${secs >= 10 ? secs : `0${secs}`}`
+	let AllSecs = Math.round((minutes*60+seconds)/6*mu)
+	minutes = Math.floor((AllSecs-AllSecs%60)/60)
+	let secs = AllSecs-minutes*60
+	return `${minutes}**:**${secs >= 10 ? secs : `0${secs}`}`
 }
 
 module.exports.run = async(client, message, args) => {
