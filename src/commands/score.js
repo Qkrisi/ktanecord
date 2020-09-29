@@ -1,6 +1,4 @@
-const { embed, getColor } = require('../utils.js')
-const {mostSimilarModule} = require('./repo.js')
-const {ktaneModules} = require("../main.js")
+const { embed, getColor, GetModule } = require('../utils.js')
 const {aliases} = require('../map.js')
 const fetch = require('wumpfetch')
 const config = require('../../config.json')
@@ -18,15 +16,13 @@ function GetMultiplier(m, mu)
 	secs = Math.round(secs) * mu
 	tempMinutes = Math.floor(secs/60)
 	secs = Math.round(secs%60)
-	return `${tempMinutes}**:**${secs}`
+	return `${tempMinutes}**:**${secs >= 10 ? secs : `0${secs}`}`
 }
 
 module.exports.run = async(client, message, args) => {
-	let inputmodule = ktaneModules.get(aliases.get(args._[0].toString().toLowerCase()))
-    if (!inputmodule) inputmodule = ktaneModules.get(args._.join(' ').toLowerCase())
-    if (!inputmodule) inputmodule = ktaneModules.get(args._[0])
-    if (!inputmodule) inputmodule = ktaneModules.get(mostSimilarModule(args._.join(' ').toLowerCase()))
-    if (!inputmodule) return message.channel.send(`🚫 Couldn't find a module by the ID of \`${args._[0]}\` (case-sensitive), name of \`${args._.join(' ')}\` (not case-sensitive) or periodic symbol of \`${args._[0]}\` (not case-sensitive)`)
+	if(args._.length==0) return message.channel.send("🚫 You need to specify a module by entering its name, ID or periodic symbol, or by specifying a regular expression!");
+	let inputmodule = GetModule(message, args)
+	if(!inputmodule) return
 	await fetch({url: encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/Score/${inputmodule.Name}`), parse:'json'}).send().then(async(res) => {
 		let body = res.body
 		if(body.error) return message.channel.send(body.error)
@@ -37,7 +33,7 @@ module.exports.run = async(client, message, args) => {
 		let ConstructedBody = {
 			ScoreTitle: `Scores of ${inputmodule.Name}`,
 			diffColor: getColor(inputmodule),
-			GeneralScore: body.Score,
+			GeneralScore: body.Score ? body.Score : "None",
 			BossPointsPerModule: body["Boss Module Points per Module"],
 			ScoreWithCheatsheet: body["Score With Cheatsheet"],
 			TPScore: body["TP\nScore"],

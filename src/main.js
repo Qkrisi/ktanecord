@@ -75,6 +75,6 @@ client.on('message', message => {
 
 client.login(config.discord)
 
-module.exports.ktaneModules = ktaneModules
+module.exports.ktaneModules = _ => ktaneModules
 module.exports.modIDs = modIDs
 module.exports.getCooldown = getCooldown

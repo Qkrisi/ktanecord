@@ -65,7 +65,9 @@ To run the bot, run this command: `node src/main.js`
 
 -[gspread](https://pypi.org/project/gspread)
 
--[oauth2client](https://pypi.org/project/oauth2client/)
+-[oauth2client](https://pypi.org/project/oauth2client)
+
+-[Levenshtein](https://pypi.org/project/python-levenshtein)
 
 You also need Python3.8+
 

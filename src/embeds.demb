@@ -46,9 +46,21 @@
   @end
   @field
     @name
+      |matchCMD
+    @value
+      |matchDesc
+  @end
+  @field
+    @name
       `Inline module lookup`
     @value
       📙 Get (condensed) information about a module without running a command with `{module}`. Example: `Ok but {V} is a pretty cool module`
+  @end
+  @field
+    @name
+      __**Reference**__
+    @value
+      Modules can be the name, the ID, the periodic symbol or a Regular Expression to the module
   @end
   @field
     @name
@@ -435,6 +447,31 @@
     @value
       None
     @inline
+      true
+  @end
+  @field
+    @name
+      Resolved score
+    @value
+      None
+    @inline
+      true
+  @end
+  @field
+    @name
+      Default score
+    @value
+      10
+    @inline
+      true
+  @end
+  @field
+    @name
+      7.5x multiplier
+    @value
+      1**:**15
+    @inline
+      false
   @end
   @field
     @name

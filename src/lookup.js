@@ -1,5 +1,5 @@
 const { aliases, manualOverride } = require('./map')
-const { levenshteinRatio, parseDifficulty, embed, getColor, months } = require('./utils')
+const { levenshteinRatio, parseDifficulty, embed, getColor, months, GetModule, FakeArg } = require('./utils')
 const axios = require('axios')
 const d = /\{[^}]+}/g
 
@@ -19,7 +19,7 @@ module.exports = async (modules, message) => {
     console.log(m)
     let inputmodule = modules.get(aliases.get(m)) ||
         modules.get(m) ||
-        modules.get(mostSimilarModule(modules, m))
+        modules.get(mostSimilarModule(modules, m)) || GetModule(message, new FakeArg(m), false)
     if (!inputmodule) return
     let sb = inputmodule.Symbol ? ` (${inputmodule.Symbol}) ` : ` `
     let Updated = "No data"

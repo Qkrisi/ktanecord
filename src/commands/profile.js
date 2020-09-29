@@ -1,5 +1,6 @@
-const { embed, difficulties, getColor } = require('../utils')
-const { ktaneModules, modIDs } = require('../main.js')
+const { embed, difficulties, getColor, FakeArg, GetModule } = require('../utils')
+const main = require('../main.js')
+const { modIDs } = require('../main.js')
 const fetch = require('wumpfetch')
 const { mostSimilarModule } = require('./repo.js')
 const aliases = require('../map.js').aliases
@@ -45,11 +46,7 @@ module.exports.run = async(client, message, args) => {
 		EnabledList.forEach(module => {
 				if(module)
 				{
-					let inputmodule
-					if (!inputmodule) inputmodule = ktaneModules.get(aliases.get(module.toString().toLowerCase()))
-					if (!inputmodule) inputmodule = ktaneModules.get(module.toLowerCase())
-					if (!inputmodule) inputmodule = ktaneModules.get(module)
-					if (!inputmodule) inputmodule = ktaneModules.get(mostSimilarModule(module.toLowerCase()))
+					let inputmodule = GetModule(message, new FakeArg(module), false)
 					if(inputmodule)
 					{
 						defNum = difficulties.get(inputmodule.DefuserDifficulty)

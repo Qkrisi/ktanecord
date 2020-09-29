@@ -1,5 +1,5 @@
-const { embed, levenshteinRatio, parseDifficulty, getColor, months } = require('../utils.js')
-const { ktaneModules, getCooldown } = require('../main.js')
+const { embed, parseDifficulty, getColor, months, GetModule } = require('../utils.js')
+const main = require('../main.js')
 const { aliases, subjectOverrides, manualOverride } = require('../map.js')
 const config = require('../../config.json')
 const axios = require('axios')
@@ -9,17 +9,8 @@ let cooldown = new Map()
 function doNothing() { }
 
 function getRandomModule() {
-    let keys = Array.from(ktaneModules.keys())
-    return ktaneModules.get(keys[Math.floor(Math.random() * keys.length)])
-}
-
-function mostSimilarModule(searchItem) {
-    let keys = Array.from(ktaneModules.keys())
-    let module = keys.sort((entry1, entry2) =>
-        levenshteinRatio(entry2.toLowerCase(), searchItem) - levenshteinRatio(entry1.toLowerCase(), searchItem)
-    )[0]
-    if (levenshteinRatio(module.toLowerCase(), searchItem) < 0.7) return null
-    return module
+    let keys = Array.from(main.ktaneModules().keys())
+    return main.ktaneModules().get(keys[Math.floor(Math.random() * keys.length)])
 }
 
 var Updated = "No data"
@@ -39,15 +30,12 @@ module.exports.run = async(client, message, args) => {
         inputmodule = getRandomModule()
         if (message.guild)
         {	
-			let Cooldown = getCooldown()
+			let Cooldown = main.getCooldown()
             cooldown.set(message.author.id, Date.now() + (Cooldown.hasOwnProperty(message.guild.id.toString()) ? Cooldown[message.guild.id.toString()]*1000 : 45000))
 		}
     }
-    if (!inputmodule) inputmodule = ktaneModules.get(aliases.get(args._[0].toString().toLowerCase()))
-    if (!inputmodule) inputmodule = ktaneModules.get(args._.join(' ').toLowerCase())
-    if (!inputmodule) inputmodule = ktaneModules.get(args._[0])
-    if (!inputmodule) inputmodule = ktaneModules.get(mostSimilarModule(args._.join(' ').toLowerCase()))
-    if (!inputmodule) return message.channel.send(`🚫 Couldn't find a module by the ID of \`${args._[0]}\` (case-sensitive), name of \`${args._.join(' ')}\` (not case-sensitive) or periodic symbol of \`${args._[0]}\` (not case-sensitive)`)
+    if(!inputmodule) inputmodule = GetModule(message, args)
+    if(!inputmodule) return
 
 
     //adding the links of the module
@@ -106,5 +94,3 @@ module.exports.run = async(client, message, args) => {
         diffColor: getColor(inputmodule)
     }))
 }
-
-exports.mostSimilarModule = mostSimilarModule
