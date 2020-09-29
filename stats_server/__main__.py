@@ -140,7 +140,7 @@ def FetchScores():
 def GetScore(module):
 	module = unquote(module).lower()
 	for record in Records:
-		if(str(record["ModuleID"]).lower()):return str(record).replace("'",'"')
+		if(str(record["ModuleID"]).lower()==module):return str(record).replace("'",'"')
 	similar = sorted(Records, key = cmp_to_key(lambda a, b : distance(str(a["ModuleID"]).lower(), module) - distance(str(b["ModuleID"]).lower(), module)))[0]
 	if(distance(str(similar["ModuleID"]).lower(), module) >= 0.7):return str(similar).replace("'",'"')
 	return str({"error":"Module not found"}).replace("'",'"')
