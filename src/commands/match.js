@@ -85,12 +85,13 @@ function GetMatching(regex)
 
 module.exports.run = (client, message, args) => {
 	if(args._.length==0) return message.channel.send("🚫 You need to specify a regular expression!")
-	let regex = (`${args.simple ? `${args.simple}${args._.length > 0 ? " " : ""}` : ""}` + args._.join(" "))
+	let res
+	let regex = args._.join(" ")
+	//let regex = (`${args.simple ? `${args.simple}${args._.length > 0 ? " " : ""}` : ""}` + args._.join(" "))
 	let regexString = regex
-	console.log(args)
-	if(args.simple) regex = ConvertToFull(regex)
-	let res = GetMatching(regex)
-	if(!res) return message.channel.send(`Invalid ${args.simple ? "simple " : ""}RegEx: ${"`"}${regex}${"`"}.${!args.simple ? ` Did you mean ${"`"}${config.token}match --simple${"`"}?` : ""}`)
+	res = GetMatching(ConvertToFull(regex))
+	if(!res || res.length == 0) res = GetMatching(regex)
+	if(!res) return message.channel.send(`Invalid regex: ${regexString}`)
 	message.channel.send(`Found ${res.length} result${res.length == 1 ? "" : "s"} for ${regexString}${res.length > 0 ? `${res.length > 10 ? "; showing first 10:" : ":"}` : ""}`)
 	if(res.length < 1) return
 	let lines = []
