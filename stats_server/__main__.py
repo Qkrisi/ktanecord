@@ -136,7 +136,7 @@ def FetchScores():
 	del Records[0]
 	return str({"Response": "Modules successfully fetched!"}).replace("'",'"')
 
-def GetSimiar(key, module):
+def GetSimilar(key, module):
 	similar = sorted(Records, key = cmp_to_key(lambda a, b: distance(str(a[key]).lower(), module) - distance(str(b[key]).lower(), module)))[0]
 	if(distance(str(similar[key]).lower(), module) >= 0.7): return str(similar).replace("'",'"')
 	return None
