@@ -1,5 +1,5 @@
 const { embed, getColor, GetModule } = require('../utils.js')
-const {aliases} = require('../map.js')
+const {aliases, manualOverride} = require('../map.js')
 const fetch = require('wumpfetch')
 const config = require('../../config.json')
 
@@ -25,9 +25,12 @@ module.exports.run = async(client, message, args) => {
 			ScoreTitle: `Scores of ${inputmodule.Name}`,
 			diffColor: getColor(inputmodule)
 		}))
+		let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
 		let ConstructedBody = {
 			ScoreTitle: `Scores of ${inputmodule.Name}`,
+			creator: `${inputmodule.Type == "Widget" ? "Widget" : "Module"} made by ${inputmodule.Author}`,
 			diffColor: getColor(inputmodule),
+			tn: `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`,
 			GeneralScore: body.Score ? body.Score : "None",
 			BossPointsPerModule: body["Boss Module Points per Module"],
 			ScoreWithCheatsheet: body["Score With Cheatsheet"],

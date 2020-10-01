@@ -323,9 +323,11 @@
   @title
     |ScoreTitle
   @footer
-    "
+    |creator
   @color
     |diffColor
+  @thumbnail
+    |tn
   @field
     @name
        ​
@@ -430,9 +432,11 @@
   @title
     |ScoreTitle
   @footer
-    "
+    |creator
   @color
     |diffColor
+  @thumbnail
+    |tn
   @field
     @name
        ​
