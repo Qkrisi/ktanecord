@@ -20,7 +20,7 @@ function mostSimilarModule(searchItem) {
     return module
 }
 
-exports.parseDifficulty = d => d.startsWith('Very') ? d.replace('y', 'y ').trim() : d
+exports.parseDifficulty = d => !d ? "None" : d.startsWith('Very') ? d.replace('y', 'y ').trim() : d
 
 const levenshteinRatio = (target, source) => {
     if (source == null || target == null) return 0.0
@@ -92,18 +92,19 @@ exports.GetModule = (message, args, send = true) => {
 }
  
  
-const colors = [0x53FF00, 0x13FF00, 0xFFFF00, 0xF91515, 0xA81313]
+const colors = [0x53FF00, 0x13FF00, 0xFFFF00, 0xF91515, 0xA81313, 0x7289DA]
 const difficulties = new Map([
     ['VeryEasy', 0],
     ['Easy', 1],
     ['Medium', 2],
     ['Hard', 3],
-    ['VeryHard', 4]
+    ['VeryHard', 4],
+    ['General', 5]
 ])
 
 exports.FakeArg = FakeArg
 exports.levenshteinRatio = levenshteinRatio
 exports.difficulties = difficulties
-exports.getColor = inputmodule => colors[Math.max(...new Array(inputmodule.DefuserDifficulty, inputmodule.ExpertDifficulty).map(e => difficulties.get(e)))]
+exports.getColor = inputmodule => colors[Math.max(...new Array(inputmodule.DefuserDifficulty ? inputmodule.DefuserDifficulty : "General", inputmodule.ExpertDifficulty ? inputmodule.ExpertDifficulty : "General").map(e => difficulties.get(e)))]
 exports.months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 exports.embed = new dembParser([__dirname, "/embeds.demb"].join(""))
