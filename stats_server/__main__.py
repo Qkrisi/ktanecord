@@ -136,13 +136,20 @@ def FetchScores():
 	del Records[0]
 	return str({"Response": "Modules successfully fetched!"}).replace("'",'"')
 
+def GetSimiar(key, module):
+	similar = sorted(Records, key = cmp_to_key(lambda a, b: distance(str(a[key]).lower(), module) - distance(str(b[key]).lower(), module)))[0]
+	if(distance(str(similar[key]).lower(), module) >= 0.7): return str(similar).replace("'",'"')
+	return None
+
 @app.route("/Score/<module>")
 def GetScore(module):
 	module = unquote(module).lower()
 	for record in Records:
-		if(str(record["ModuleID"]).lower()==module):return str(record).replace("'",'"')
-	similar = sorted(Records, key = cmp_to_key(lambda a, b : distance(str(a["ModuleID"]).lower(), module) - distance(str(b["ModuleID"]).lower(), module)))[0]
-	if(distance(str(similar["ModuleID"]).lower(), module) >= 0.7):return str(similar).replace("'",'"')
+		if(str(record["ModuleID"]).lower()==module or str(record["Module Name"]).lower()==module):return str(record).replace("'",'"')
+	similar = GetSimilar("ModuleID", module)
+	if(similar!=None): return similar
+	similar = GetSimilar("Module Name", module)
+	if(similar!=None): return similar
 	return str({"error":"Module not found"}).replace("'",'"')
 
 @app.route("/ScoreDump")
