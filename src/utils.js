@@ -49,6 +49,7 @@ const levenshteinRatio = (target, source) => {
     return 1.0 - distance[sourceWordCount][targetWordCount] / Math.max(source.length, target.length)
 }
 
+<<<<<<< Updated upstream
 exports.GetModule = (message, args, send = true) => {
 	let HandleRegex = result => {
 		if(result.length == 1) return result[0].Module
@@ -92,6 +93,9 @@ exports.GetModule = (message, args, send = true) => {
 }
  
  
+=======
+
+>>>>>>> Stashed changes
 const colors = [0x53FF00, 0x13FF00, 0xFFFF00, 0xF91515, 0xA81313]
 const difficulties = new Map([
     ['VeryEasy', 0],
@@ -105,5 +109,11 @@ exports.FakeArg = FakeArg
 exports.levenshteinRatio = levenshteinRatio
 exports.difficulties = difficulties
 exports.getColor = inputmodule => colors[Math.max(...new Array(inputmodule.DefuserDifficulty, inputmodule.ExpertDifficulty).map(e => difficulties.get(e)))]
+<<<<<<< Updated upstream
 exports.months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+=======
+
+exports.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+>>>>>>> Stashed changes
 exports.embed = new dembParser([__dirname, "/embeds.demb"].join(""))

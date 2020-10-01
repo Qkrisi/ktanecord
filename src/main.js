@@ -12,8 +12,8 @@ let ktaneModules = new Map()
 let modIDs = []
 
 function getCooldown() {
-	let path = [__dirname, "cooldown.json"].join("/")
-	return fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, "utf8")) : {}
+    let path = [__dirname, "cooldown.json"].join("/")
+    return fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, "utf8")) : {}
 }
 
 function getKtaneModules() {

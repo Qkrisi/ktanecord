@@ -35,7 +35,7 @@ function getDecimal(num) {
 	return splitted.length == 1 ? `${splitted[0]}` : `${splitted[0]}**.**${splitted[1].charAt(0)}`
 }
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (_client, message, args) => {
 	let argList = args._
 	if (argList.length == 0) {
 		/*let dEmbed = new Discord.MessageEmbed().setTitle('Available streamers').setColor('#0x7289DA')
@@ -49,7 +49,7 @@ module.exports.run = async (client, message, args) => {
 		return message.channel.send(dEmbed)*/
 		return
 	}
-	if (argList[0] == "streamers") return message.channel.send(`Current available streamers: ${available.join(', ')}`)
+	if (argList[0] == "streamers") return await message.channel.send(`Current available streamers: ${available.join(', ')}`)
 	if (argList[0] != "stats") return
 	let streamer
 	let name
@@ -88,16 +88,16 @@ module.exports.run = async (client, message, args) => {
 			})
 			if (ret) return message.channel.send(resp.error)
 		}*/
-		if (resp.error) return message.channel.send(resp.error)
+		if (resp.error) return await message.channel.send(resp.error)
 		let hex = rgbToHex(resp.color.r, resp.color.g, resp.color.b)
 
 		let r1 = resp.strike > 0 ? getDecimal(resp.solve / resp.strike) : resp.solve
 		let r2 = resp.strike > 0 ? getDecimal(resp.score / resp.strike) : resp.score
-		
+
 		let SS = `${resp.solve} **/** ${resp.strike}`
 		let SSRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
-		
-		message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
+
+		await message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
 			name: `${originalName}`,
 			userColor: hex,
 			streamer: `Statistics from ${originalStreamer}'s stream`,
