@@ -388,19 +388,11 @@
   @end
   @field
     @name
-      Score with cheatsheet
-    @value
-      |ScoreWithCheatsheet
-    @inline
-      false
-  @end
-  @field
-    @name
       7.5x multiplier
     @value
       |SFMultiplier
     @inline
-      true
+      false
   @end
   @field
     @name

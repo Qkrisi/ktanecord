@@ -33,7 +33,6 @@ module.exports.run = async(client, message, args) => {
 			tn: `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`,
 			GeneralScore: body.Score ? body.Score : "None",
 			BossPointsPerModule: body["Boss Module Points per Module"],
-			ScoreWithCheatsheet: body["Score With Cheatsheet"],
 			TPScore: body["TP\nScore"],
 			TPBombReward: body["TP\nBomb Reward"],
 			ResolvedScore: body["Resolved Score\n"],
