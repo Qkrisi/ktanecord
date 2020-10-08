@@ -425,10 +425,10 @@
     |ScoreTitle
   @footer
     |creator
-  @color
-    |diffColor
   @thumbnail
     |tn
+  @color
+    |diffColor
   @field
     @name
        ​

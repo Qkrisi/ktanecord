@@ -21,16 +21,20 @@ module.exports.run = async(client, message, args) => {
 	await fetch({url: encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/Score/${inputmodule.Name}`), parse:'json'}).send().then(async(res) => {
 		let body = res.body
 		if(body.error) return message.channel.send(body.error)
+		let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
+		let creator = `${inputmodule.Type == "Widget" ? "Widget" : "Module"} made by ${inputmodule.Author}`
+		let thumbnail = `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`
 		if(body.Score.toString().trim()=="" && body["TP\nScore"].toString().trim()=="") return message.channel.send(embed.getEmbed("ScoreEmpty", {
 			ScoreTitle: `Scores of ${inputmodule.Name}`,
-			diffColor: getColor(inputmodule)
+			diffColor: getColor(inputmodule),
+			creator: creator,
+			tn: thumbnail
 		}))
-		let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
 		let ConstructedBody = {
 			ScoreTitle: `Scores of ${inputmodule.Name}`,
-			creator: `${inputmodule.Type == "Widget" ? "Widget" : "Module"} made by ${inputmodule.Author}`,
+			creator: creator,
 			diffColor: getColor(inputmodule),
-			tn: `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`,
+			tn: thumbnail,
 			GeneralScore: body.Score ? body.Score : "None",
 			BossPointsPerModule: body["Boss Module Points per Module"],
 			TPScore: body["TP\nScore"],
@@ -46,5 +50,5 @@ module.exports.run = async(client, message, args) => {
 		let emb = embed.getEmbed("Score", ConstructedBody)
 		emb.fields = emb.fields.filter(field => field.value!="-")
 		message.channel.send(emb)
-	}).catch(error => message.channel.send(`An error occurred while fetching module scores: ${error}`))
+	})//.catch(error => message.channel.send(`An error occurred while fetching module scores: ${error}`))
 }
