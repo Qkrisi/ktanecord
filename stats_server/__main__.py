@@ -136,16 +136,22 @@ def FetchScores():
 	del Records[0]
 	return str({"Response": "Modules successfully fetched!"}).replace("'",'"')
 
+
+def UpdateRecord(old):
+	for key in old:
+		if isinstance(old[key], str): old[key] = old[key].replace("'","{__apostrophe__}")
+	return str(old).replace("'",'"').replace("{__apostrophe__}","'")
+
 def GetSimilar(key, module):
 	similar = sorted(Records, key = cmp_to_key(lambda a, b: distance(str(a[key]).lower(), module) - distance(str(b[key]).lower(), module)))[0]
-	if(distance(str(similar[key]).lower(), module) >= 0.7): return str(similar).replace("'",'"')
+	if(distance(str(similar[key]).lower(), module) >= 0.7): return UpdateRecord(similar)
 	return None
 
 @app.route("/Score/<module>")
 def GetScore(module):
 	module = unquote(module).lower()
 	for record in Records:
-		if(str(record["ModuleID"]).lower()==module or str(record["Module Name"]).lower()==module):return str(record).replace("'",'"')
+		if(str(record["ModuleID"]).lower()==module or str(record["Module Name"]).lower()==module):return UpdateRecord(record)
 	similar = GetSimilar("ModuleID", module)
 	if(similar!=None): return similar
 	similar = GetSimilar("Module Name", module)
