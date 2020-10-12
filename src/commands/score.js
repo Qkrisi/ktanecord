@@ -18,7 +18,7 @@ module.exports.run = async(client, message, args) => {
 	if(args._.length==0) return message.channel.send("🚫 You need to specify a module by entering its name, ID or periodic symbol, or by specifying a regular expression!");
 	let inputmodule = GetModule(message, args)
 	if(!inputmodule) return
-	await fetch({url: encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/Score/${inputmodule.Name}`), parse:'json'}).send().then(async(res) => {
+	await fetch({url: encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/Score/${inputmodule.ModuleID}`), parse:'json'}).send().then(async(res) => {
 		let body = res.body
 		if(body.error) return message.channel.send(body.error)
 		let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
