@@ -93,10 +93,10 @@ module.exports.run = async (client, message, args) => {
 
 		let r1 = resp.strike > 0 ? getDecimal(resp.solve / resp.strike) : resp.solve
 		let r2 = resp.strike > 0 ? getDecimal(resp.score / resp.strike) : resp.score
-		
+
 		let SS = `${resp.solve} **/** ${resp.strike}`
 		let SSRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
-		
+
 		message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
 			name: `${originalName}`,
 			userColor: hex,

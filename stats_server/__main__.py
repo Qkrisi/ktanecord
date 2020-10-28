@@ -63,7 +63,7 @@ def Updated(p: dict) -> dict:
 	for k in updateAdded:
 		if not k in p:p[k]=updateAdded[k]
 	return p
-	
+
 UpdateResult = lambda d : str(d).replace("'",'"').replace("True","true").replace("False","false")
 
 @app.route("/get/<streamer>/<player>")
@@ -111,7 +111,7 @@ def SaveStats(password):
 	f.write(UpdateResult(Dump()))
 	f.close()
 	return "Save sucessful"
-	
+
 @app.route("/load/<password>")
 def LoadStats(password):
 	global players
@@ -120,7 +120,7 @@ def LoadStats(password):
 	stats = loads(f.readline())
 	f.close()
 	players = {}
-	for streamer in stats["Stats"]:	
+	for streamer in stats["Stats"]:
 		players[streamer] = {}
 		for player in stats["Stats"][streamer]:
 			base = stats["Stats"][streamer][player]
@@ -128,7 +128,7 @@ def LoadStats(password):
 			getInt = lambda n : int(base[n])
 			players[streamer][player] = Player(player, int(base["color"]["r"]), int(base["color"]["g"]), int(base["color"]["b"]), getInt("solve"), getInt("strike"), getInt("score"), getInt("rank"), getInt("soloClears"), getInt("soloRank"), base["OptedOut"])
 	return "Load successful"
-	
+
 @app.route("/fetchScores")
 def FetchScores():
 	global Records
@@ -151,7 +151,7 @@ def GetSimilar(key, module):
 def GetScore(module):
 	module = unquote(module).lower()
 	for record in Records:
-		if(str(record["ModuleID"]).lower()==module or str(record["Module Name"]).lower()==module):return UpdateRecord(record)
+		if(str(record["ModuleID"]).lower()==module or str(record["Module Name"]).lower()==module): return UpdateRecord(record)
 	similar = GetSimilar("ModuleID", module)
 	if(similar!=None): return similar
 	similar = GetSimilar("Module Name", module)
