@@ -3,12 +3,12 @@ const {aliases, manualOverride} = require('../map.js')
 const fetch = require('wumpfetch')
 const config = require('../../config.json')
 
-function GetMultiplier(m, mu)
+function GetMultiplier(m)
 {
 	let splitted = m.split(":")
 	let minutes = parseInt(splitted[0])
 	let seconds = parseInt(splitted[1])
-	let AllSecs = Math.round((minutes*60+seconds)/6*mu)
+	let AllSecs = minutes*60+seconds
 	minutes = Math.floor((AllSecs-AllSecs%60)/60)
 	let secs = AllSecs-minutes*60
 	return `${minutes}**:**${secs >= 10 ? secs : `0${secs}`}`
@@ -24,7 +24,7 @@ module.exports.run = async(client, message, args) => {
 		let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
 		let creator = `${inputmodule.Type == "Widget" ? "Widget" : "Module"} made by ${inputmodule.Author}`
 		let thumbnail = `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`
-		if(body.Score.toString().trim()=="" && body["TP\nScore"].toString().trim()=="") return message.channel.send(embed.getEmbed("ScoreEmpty", {
+		if(body["Assigned Score"].toString().trim()=="" && body["TP\nScore"].toString().trim()=="") return message.channel.send(embed.getEmbed("ScoreEmpty", {
 			ScoreTitle: `Scores of ${inputmodule.Name}`,
 			diffColor: getColor(inputmodule),
 			creator: creator,
@@ -35,17 +35,17 @@ module.exports.run = async(client, message, args) => {
 			creator: creator,
 			diffColor: getColor(inputmodule),
 			tn: thumbnail,
-			GeneralScore: body.Score ? body.Score : "None",
-			BossPointsPerModule: body["Boss Module Points per Module"],
+			GeneralScore: body["Assigned Score"] ? body["Assigned Score"] : "None",
+			BossPointsPerModule: body["Assigned per module"],
 			TPScore: body["TP\nScore"],
 			TPBombReward: body["TP\nBomb Reward"],
 			ResolvedScore: body["Resolved Score\n"],
 			ResolvedBossPointsPerModule: body["Resolved Boss Points per Module"],
-			SFMultiplier: GetMultiplier(body["Time gained upon solve when multiplier is at:"], 7.5),
-			TotalBossPoints:body["Total boss points earned (adjust # of modules)"],
+			SFMultiplier: GetMultiplier(body["7.5"]),
+			TotalBossPoints:body["Assigned Total boss points earned (adjust # of modules)"],
 		}
 		Object.keys(ConstructedBody).forEach(key => {
-			if(ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]) ConstructedBody[key]="-"
+			if(!ConstructedBody[key] || ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]) ConstructedBody[key]="-"
 		})
 		let emb = embed.getEmbed("Score", ConstructedBody)
 		emb.fields = emb.fields.filter(field => field.value!="-")

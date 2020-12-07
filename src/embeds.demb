@@ -338,7 +338,7 @@
   @end
   @field
     @name
-      Score
+      Assigned Score
     @value
       |GeneralScore
     @inline
@@ -346,7 +346,7 @@
   @end
   @field
     @name
-      Resolved Score
+      Score
     @value
       |ResolvedScore
     @inline
@@ -364,7 +364,7 @@
   @end
   @field
     @name
-      Boss points per module
+      Assigned Boss points per module
     @value
       |BossPointsPerModule
     @inline
@@ -372,7 +372,7 @@
   @end
   @field
     @name
-      Resolved boss points per module
+      Boss points per module
     @value
       |ResolvedBossPointsPerModule
     @inline
@@ -380,7 +380,7 @@
   @end
   @field
     @name
-      Total boss points earned (23 modules)
+      Assigned Total boss points earned (23 modules)
     @value
       |TotalBossPoints
     @inline

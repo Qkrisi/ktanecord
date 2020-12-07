@@ -27,6 +27,7 @@ client = gspread.authorize(creds)
 
 sheetInfo = client.open_by_key(ScoreSheetID)
 sheet = sheetInfo.sheet1
+print(sheet.row_values(1))
 
 Records = []
 
