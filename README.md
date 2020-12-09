@@ -53,9 +53,9 @@ Paste these lines in it, and replace the values with the proper ones:
 | tpServerIP | The ip of the server that stores Twitch Plays scores, more about that below |
 | tpServerPort | The port of the server that stores Twitch Plays scores, more about that below |
 | tpServerPass | A password to block false scores |
-| ScoreSheet| The ID of the Google Spreadsheet that stores module scores |
+| ScoreSheet | The ID of the Google Spreadsheet that stores module scores |
 
-To run the bot, run this command: `node src/main.js`
+To run the bot, run the command `node src/main.js`
 
 ## Compile the TP server
 
@@ -75,7 +75,7 @@ You also need Python3.8+
 
 Create a Google Application with the Spreadsheet API enabled.
 
-Create credentials for the Spreadsheet API, save that as a JSON to stats_server/credentials.json
+Create credentials for the Spreadsheet API, save that as a JSON to `stats_server/credentials.json`
 
 To run the server, run the following command: `python ./stats_server/__main__.py`
 
@@ -91,7 +91,7 @@ Contributions are highly appreciated, but under the following rule(s):
 
 Join our [Discord Server](https://discord.gg/gJVy2Rt) to test out new feauters, give feedback about the bot!
 
-If you're a streamer and wish to be the part of the tp stats system, ping me on Disord (Qkrisi#4982)
+If you're a streamer and wish to be the part of the tp stats system, ping me on Disord (`Qkrisi#4982`)
 
 
 <br><br>

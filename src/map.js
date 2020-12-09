@@ -61,8 +61,8 @@ const aliases = new Map([
 ])
 
 const manualOverride = new Map([
-	["A>N<D", "A_N_D"],
-	["...?", "Punctuation Marks"]
+    ["A>N<D", "A_N_D"],
+    ["...?", "Punctuation Marks"]
 ])
 
 const subjectOverrides = new Map([

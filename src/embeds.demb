@@ -30,7 +30,7 @@
     @name
       |scoreCMD
     @value
-      🧮 Shows the scores of the specified module (Time Mode and Twitch Plays)
+      🧮 Shows the scores of the specified module (Time Mode and Twitch Plays) - Use `--mobile` for a mobile-compatible view.
   @end
   @field
     @name
@@ -323,32 +323,16 @@
   @title
     |ScoreTitle
   @footer
-    |creator
+    "
   @color
     |diffColor
   @thumbnail
     |tn
   @field
     @name
-       ​
+      **Time Mode**
     @value
-       __**Time Mode scores**__
-    @inline
-      false
-  @end
-  @field
-    @name
-      Assigned Score
-    @value
-      |GeneralScore
-    @inline
-      true
-  @end
-  @field
-    @name
-      Score
-    @value
-      |ResolvedScore
+      |TimeModeFields
     @inline
       true
   @end
@@ -364,125 +348,59 @@
   @end
   @field
     @name
-      Assigned Boss points per module
+      ⠀
     @value
-      |BossPointsPerModule
+      |TimeModeValues
     @inline
       true
   @end
   @field
     @name
-      Boss points per module
+      **Twitch Plays**
     @value
-      |ResolvedBossPointsPerModule
+      |TPFields
     @inline
       true
   @end
   @field
     @name
-      Assigned Total boss points earned (23 modules)
+      ​
     @value
-      |TotalBossPoints
+      ​
     @inline
       true
+    @comment
+      Empty field just for alignment
   @end
   @field
     @name
-      7.5x multiplier
+      ⠀
     @value
-      |SFMultiplier
-    @inline
-      false
-  @end
-  @field
-    @name
-       ​
-    @value
-       __**TwitchPlays scores**__
-    @inline
-      false
-  @end
-  @field
-    @name
-      Score
-    @value
-      |TPScore
-    @inline
-      true
-  @end
-  @field
-    @name
-      Bomb reward
-    @value
-      |TPBombReward
+      |TPValues
     @inline
       true
   @end
 #end
 
-#ScoreEmpty
+#ScoreMobile
   @title
     |ScoreTitle
   @footer
-    |creator
-  @thumbnail
-    |tn
+    "
   @color
     |diffColor
+  @thumbnail
+    |tn
   @field
     @name
-       ​
+      **Time Mode**
     @value
-       __**Time Mode scores**__
-    @inline
-      false
+      |TimeModeFieldsMobile
   @end
   @field
     @name
-      Score
+      **Twitch Plays**
     @value
-      None
-    @inline
-      true
-  @end
-  @field
-    @name
-      Resolved score
-    @value
-      None
-    @inline
-      true
-  @end
-  @field
-    @name
-      Default score
-    @value
-      10
-    @inline
-      true
-  @end
-  @field
-    @name
-      7.5x multiplier
-    @value
-      1**:**15
-    @inline
-      false
-  @end
-  @field
-    @name
-       ​
-    @value
-       __**TwitchPlays scores**__
-    @inline
-      false
-  @end
-  @field
-    @name
-      Score
-    @value
-      None
-    @inline
-      false
+      |TPFieldsMobile
   @end
 #end
