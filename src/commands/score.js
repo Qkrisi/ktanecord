@@ -35,7 +35,7 @@ function GetMultiplier(m)
 	let splitted = m.split(":")
 	let minutes = parseInt(splitted[0])
 	let seconds = parseInt(splitted[1])
-	let str = `${minutes}:${seconds}`
+	let str = `${minutes}:${seconds.toString().length==1 ? 0 : ""}${seconds}`
 	return str=="NaN:NaN" ? "" : str
 }
 
