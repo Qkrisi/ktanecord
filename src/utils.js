@@ -76,7 +76,7 @@ exports.GetModule = (message, args, send = true) => {
 			result = GetMatching(args._.join(' '))
 			if (result && result.length > 0) return HandleRegex(result)
 			else {
-				const cleanseDiscordText = (text) => text.replace(/`/g, "").replace(/(\*|_)/g, "\\$1");
+				const cleanseDiscordText = (text) => text.replace(/`/g, "");
 				if (send) message.channel.send(`🚫 Couldn't find a module by the ID of \`${cleanseDiscordText(args._[0])}\` (case-sensitive), name of \`${cleanseDiscordText(args._.join(' '))}\` (not case-sensitive) or periodic symbol of \`${cleanseDiscordText(args._[0])}\` (not case-sensitive)`)
 				return undefined
 			}
