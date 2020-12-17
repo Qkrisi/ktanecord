@@ -8,5 +8,21 @@
     "larg": "0.0.4",
     "lodash": "^4.17.15",
     "wumpfetch": "^0.2.13"
-  }
+  },
+  "name": "ktanecord",
+  "description": "[Invite](https://top.gg/bot/546017180865789962)",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/qkrisi/ktanecord.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qkrisi/ktanecord/issues"
+  },
+  "homepage": "https://github.com/qkrisi/ktanecord#readme"
 }

@@ -9,6 +9,8 @@ class FakeArg {
 	}
 }
 
+const cleanseDiscordText = (text) => text.replace(/`/g, "");
+
 function mostSimilarModule(searchItem) {
 	let keys = Array.from(main.ktaneModules().keys())
 	let module = keys.sort((entry1, entry2) =>
@@ -48,6 +50,11 @@ const levenshteinRatio = (target, source) => {
 }
 
 exports.GetModule = (message, args, send = true) => {
+	if(args._.join(' ').includes("`"))
+	{
+		message.channel.send("Please don't use backticks in the input!")
+		return undefined
+	}
 	let HandleRegex = result => {
 		if (result.length == 1) return result[0].Module
 		else {
@@ -75,8 +82,7 @@ exports.GetModule = (message, args, send = true) => {
 		else {
 			result = GetMatching(args._.join(' '))
 			if (result && result.length > 0) return HandleRegex(result)
-			else {
-				const cleanseDiscordText = (text) => text.replace(/`/g, "");
+			{
 				if (send) message.channel.send(`🚫 Couldn't find a module by the ID of \`${cleanseDiscordText(args._[0])}\` (case-sensitive), name of \`${cleanseDiscordText(args._.join(' '))}\` (not case-sensitive) or periodic symbol of \`${cleanseDiscordText(args._[0])}\` (not case-sensitive)`)
 				return undefined
 			}
