@@ -6,7 +6,7 @@
     "discord.js": "^11.4.2",
     "enum": "^3.0.4",
     "larg": "0.0.4",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "wumpfetch": "^0.2.13"
   },
   "name": "ktanecord",
