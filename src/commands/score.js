@@ -44,7 +44,7 @@ function GetScoreString(body, fields, names, UseName = false)
 	let str = ""
 	let c = 0
 	fields.forEach(f => {
-		if(body[f] && body[f].toString().trim()!="") str += (UseName ? `${names[c]}:` : body[f])+"\n"
+		if(f && body[f] && body[f].toString().trim()!="") str += (UseName ? `${names[c]}:` : body[f])+"\n"
 		c+=1
 	})
 	return str
@@ -63,12 +63,13 @@ module.exports.run = async (client, message, args) => {
 		let TweaksScore = ""
 		Object.keys(ScorePriority).forEach(field => 
 		{
-			if(!TweaksScore && body[field]!=undefined && body[field].toString().trim()!="") TweaksScore = +body[field]+GetPPM(body)+` (${ScorePriority[field]})`
+			if(!TweaksScore && body[field]!=undefined && body[field].toString().trim()!="") TweaksScore = body[field]+GetPPM(body)+` (${ScorePriority[field]})`
 		})
 		if(!TweaksScore) TweaksScore = `10${GetPPM(body)} (Default)`
+		let UseCommunity = !TweaksScore.includes("Assigned");
 		let time = GetMultiplier(body["7.5"])
-		let TimeModeFields = "Score:\n"+GetScoreString(body, ["Community Score", "Assigned Total boss points earned (adjust # of modules)"], ["Community", "Total points for 23 modules"], true)+(time ? "Time gained at 7.5x multiplier:" : "")
-		let TimeModeValues = `${TweaksScore}\n`+GetScoreString(body, ["Community Score", "Assigned Total boss points earned (adjust # of modules)"], ["Community", "Total points for 23 modules"])+(time ? time : "")
+		let TimeModeFields = "Score:\n"+GetScoreString(body, [UseCommunity ? "Community Score" : "", "Assigned Total boss points earned (adjust # of modules)"], ["Community", "Total points for 23 modules"], true)+(time ? "Time gained at 7.5x multiplier:" : "")
+		let TimeModeValues = `${TweaksScore}\n`+GetScoreString(body, [UseCommunity ? "Community Score" : "", "Assigned Total boss points earned (adjust # of modules)"], ["Community", "Total points for 23 modules"])+(time ? time : "")
 		let TPFields = GetScoreString(body, ["TP\nScore", "TP\nBomb Reward"], ["Score", "Bomb reward"], true)
 		let TPValues = GetScoreString(body, ["TP\nScore", "TP\nBomb Reward"], ["Score", "Bomb reward"])
 		let TimeModeMobile = ""
