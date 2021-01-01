@@ -11,7 +11,6 @@ function GetCallback(message){
 }
 
 function GetErrorCallback(message){
-function GetErrorCallback(message){
 	return error => {
 		console.log(error)
 		message.channel.send(`An error occurrend while communicating with the scoring server (${error.response.status})`)
