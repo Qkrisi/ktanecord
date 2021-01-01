@@ -5,6 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from urllib.parse import unquote
 from Levenshtein import distance
 from functools import cmp_to_key
+from os import path
 from GspreadExtensions import *
 import gspread
 
@@ -122,6 +123,7 @@ def LoadStats(password):
 	global players
 	global Notes
 	if not password == passwd: return str({"error": "Invalid password"}).replace("'",'"')
+	if not os.path.exists("stats.json"):return str({"error": "Save file not found"}).replace("'",'"')
 	f = open("stats.json","r+")
 	stats = loads("\n".join(f.readlines()))
 	Notes = stats["CommunityNotes"]
