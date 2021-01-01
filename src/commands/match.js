@@ -35,7 +35,6 @@ const ConvertToFull = simple => {
 //`/^${simple.replace(/\?/g,"(.)").replace(/\*/g,"(.*?)").replace(/\#/g, "([0-9])")}${"$"}/i`
 
 function GetMatching(regex) {
-	console.log(regex)
 	if (regex.startsWith("/")) regex = regex.substring(1)
 	let i = regex.lastIndexOf("/")
 	let flags = []

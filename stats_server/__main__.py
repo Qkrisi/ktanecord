@@ -1,10 +1,12 @@
 from flask import Flask, request
+from datetime import datetime
 from json import loads
-import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from urllib.parse import unquote
 from Levenshtein import distance
 from functools import cmp_to_key
+from GspreadExtensions import *
+import gspread
 
 app = Flask("tpScoreServer")
 
@@ -22,15 +24,17 @@ with open("../config.json","r") as f:
 	port = parsed["tpServerPort"]
 	ScoreSheetID = parsed["ScoreSheet"]
 
-creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', gspread.auth.READONLY_SCOPES)
+creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', gspread.auth.DEFAULT_SCOPES)
 client = gspread.authorize(creds)
 
 sheetInfo = client.open_by_key(ScoreSheetID)
 sheet = sheetInfo.sheet1
-print(sheet.row_values(1))
+
+UpdateSheets = [sheetInfo.get_worksheet(i) for i in range(1, 5)]
 
 Records = []
 
+Notes = {}
 
 class Color():
 	def __init__(self, r, g, b):
@@ -98,7 +102,7 @@ def setReq(password, streamer):
 @app.route("/dump")
 def Dump() -> dict:
 	global players
-	temp = {"Stats":{}}
+	temp = {"Stats":{},"CommunityNotes":Notes}
 	for streamer in players:
 		temp["Stats"][streamer] = {}
 		for player in players[streamer]:
@@ -116,9 +120,11 @@ def SaveStats(password):
 @app.route("/load/<password>")
 def LoadStats(password):
 	global players
+	global Notes
 	if not password == passwd: return str({"error": "Invalid password"}).replace("'",'"')
 	f = open("stats.json","r+")
-	stats = loads(f.readline())
+	stats = loads("\n".join(f.readlines()))
+	Notes = stats["CommunityNotes"]
 	f.close()
 	players = {}
 	for streamer in stats["Stats"]:
@@ -143,9 +149,9 @@ def UpdateRecord(old):
 		if isinstance(old[key], str): old[key] = old[key].replace("'","{__apostrophe__}")
 	return str(old).replace("'",'"').replace("{__apostrophe__}","'")
 
-def GetSimilar(key, module):
+def GetSimilar(key, module, ReturnRecord = False):
 	similar = sorted(Records, key = cmp_to_key(lambda a, b: distance(str(a[key]).lower(), module) - distance(str(b[key]).lower(), module)))[0]
-	if(distance(str(similar[key]).lower(), module) >= 0.7): return UpdateRecord(similar)
+	if(distance(str(similar[key]).lower(), module) >= 0.7): return UpdateRecord(similar) if not ReturnRecord else similar
 	return None
 
 @app.route("/Score/<module>")
@@ -158,6 +164,52 @@ def GetScore(module):
 	similar = GetSimilar("Module Name", module)
 	if(similar!=None): return similar
 	return str({"error":"Module not found"}).replace("'",'"')
+	
+CommunityColumn = {
+	"K":"Community Score",
+	"L":"Community Per Module",
+	"M":"Community Boss Score"
+}
+
+@app.route("/SetCommunityScore", methods=["POST"])
+def ChangeCommunityScore(Comment = False, body = {}):
+	data = request.json if not Comment else body
+	module = data["module"].lower()
+	ModuleRecord = None
+	for record in Records:
+		if(str(record["ModuleID"]).lower()==module or str(record["Module Name"]).lower()==module): ModuleRecord = record
+	if ModuleRecord==None:
+		ModuleRecord = GetSimilar("ModuleID", module, True)
+		if ModuleRecord==None:ModuleRecord = GetSimilar("Module Name", module, True)
+		if ModuleRecord==None:return str({"error":"Module not found"}).replace("'",'"')
+	index = sheet.find(ModuleRecord["Module Name"], in_column=2).row
+	col = data["column"]
+	ColumnName = CommunityColumn[col]
+	OldValue = ModuleRecord[ColumnName] if ColumnName in ModuleRecord else ""
+	if not Comment and OldValue==data["value"]:return str({"error":f"Value is already {data['value']}"}).replace("'",'"')
+	start = '' if Comment or not OldValue else f'{ModuleRecord[ColumnName]} -> {data["value"]} '
+	IDCol = f'{ModuleRecord["ModuleID"]}-{col}'
+	Reason = f"[{data['discord']}]: {start}{data['reason']} ({datetime.today().strftime('%Y-%m-%d')} {datetime.now().strftime('%H:%M:%S')})"
+	if not IDCol in Notes:
+		Notes[IDCol]={"Notes":[],"Reason":""}
+	Notes[IDCol]["Notes"].append(Reason)
+	if not Comment:Notes[IDCol]["Reason"]=Reason
+	ReasonList = Notes[IDCol]["Notes"][0:]
+	FullReason = "\n".join(ReasonList)
+	while len(FullReason.encode("utf-8"))>262144:
+		ReasonList = ReasonList[1:]
+		FullReason = "\n".join(ReasonList)
+	if len(ReasonList)<len(Notes[IDCol]["Notes"]):
+		FullReason = (Reason+"\n" if not Reason in ReasonList else '')+"...\n"+FullReason
+	if not Comment:sheet.update_acell(f"{col}{index}", data["value"])
+	insert_note(sheet, f"{col}{index}", FullReason)
+	for worksheet in UpdateSheets:
+		insert_note(worksheet, f"{col}{worksheet.find(ModuleRecord['Module Name'], in_column=2).row}", FullReason)
+	return str({"success":""}).replace("'",'"')
+
+@app.route("/Comment", methods=["POST"])
+def Comment():
+	return ChangeCommunityScore(True, request.json)
 
 @app.route("/ScoreDump")
 def ScoreDump():
