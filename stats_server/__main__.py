@@ -123,7 +123,7 @@ def LoadStats(password):
 	global players
 	global Notes
 	if not password == passwd: return str({"error": "Invalid password"}).replace("'",'"')
-	if not os.path.exists("stats.json"):return str({"error": "Save file not found"}).replace("'",'"')
+	if not path.exists("stats.json"):return str({"error": "Save file not found"}).replace("'",'"')
 	f = open("stats.json","r+")
 	stats = loads("\n".join(f.readlines()))
 	Notes = stats["CommunityNotes"]
