@@ -1,4 +1,5 @@
 const {GetModule, FakeArg} = require('../utils.js')
+const {cloneDeep} = require("lodash")
 const axios = require('axios')
 const config = require('../../config.json')
 
@@ -51,10 +52,10 @@ module.exports.run = (client, message, args) => {
 		"value":value,
 		"reason":reason
 	}
-	let url = `http://${config.tpServerIP}:${config.tpServerPort}/SetCommunityScore`
+	let url = encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/SetCommunityScore`)
 	let Callback = GetCallback(message)
 	let ErrorCallback = GetErrorCallback(message)
-	axios.post(url, body).then(Callback(true)).catch(ErrorCallback)
+	axios.post(url, cloneDeep(body)).then(Callback(true)).catch(ErrorCallback)
 	if(args.boss){
 		body["column"]="M"
 		value = ValidateNumber(input[2], message)

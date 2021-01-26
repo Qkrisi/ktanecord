@@ -169,13 +169,14 @@ def GetScore(module):
 	
 CommunityColumn = {
 	"K":"Community Score",
-	"L":"Community Per Module",
-	"M":"Community Boss Score"
+	"L":"Community Boss Score",
+	"M":"Community Per Module"
 }
 
 @app.route("/SetCommunityScore", methods=["POST"])
 def ChangeCommunityScore(Comment = False, body = {}):
 	data = request.json if not Comment else body
+	print(f"received {data}")
 	module = data["module"].lower()
 	ModuleRecord = None
 	for record in Records:
@@ -207,12 +208,30 @@ def ChangeCommunityScore(Comment = False, body = {}):
 	insert_note(sheet, f"{col}{index}", FullReason)
 	for worksheet in UpdateSheets:
 		insert_note(worksheet, f"{col}{worksheet.find(ModuleRecord['Module Name'], in_column=2).row}", FullReason)
+	if not Comment:FetchScores()
 	return str({"success":""}).replace("'",'"')
 
 @app.route("/Comment", methods=["POST"])
 def Comment():
 	return ChangeCommunityScore(True, request.json)
 
+@app.route("/GetCommunity/<module>")
+def GetCommunityScore(module):
+	module = unquote(module).lower()
+	similar = None
+	for record in Records:
+		if(str(record["ModuleID"]).lower()==module or str(record["Module Name"]).lower()==module): similar = record
+	if similar==None:similar = GetSimilar("ModuleID", module, True)
+	if similar==None:similar = GetSimilar("Module Name", module, True)
+	if similar==None:return str({"error":"Module not found"}).replace("'",'"')
+	body = {}
+	for key in CommunityColumn:
+		IDCol = f"{similar['ModuleID']}-{key}"
+		if IDCol in Notes:
+			body["MainReason" if key=="K" else "BossReason"]=Notes[IDCol]["Reason"]
+		body[CommunityColumn[key]]=similar[CommunityColumn[key]]
+	return str(body).replace("'",'"')
+	
 @app.route("/ScoreDump")
 def ScoreDump():
 	return str(Records)

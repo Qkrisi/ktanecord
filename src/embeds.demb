@@ -404,3 +404,130 @@
       |TPFieldsMobile
   @end
 #end
+
+#CommunityScore
+  @title
+    |ScoreTitle
+  @footer
+    "
+  @color
+    |diffColor
+  @thumbnail
+    |tn
+  @field
+    @name
+      ⠀
+    @value
+      **__Main scores__**
+    @inline
+      false
+  @end
+  @field
+    @name
+      Score
+    @value
+      |MainScore
+    @inline
+      true
+  @end
+  @field
+    @name
+      Reason
+    @value
+      |MainReason
+    @inline
+      true
+  @end
+  @field
+    @name
+      ​
+    @value
+      ​
+    @inline
+      true
+    @comment
+      Empty field just for alignment
+  @end
+  @field
+    @name
+      ⠀
+    @value
+      **__Boss scores__**
+    @inline
+      false
+  @end
+  @field
+    @name
+      Points Per Module
+    @value
+      |ppm
+    @inline
+      true
+  @end
+  @field
+    @name
+      Total boss points earned
+    @value
+      |totalbp
+    @inline
+      true
+  @end
+  @field
+    @name
+      Reason
+    @value
+      |BossReason
+    @inline
+      true
+  @end
+#end
+
+#CurrentStreamers
+  @footer
+    "
+  @color
+    0x6441A5
+  @title
+    "
+  @field
+    @name
+      __**Current status of TP:KTaNE streamers**__
+    @value
+      |streamers
+  @end
+#end
+
+#StreamerData
+  @title
+    |streamer
+  @footer
+    "
+  @color
+    0x6441A5
+  @thumbnail
+    |thumbnail
+  @field
+    @name
+      Viewers
+    @value
+      |viewers
+    @inline
+      true
+  @end
+  @field
+    @name
+      Language
+    @value
+      |language
+    @inline
+      true
+  @end
+  @field
+    @name
+      Time of start (UTC)
+    @value
+      |start
+    @inline
+      false
+  @end
+#end

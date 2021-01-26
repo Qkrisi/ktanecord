@@ -41,7 +41,9 @@ Paste these lines in it, and replace the values with the proper ones:
     "tpServerIP": "IP",
     "tpServerPort": "port",
     "tpServerPass": "yourpwd",
-    "ScoreSheet": "sheetID"
+    "ScoreSheet": "sheetID",
+    "TwitchID": "AppID",
+    "TwitchSecret": "AppSecret"
 }
 ```
 
@@ -54,6 +56,8 @@ Paste these lines in it, and replace the values with the proper ones:
 | tpServerPort | The port of the server that stores Twitch Plays scores, more about that below |
 | tpServerPass | A password to block false scores |
 | ScoreSheet | The ID of the Google Spreadsheet that stores module scores |
+| TwitchID | ID of Twitch application (for streamer stats) |
+| TwitchSecret | Secret of Twitch application (for streamer stats) |
 
 To run the bot, run the command `node src/main.js`
 

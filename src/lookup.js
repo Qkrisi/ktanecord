@@ -1,7 +1,7 @@
 const { aliases, manualOverride } = require('./map')
 const { levenshteinRatio, parseDifficulty, embed, getColor, months, GetModule, FakeArg } = require('./utils')
 const axios = require('axios')
-const d = /\{[^}]+}/g
+const d = /\[\[[^}]+]]/g
 const CodeExclude = /`.*?`/g
 
 function mostSimilarModule(modules, searchItem) {
@@ -17,7 +17,7 @@ module.exports = async (modules, message) => {
     message.content = message.content.replace(CodeExclude, '')
     let m = d.exec(message.content)
     if (m == null) { return } // don't remove {} otherwise ASI will fuck it up
-    m = m[0].slice(1, m[0].length - 1).toLowerCase()
+    m = m[0].slice(2, m[0].length - 2).toLowerCase()
     let inputmodule = modules.get(aliases.get(m)) ||
         modules.get(m) ||
         modules.get(mostSimilarModule(modules, m)) || GetModule(message, new FakeArg(m), false)
