@@ -19,13 +19,29 @@ module.exports.run = async (client, message, args) => {
 			MainReason:body["MainReason"],
 			ppm:body["Community Boss Score"],
 			totalbp:body["Community Per Module"],
-			BossReason:body["BossReason"]
+			BossReason:body["BossReason"],
+			MainTitle: "Score",
+			BossTitle: "Points Per Module"
 		}
+		console.log(!ConstructedBody.MainScore);
+		if(!ConstructedBody.MainScore)
+		{
+			ConstructedBody.MainTitle = "*none*"
+			ConstructedBody.MainScore = " ​"
+		}
+		if(!ConstructedBody.ppm && !ConstructedBody.totalbp)
+		{
+			ConstructedBody.BossTitle = "*none*"
+			ConstructedBody.ppm = " ​"
+		}
+		console.log(ConstructedBody);
 		Object.keys(ConstructedBody).forEach(key => {
-			if(!ConstructedBody[key] || ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]) ConstructedBody[key]="-"
+			console.log(key);
+			console.log(!ConstructedBody[key] || ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]);
+			if(!ConstructedBody[key] || ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]) ConstructedBody[key]="."
 		})
 		let emb = embed.getEmbed("CommunityScore", ConstructedBody)
-		emb.fields = emb.fields.filter(field => field.value!="-")
+		emb.fields = emb.fields.filter(field => field.value!=".")
 		message.channel.send(emb)
 	})
 }

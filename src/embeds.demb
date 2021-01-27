@@ -424,7 +424,7 @@
   @end
   @field
     @name
-      Score
+      |MainTitle
     @value
       |MainScore
     @inline
@@ -458,7 +458,7 @@
   @end
   @field
     @name
-      Points Per Module
+      |BossTitle
     @value
       |ppm
     @inline

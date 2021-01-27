@@ -170,7 +170,6 @@ def GetScore(module):
 CommunityColumn = {
 	"K":"Community Score",
 	"L":"Community Boss Score",
-	"M":"Community Per Module"
 }
 
 @app.route("/SetCommunityScore", methods=["POST"])
@@ -192,6 +191,7 @@ def ChangeCommunityScore(Comment = False, body = {}):
 	start = '' if Comment or not OldValue else f'{ModuleRecord[ColumnName]} -> {data["value"]} '
 	IDCol = f'{ModuleRecord["ModuleID"]}-{col}'
 	Reason = f"[{data['discord']}]: {start}{data['reason']} ({datetime.today().strftime('%Y-%m-%d')} {datetime.now().strftime('%H:%M:%S')})"
+	Reason = Reason.replace("'","’").replace('"',"”")
 	if not IDCol in Notes:
 		Notes[IDCol]={"Notes":[],"Reason":""}
 	Notes[IDCol]["Notes"].append(Reason)
@@ -228,7 +228,8 @@ def ClearCommunityScore(module):
 	for col in CommunityColumn:
 		sheet.update_acell(f"{col}{index}", "")
 		clear_note(sheet, f"{col}{index}")
-		if col in Notes:del Notes[f'{similar["Module Name"]}-{col}']
+		NoteName = f'{similar["Module Name"]}-{col}'
+		if NoteName in Notes:del Notes[NoteName]
 	FetchScores()
 	return str({"success":""}).replace("'",'"')
 
