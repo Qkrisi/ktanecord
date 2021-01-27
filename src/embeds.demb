@@ -54,7 +54,7 @@
     @name
       `Inline module lookup`
     @value
-      📙 Get (condensed) information about a module without running a command with `{module}`. Example: `Ok but {V} is a pretty cool module`
+      📙 Get (condensed) information about a module without running a command with `[[module]]`. Example: `Ok but [[V]] is a pretty cool module`
   @end
   @field
     @name
@@ -501,7 +501,7 @@
   @title
     |streamer
   @footer
-    "
+    |name
   @color
     0x6441A5
   @thumbnail

@@ -56,7 +56,7 @@ module.exports.run = async (client, message, args) => {
 		if(argList[0]=="current")
 		{
 			FetchStatus.forEach(async(streamer) => {
-				let url = `https://api.twitch.tv/helix/streams?user_login=${streamer}`
+				let url = encodeURI(`https://api.twitch.tv/helix/streams?user_login=${streamer}`)
 				await fetch({url: url, parse: "json", headers:{Authorization:`Bearer ${token}`, "Client-Id": ClientID}}).send().then(async(response) => {
 					counter+=1
 					let body = response.body.data[0]
@@ -74,19 +74,20 @@ module.exports.run = async (client, message, args) => {
 		{
 			let streamer = argList[1]
 			if(!streamer) streamer = "MrPeanut1028"
-			let url = `https://api.twitch.tv/helix/streams?user_login=${streamer}`
-				await fetch({url: url, parse: "json", headers:{Authorization:`Bearer ${token}`, "Client-Id": ClientID}}).send().then(async(response) => {
-					let body = response.body.data[0]
-					let online = body!=undefined && body.type=="live" && body["game_name"]=="Keep Talking and Nobody Explodes" && ["Twitch Plays", "TP"].some(element => body.title.includes(element))
-					if(!online) return message.channel.send(`${streamer} is currently not online or isn't streaming TP:KTaNE`)
-					message.channel.send(embed.getEmbed("StreamerData", {
-						viewers: body["viewer_count"],
-						start: body["started_at"].replace("T", " ").replace("Z",""),
-						language: body["language"],
-						thumbnail: body["thumbnail_url"].replace("{width}", "1920").replace("{height}", "1080")+`?${new Date().getMilliseconds()}`,
-						streamer: `Statistics of ${streamer}'s stream`
-					}))		
-				})
+			let url = encodeURI(`https://api.twitch.tv/helix/streams?user_login=${streamer}`)
+			await fetch({url: url, parse: "json", headers:{Authorization:`Bearer ${token}`, "Client-Id": ClientID}}).send().then(async(response) => {
+				let body = response.body.data[0]
+				let online = body!=undefined && body.type=="live" && body["game_name"]=="Keep Talking and Nobody Explodes" && ["Twitch Plays", "TP"].some(element => body.title.includes(element))
+				if(!online) return message.channel.send(`${streamer} is currently not online or isn't streaming TP:KTaNE`)
+				message.channel.send(embed.getEmbed("StreamerData", {
+					viewers: body["viewer_count"],
+					start: body["started_at"].replace("T", " ").replace("Z",""),
+					language: body["language"],
+					thumbnail: body["thumbnail_url"].replace("{width}", "1920").replace("{height}", "1080")+`?${new Date().getMilliseconds()}`,
+					streamer: `Statistics of ${streamer}'s stream`,
+					name: body["title"]
+				}))		
+			})
 		}
 		return
 	}

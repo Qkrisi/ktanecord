@@ -83,11 +83,16 @@ const subjectOverrides = new Map([
 ])
 
 const profileWhitelist = [
-    "321242389106786314",
-    "345587926681518080"
+	"345587926681518080",		//Qkrisi
+    "321242389106786314"		//Cyber28
+]
+
+const ScoreWhitelist = [
+	"121400102148505600"		//Rexkix
 ]
 
 module.exports.aliases = aliases
 module.exports.manualOverride = manualOverride
 module.exports.subjectOverrides = subjectOverrides
 module.exports.profileWhitelist = profileWhitelist
+module.exports.ScoreWhitelist = ScoreWhitelist

@@ -38,7 +38,7 @@ function ValidateNumber(value, message){
 
 module.exports.run = (client, message, args) => {
 	if(args.boss) args._.unshift(args.boss)
-	let input = args._.join(" ").split(", ")
+	let input = args._.join(" ").split("//")
 	if(input.length < (args.boss ? 4 : 3)) return message.channel.send("Too few arguments were given")
 	let inputmodule = GetModule(message, new FakeArg(input[0]))
 	if(!inputmodule) return
