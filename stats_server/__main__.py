@@ -183,7 +183,7 @@ def ChangeCommunityScore(Comment = False, body = {}):
 		ModuleRecord = GetSimilar("ModuleID", module, True)
 		if ModuleRecord==None:ModuleRecord = GetSimilar("Module Name", module, True)
 		if ModuleRecord==None:return str({"error":"Module not found"}).replace("'",'"')
-	index = sheet.find(ModuleRecord["Module Name"], in_column=2).row
+	index = sheet.find(str(ModuleRecord["Module Name"]), in_column=2).row
 	col = data["column"]
 	ColumnName = CommunityColumn[col]
 	OldValue = ModuleRecord[ColumnName] if ColumnName in ModuleRecord else ""
@@ -206,7 +206,7 @@ def ChangeCommunityScore(Comment = False, body = {}):
 	if not Comment:sheet.update_acell(f"{col}{index}", data["value"])
 	insert_note(sheet, f"{col}{index}", FullReason)
 	for worksheet in UpdateSheets:
-		insert_note(worksheet, f"{col}{worksheet.find(ModuleRecord['Module Name'], in_column=2).row}", FullReason)
+		insert_note(worksheet, f"{col}{worksheet.find(str(ModuleRecord['Module Name']), in_column=2).row}", FullReason)
 	if not Comment:FetchScores()
 	return str({"success":""}).replace("'",'"')
 
@@ -224,7 +224,7 @@ def ClearCommunityScore(module):
 	if similar==None:similar = GetSimilar("ModuleID", module, True)
 	if similar==None:similar = GetSimilar("Module Name", module, True)
 	if similar==None:return str({"error":"Module not found"}).replace("'",'"')
-	index = sheet.find(similar["Module Name"], in_column=2).row
+	index = sheet.find(str(similar["Module Name"]), in_column=2).row
 	for col in CommunityColumn:
 		sheet.update_acell(f"{col}{index}", "")
 		clear_note(sheet, f"{col}{index}")

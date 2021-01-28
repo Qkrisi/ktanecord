@@ -23,7 +23,6 @@ module.exports.run = async (client, message, args) => {
 			MainTitle: "Score",
 			BossTitle: "Points Per Module"
 		}
-		console.log(!ConstructedBody.MainScore);
 		if(!ConstructedBody.MainScore)
 		{
 			ConstructedBody.MainTitle = "*none*"
@@ -34,7 +33,6 @@ module.exports.run = async (client, message, args) => {
 			ConstructedBody.BossTitle = "*none*"
 			ConstructedBody.ppm = " ​"
 		}
-		console.log(ConstructedBody);
 		Object.keys(ConstructedBody).forEach(key => {
 			console.log(key);
 			console.log(!ConstructedBody[key] || ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]);

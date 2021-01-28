@@ -48,13 +48,13 @@ module.exports.run = (client, message, args) => {
 		}
 	})
 	if(!c) return
-	if(input.length < (args.boss ? 4 : 3)) return message.channel.send("Too few arguments were given")
+	if(input.length < (args.boss ? 4 : 3)) return message.channel.send(`Too few arguments were given. Please us one of the following syntaxes:\n\`${config.token}setcs <module>//<value>//<reason>\`\n\`${config.token}setbosscs <module>//<value>//<value>//<reason>\``)
+	if(!input[0]) return message.channel.send("Please specify a module!")
 	let inputmodule = GetModule(message, new FakeArg(input[0]))
 	if(!inputmodule) return
 	let value = ValidateNumber(input[1], message)
 	if(value==undefined) return
-	let reason = input.slice(args.boss ? 3 : 2).join("//").replace("'","’").replace('"',"”");
-	//if(reason.includes('"') || reason.includes("'")) return message.channel.send("Please don't use quotation marks or apostrophes in your reason!");
+	let reason = input.slice(args.boss ? 3 : 2).join("//").replace("'","’").replace('"',"”")
 	body = {
 		"module":inputmodule.Name,
 		"discord":message.author.tag,
