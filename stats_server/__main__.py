@@ -177,6 +177,7 @@ def ChangeCommunityScore(Comment = False, body = {}):
 	data = request.json if not Comment else body
 	module = data["module"].lower()
 	ModuleRecord = None
+	IgnoreReason = "IgnoreReason" in data
 	for record in Records:
 		if(str(record["ModuleID"]).lower()==module or str(record["Module Name"]).lower()==module): ModuleRecord = record
 	if ModuleRecord==None:
@@ -189,13 +190,13 @@ def ChangeCommunityScore(Comment = False, body = {}):
 	OldValue = ModuleRecord[ColumnName] if ColumnName in ModuleRecord else ""
 	if not Comment and OldValue==data["value"]:return str({"error":f"Value is already {data['value']}"}).replace("'",'"')
 	start = '' if Comment or not OldValue else f'{ModuleRecord[ColumnName]} -> {data["value"]} '
-	IDCol = f'{ModuleRecord["ModuleID"]}-{col}'
-	Reason = f"[{data['discord']}]: {start}{data['reason']} ({datetime.today().strftime('%Y-%m-%d')} {datetime.now().strftime('%H:%M:%S')})"
+	IDCol = f'{ModuleRecord["ModuleID"]}-{col if not IgnoreReason else "K"}'
+	Reason = f"[{data['discord']}]: {start}{data['reason'] if not IgnoreReason else ''} ({datetime.today().strftime('%Y-%m-%d')} {datetime.now().strftime('%H:%M:%S')})" if not IgnoreReason or OldValue else ""
 	Reason = Reason.replace("'","’").replace('"',"”")
 	if not IDCol in Notes:
 		Notes[IDCol]={"Notes":[],"Reason":""}
 	Notes[IDCol]["Notes"].append(Reason)
-	if not Comment:Notes[IDCol]["Reason"]=Reason
+	if not Comment and not IgnoreReason:Notes[IDCol]["Reason"]=Reason
 	ReasonList = Notes[IDCol]["Notes"][0:]
 	FullReason = "\n".join(ReasonList)
 	while len(FullReason.encode("utf-8"))>262144:
@@ -204,6 +205,7 @@ def ChangeCommunityScore(Comment = False, body = {}):
 	if len(ReasonList)<len(Notes[IDCol]["Notes"]):
 		FullReason = (Reason+"\n" if not Reason in ReasonList else '')+"...\n"+FullReason
 	if not Comment:sheet.update_acell(f"{col}{index}", data["value"])
+	if IgnoreReason:col="K"
 	insert_note(sheet, f"{col}{index}", FullReason)
 	for worksheet in UpdateSheets:
 		insert_note(worksheet, f"{col}{worksheet.find(str(ModuleRecord['Module Name']), in_column=2).row}", FullReason)

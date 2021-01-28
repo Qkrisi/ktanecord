@@ -39,6 +39,7 @@ function ValidateNumber(value, message){
 module.exports.run = (client, message, args) => {
 	if(args.boss) args._.unshift(args.boss)
 	let input = args._.join(" ").split("//")
+	console.log(input);
 	let c = true
 	Object.keys(args).forEach(key => {
 		if(c && parseFloat(key))
@@ -67,10 +68,11 @@ module.exports.run = (client, message, args) => {
 	let ErrorCallback = GetErrorCallback(message)
 	axios.post(url, cloneDeep(body)).then(Callback(true)).catch(ErrorCallback)
 	if(args.boss){
+		let BossValue = ValidateNumber(input[2], message)
+		if(BossValue==undefined) return
 		body["column"]="L"
-		value = ValidateNumber(input[2], message)
-		if(value==undefined) return
-		body["value"]=value
+		body["value"]=BossValue
+		body["IgnoreReason"]=""
 		axios.post(url, body).then(Callback(false)).catch(ErrorCallback)
 	}
 }
