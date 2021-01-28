@@ -418,7 +418,7 @@
     @name
       ⠀
     @value
-      **__Main scores__**
+      **__Main score__**
     @inline
       false
   @end
@@ -452,7 +452,7 @@
     @name
       ⠀
     @value
-      **__Boss scores__**
+      **__Boss score__**
     @inline
       false
   @end

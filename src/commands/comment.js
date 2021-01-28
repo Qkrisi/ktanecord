@@ -12,7 +12,7 @@ module.exports.run = async(client, message, args) => {
 		"module":module.Name,
 		"discord":message.author.tag,
 		"reason":reason,
-		"column":"K"		//Just to avoid server screaming
+		"column":args.boss ? "L" : "K"
 	}
 	let url = encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/Comment`)
 	await axios.post(url, body).then(response => {

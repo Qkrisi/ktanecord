@@ -59,7 +59,7 @@ client.on('message', message => {
     if (message.author.bot) return
     lookup(ktaneModules, message)
     if (!message.content.startsWith(config.token)) return
-	if (!profileWhitelist.includes(message.author.id) && message.content.length > 600) return message.channel.send("Please ") // why is this herey
+	if (!profileWhitelist.includes(message.author.id) && message.content.length > 600) return message.channel.send("Please ") // why is this here
 
 	while(message.content.includes("  ")) message.content = message.content.replace("  ", " ")
 
