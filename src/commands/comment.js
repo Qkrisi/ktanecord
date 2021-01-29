@@ -1,8 +1,14 @@
 const {GetModule, FakeArg} = require("../utils.js")
+const {profileWhitelist, ScoreWhitelist} = require("../map.js")
+const {getCooldown} = require("../main.js")
 const config = require('../../config.json')
 const axios = require('axios')
 
 module.exports.run = async(client, message, args) => {
+	let AuthorID = message.author.id.toString()
+	let cooldown = getCooldown()
+	if(!profileWhitelist.includes(AuthorID) && !ScoreWhitelist.includes(AuthorID) && cooldown["Scorebans"]!=undefined && cooldown["Scorebans"].includes(AuthorID))
+		return message.channel.send("You were banned from interacting with community scores!")
 	let input = args._.join(" ").split("//")
 	if(input.length < 2) return message.channel.send(`To few arguments were given. Please use this syntax: \`${config.token}comment <module>//<comment>\``);
 	let module = GetModule(message, new FakeArg(input[0]))

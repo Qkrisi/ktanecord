@@ -1,5 +1,7 @@
 const {GetModule, FakeArg} = require('../utils.js')
+const {profileWhitelist, ScoreWhitelist} = require("../map.js")
 const {cloneDeep} = require("lodash")
+const {getCooldown} = require("../main.js")
 const axios = require('axios')
 const config = require('../../config.json')
 
@@ -37,6 +39,10 @@ function ValidateNumber(value, message){
 }
 
 module.exports.run = async(client, message, args) => {
+	let AuthorID = message.author.id.toString()
+	let body = getCooldown()
+	if(!profileWhitelist.includes(AuthorID) && !ScoreWhitelist.includes(AuthorID) && body["Scorebans"]!=undefined && body["Scorebans"].includes(AuthorID))
+		return message.channel.send("You were banned from interacting with community scores!")
 	if(args.boss) args._.unshift(args.boss)
 	let input = args._.join(" ").split("//")
 	let c = true

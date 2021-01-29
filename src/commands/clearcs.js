@@ -7,7 +7,7 @@ const config = require('../../config.json')
 module.exports.run = async (client, message, args) => {
 	let AuthorID = message.author.id.toString()
 	let body = getCooldown()
-	if(!profileWhitelist.includes(AuthorID) && !ScoreWhitelist.includes(AuthorID) && (body["ScoreMaintainers"]==undefined || !body["ScoreMaintainers"].includes(AuthorID)))
+	if(!profileWhitelist.includes(AuthorID) && !ScoreWhitelist.includes(AuthorID) && (body["Scoremaintainers"]==undefined || !body["Scoremaintainers"].includes(AuthorID)))
 		return message.channel.send("You don't have permission to run this command!")
 	if(args._.length==0) return message.channel.send("Please specify a module!")
 	let module = GetModule(message, args)
