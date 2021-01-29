@@ -408,6 +408,8 @@
 #CommunityScore
   @title
     |ScoreTitle
+  @description
+    |desc=
   @footer
     "
   @color
@@ -416,17 +418,17 @@
     |tn
   @field
     @name
-      ⠀
+      General
     @value
-      **__Main score__**
+      |GeneralScore
     @inline
-      false
+      true
   @end
   @field
     @name
-      |MainTitle
+      PPM
     @value
-      |MainScore
+      |PPMScore
     @inline
       true
   @end
@@ -434,51 +436,9 @@
     @name
       Reason
     @value
-      |MainReason
+      |Reason
     @inline
-      true
-  @end
-  @field
-    @name
-      ​
-    @value
-      ​
-    @inline
-      true
-    @comment
-      Empty field just for alignment
-  @end
-  @field
-    @name
-      ⠀
-    @value
-      **__Boss score__**
-    @inline
-      false
-  @end
-  @field
-    @name
-      |BossTitle
-    @value
-      |ppm
-    @inline
-      true
-  @end
-  @field
-    @name
-      Total boss points earned
-    @value
-      |totalbp
-    @inline
-      true
-  @end
-  @field
-    @name
-      Reason
-    @value
-      |BossReason
-    @inline
-      true
+    true
   @end
 #end
 

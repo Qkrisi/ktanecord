@@ -15,27 +15,12 @@ module.exports.run = async (client, message, args) => {
 			ScoreTitle:`__Community scores of ${inputmodule.Name}__`,
 			diffColor:getColor(inputmodule),
 			tn:thumbnail,
-			MainScore:body["Community Score"],
-			MainReason:body["MainReason"],
-			ppm:body["Community Boss Score"],
-			totalbp:body["Community Per Module"],
-			BossReason:body["BossReason"],
-			MainTitle: "Score",
-			BossTitle: "Points Per Module"
+			GeneralScore:body["Community Score"],
+			Reason:body["MainReason"],
+			PPMScore:body["Community Boss Score"],
 		}
-		if(!ConstructedBody.MainScore)
-		{
-			ConstructedBody.MainTitle = "*none*"
-			ConstructedBody.MainScore = " ​"
-		}
-		if(!ConstructedBody.ppm && !ConstructedBody.totalbp)
-		{
-			ConstructedBody.BossTitle = "*none*"
-			ConstructedBody.ppm = " ​"
-		}
+		if(!ConstructedBody.GeneralScore && !ConstructedBody.PPMScore) ConstructedBody.desc="*none*"
 		Object.keys(ConstructedBody).forEach(key => {
-			console.log(key);
-			console.log(!ConstructedBody[key] || ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]);
 			if(!ConstructedBody[key] || ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]) ConstructedBody[key]="."
 		})
 		let emb = embed.getEmbed("CommunityScore", ConstructedBody)
