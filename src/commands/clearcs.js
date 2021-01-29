@@ -1,8 +1,9 @@
 const {getCooldown} = require("../main.js")
 const {profileWhitelist, ScoreWhitelist} = require("../map.js")
-const {GetModule} = require("../utils.js")
+const {GetModule, FakeArg} = require("../utils.js")
 const fetch = require('wumpfetch')
 const config = require('../../config.json')
+const say = require("./say.js")
 
 module.exports.run = async (client, message, args) => {
 	let AuthorID = message.author.id.toString()
@@ -19,4 +20,5 @@ module.exports.run = async (client, message, args) => {
 		message.channel.send("An error occurred!")
 		console.log(`Error: ${err}`)
 	})
+	say.run(client, message, new FakeArg(`${config.ScoreLog} ${message.author.tag} has cleared ${module.Name} (${message.author.id})`), true);
 }
