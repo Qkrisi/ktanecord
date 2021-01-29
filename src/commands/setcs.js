@@ -84,5 +84,5 @@ module.exports.run = async(client, message, args) => {
 		log+=` and boss value to ${BossValue}`
 		await axios.post(url, body).then(Callback(true)).catch(ErrorCallback)
 	}
-	say.run(client, message, new FakeArg(`${config.ScoreLog} ${log}, reason: ${reason} (${message.author.id})`))
+	say.run(client, message, new FakeArg(`${config.ScoreLog} ${log}, reason: ${reason} (${message.author.id})`), true)
 }
