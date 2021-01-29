@@ -7,7 +7,7 @@ function GetCallback(message){
 	return send => response => {
 		let body = response.data
 		if(body.error) message.channel.send(`Error: ${body.error}`)
-		else if(send) message.channel.send("Score set successfully")
+		else if(send) message.channel.send(`${body.success} score set successfully`)
 	}
 }
 
@@ -36,10 +36,9 @@ function ValidateNumber(value, message){
 	return value
 }
 
-module.exports.run = (client, message, args) => {
+module.exports.run = async(client, message, args) => {
 	if(args.boss) args._.unshift(args.boss)
 	let input = args._.join(" ").split("//")
-	console.log(input);
 	let c = true
 	Object.keys(args).forEach(key => {
 		if(c && parseFloat(key))
@@ -66,13 +65,14 @@ module.exports.run = (client, message, args) => {
 	let url = encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/SetCommunityScore`)
 	let Callback = GetCallback(message)
 	let ErrorCallback = GetErrorCallback(message)
-	axios.post(url, cloneDeep(body)).then(Callback(true)).catch(ErrorCallback)
+	await axios.post(url, cloneDeep(body)).then(Callback(true)).catch(ErrorCallback)
 	if(args.boss){
+		console.log("Sending new");
 		let BossValue = ValidateNumber(input[2], message)
 		if(BossValue==undefined) return
 		body["column"]="L"
 		body["value"]=BossValue
 		body["IgnoreReason"]=""
-		axios.post(url, body).then(Callback(false)).catch(ErrorCallback)
+		await axios.post(url, body).then(Callback(true)).catch(ErrorCallback)
 	}
 }

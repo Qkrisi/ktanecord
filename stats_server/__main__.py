@@ -195,8 +195,14 @@ def ChangeCommunityScore(Comment = False, body = {}):
 	Reason = Reason.replace("'","’").replace('"',"”")
 	if not IDCol in Notes:
 		Notes[IDCol]={"Notes":[],"Reason":""}
-	Notes[IDCol]["Notes"].append(Reason)
+	if not IgnoreReason:Notes[IDCol]["Notes"].append(Reason)
+	else:
+		ind = -1
+		try:ind = len(Notes[IDCol]["Notes"])-Notes[IDCol]["Notes"][::-1].index(Notes[IDCol]["Reason"])-1
+		except ValueError:print("Reason not found")
+		if ind!=-1:Notes[IDCol]["Notes"].insert(ind, Reason)
 	if not Comment and not IgnoreReason:Notes[IDCol]["Reason"]=Reason
+	elif not Comment:Notes[IDCol]["Reason"]="\n".join([Reason, Notes[IDCol]["Reason"]])
 	ReasonList = Notes[IDCol]["Notes"][0:]
 	FullReason = "\n".join(ReasonList)
 	while len(FullReason.encode("utf-8"))>262144:
@@ -210,7 +216,7 @@ def ChangeCommunityScore(Comment = False, body = {}):
 	for worksheet in UpdateSheets:
 		insert_note(worksheet, f"{col}{worksheet.find(str(ModuleRecord['Module Name']), in_column=2).row}", FullReason)
 	if not Comment:FetchScores()
-	return str({"success":""}).replace("'",'"')
+	return str({"success":"PPM" if IgnoreReason else "General"}).replace("'",'"')
 
 @app.route("/Comment", methods=["POST"])
 def Comment():
