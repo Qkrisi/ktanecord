@@ -6,7 +6,7 @@ module.exports.run = (client, message, args) => {
 	let AuthorID = message.author.id.toString()
 	if(!profileWhitelist.includes(AuthorID) && !ScoreWhitelist.includes(AuthorID)) return message.channel.send("You don't have permission to run this command!")
 	ArgList = args._
-	if(ArgList.length < 2) return message.channel.send("Not enough arguments")
+	if(ArgList.length < 3) return message.channel.send("Not enough arguments")
 	ArgList[0] = ArgList[0].toLowerCase()
 	ArgList[1] = ArgList[1].toLowerCase()
 	if(!["maintainers", "bans"].includes(ArgList[0])) return message.channel.send("Role should either be \"maintainers\" or \"bans\"")

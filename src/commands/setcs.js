@@ -4,6 +4,7 @@ const {cloneDeep} = require("lodash")
 const {getCooldown} = require("../main.js")
 const axios = require('axios')
 const config = require('../../config.json')
+const say = require("./say.js")
 
 function GetCallback(message){
 	return send => response => {
@@ -61,6 +62,7 @@ module.exports.run = async(client, message, args) => {
 	let value = ValidateNumber(input[1], message)
 	if(value==undefined) return
 	let reason = input.slice(args.boss ? 3 : 2).join("//").replace("'","’").replace('"',"”")
+	let log = `${message.author.tag} has changed the value of ${inputmodule.Name} to ${value}`
 	body = {
 		"module":inputmodule.Name,
 		"discord":message.author.tag,
@@ -79,6 +81,8 @@ module.exports.run = async(client, message, args) => {
 		body["column"]="L"
 		body["value"]=BossValue
 		body["IgnoreReason"]=""
+		log+=` and boss value to ${BossValue}`
 		await axios.post(url, body).then(Callback(true)).catch(ErrorCallback)
 	}
+	say.run(client, message, new FakeArg(`${config.ScoreLog} ${log}, reason: ${reason} (${message.author.id})`))
 }

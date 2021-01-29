@@ -43,7 +43,8 @@ Paste these lines in it, and replace the values with the proper ones:
     "tpServerPass": "yourpwd",
     "ScoreSheet": "sheetID",
     "TwitchID": "AppID",
-    "TwitchSecret": "AppSecret"
+    "TwitchSecret": "AppSecret",
+    "ScoreLog": "ChannelID"
 }
 ```
 
@@ -58,6 +59,7 @@ Paste these lines in it, and replace the values with the proper ones:
 | ScoreSheet | The ID of the Google Spreadsheet that stores module scores |
 | TwitchID | ID of Twitch application (for streamer stats) |
 | TwitchSecret | Secret of Twitch application (for streamer stats) |
+| ScoreLog | ID of the score logging channel |
 
 To run the bot, run the command `node src/main.js`
 

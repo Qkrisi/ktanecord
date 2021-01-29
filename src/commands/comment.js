@@ -1,6 +1,7 @@
 const {GetModule, FakeArg} = require("../utils.js")
 const {profileWhitelist, ScoreWhitelist} = require("../map.js")
 const {getCooldown} = require("../main.js")
+const say = require("./say.js")
 const config = require('../../config.json')
 const axios = require('axios')
 
@@ -28,4 +29,5 @@ module.exports.run = async(client, message, args) => {
 		console.log(error)
 		message.channel.send(`An error occurrend while communicating with the scoring server (${error.response.status})`)
 	})
+	say.run(client, message, new FakeArg(`${config.ScoreLog} ${message.author.tag} has commented on ${module.Name}: ${reason} (${message.author.id})`), true)
 }
