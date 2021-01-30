@@ -117,13 +117,13 @@ module.exports.run = async (client, message, args) => {
 			if (!originalStreamer) originalStreamer = streamer
 			await fetch({ url: url, parse: 'json' }).send().then(async (res) => {
 				let resp = res.body
+				if (resp.error) return message.channel.send(resp.error)
 				let pfp = ""
 				await fetch({url: encodeURI(`https://api.twitch.tv/helix/users?login=${originalName}`), parse: 'json', headers:{Authorization:`Bearer ${token}`, "Client-Id": ClientID}}).send().then(async(response) => {
 						let body = response.body.data[0]
 						if(!body["profile_image_url"]) return
 						pfp = body["profile_image_url"]
 					})
-				if (resp.error) return message.channel.send(resp.error)
 				let hex = rgbToHex(resp.color.r, resp.color.g, resp.color.b)
 
 				let r1 = resp.strike > 0 ? getDecimal(resp.solve / resp.strike) : resp.solve
