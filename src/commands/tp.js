@@ -45,7 +45,7 @@ function getDecimal(num) {
 module.exports.run = async (client, message, args) => {
 	let argList = args._
 	if(argList[0]) argList[0] = argList[0].toLowerCase()
-	if(["current","data"].includes(argList[0])) {
+	if(["current","data", "stats"].includes(argList[0])) {
 		let token
 		let ClientID = config.TwitchID
 		await axios.post(`https://id.twitch.tv/oauth2/token?client_id=${ClientID}&client_secret=${config.TwitchSecret}&grant_type=client_credentials`, {}).then(async(response) => token = response.data.access_token)
@@ -70,7 +70,7 @@ module.exports.run = async (client, message, args) => {
 				}
 			})	
 		}
-		else
+		else if(argList[0]=="data")
 		{
 			let streamer = argList[1]
 			if(!streamer) streamer = "MrPeanut1028"
@@ -89,67 +89,65 @@ module.exports.run = async (client, message, args) => {
 				}))		
 			})
 		}
+		else
+		{
+			let streamer
+			let name
+			let originalStreamer
+			let originalName
+			if (argList.length > 1) {
+				argList = argList.splice(1, argList.length)
+				let sDone = false
+				streamer
+				if (argList.length == 1) {
+					streamer = "MrPeanut1028"
+					sDone = true
+				}
+				name = argList.length == 1 ? argList[0] : argList.splice(0, argList.length - 1).join(" ")
+				if (!sDone) streamer = argList[0]
+				originalStreamer = streamer
+				streamer = streamer.toLowerCase()
+			}
+			else {
+				streamer = "MrPeanut1028"
+				name = message.author.username
+			}
+			let url = `http://${config.tpServerIP}:${config.tpServerPort}/get/${streamer}/${name}`
+			originalName = name
+			if (!originalStreamer) originalStreamer = streamer
+			await fetch({ url: url, parse: 'json' }).send().then(async (res) => {
+				let resp = res.body
+				let pfp = ""
+				await fetch({url: encodeURI(`https://api.twitch.tv/helix/users?login=${originalName}`), parse: 'json', headers:{Authorization:`Bearer ${token}`, "Client-Id": ClientID}}).send().then(async(response) => {
+						let body = response.body.data[0]
+						if(!body["profile_image_url"]) return
+						pfp = body["profile_image_url"]
+					})
+				if (resp.error) return message.channel.send(resp.error)
+				let hex = rgbToHex(resp.color.r, resp.color.g, resp.color.b)
+
+				let r1 = resp.strike > 0 ? getDecimal(resp.solve / resp.strike) : resp.solve
+				let r2 = resp.strike > 0 ? getDecimal(resp.score / resp.strike) : resp.score
+
+				let SS = `${resp.solve} **/** ${resp.strike}`
+				let SSRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
+
+				message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
+					name: `${originalName}`,
+					userColor: hex,
+					pfp: pfp,
+					streamer: `Statistics from ${originalStreamer}'s stream`,
+					sss: `${SS} **/** ${resp.score}`,
+					ss: SS,
+					sssRatio: `${SSRatio} **:** ${r2}`,
+					ssRatio: SSRatio,
+					rank: `${resp.rank}`,
+					sDef: `${resp.soloClears}`,
+					sRank: `${resp.soloRank}`
+				}))
+			})
+		}
 		return
 	}
 	if (argList[0] == "streamers") return message.channel.send(`Current available streamers: ${available.join(', ')}`)
-	if (argList[0] != "stats") return
-	let streamer
-	let name
-	let originalStreamer
-	let originalName
-	if (argList.length > 1) {
-		argList = argList.splice(1, argList.length)
-		let sDone = false
-		streamer
-		if (argList.length == 1) {
-			streamer = "MrPeanut1028"
-			sDone = true
-		}
-		name = argList.length == 1 ? argList[0] : argList.splice(0, argList.length - 1).join(" ")
-		if (!sDone) streamer = argList[0]
-		originalStreamer = streamer
-		streamer = streamer.toLowerCase()
-	}
-	else {
-		streamer = "MrPeanut1028"
-		name = message.member.user.username
-	}
-	let url = `http://${config.tpServerIP}:${config.tpServerPort}/get/${streamer}/${name}`
-	originalName = name
-	if (!originalStreamer) originalStreamer = streamer
-	await fetch({ url: url, parse: 'json' }).send().then(async (res) => {
-		let resp = res.body
-		/*if (resp.error != undefined) {
-			let url2 = `http://${config.tpServerIP}:${config.tpServerPort}/get/${streamer}/${originalName.toLowerCase()}`
-			let ret = true
-			await fetch({ url: url2, parse: 'json' }).send().then(response => {
-				if (!response.error) {
-					ret = false
-					resp = response.body
-				}
-			})
-			if (ret) return message.channel.send(resp.error)
-		}*/
-		if (resp.error) return message.channel.send(resp.error)
-		let hex = rgbToHex(resp.color.r, resp.color.g, resp.color.b)
-
-		let r1 = resp.strike > 0 ? getDecimal(resp.solve / resp.strike) : resp.solve
-		let r2 = resp.strike > 0 ? getDecimal(resp.score / resp.strike) : resp.score
-
-		let SS = `${resp.solve} **/** ${resp.strike}`
-		let SSRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
-
-		message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
-			name: `${originalName}`,
-			userColor: hex,
-			streamer: `Statistics from ${originalStreamer}'s stream`,
-			sss: `${SS} **/** ${resp.score}`,
-			ss: SS,
-			sssRatio: `${SSRatio} **:** ${r2}`,
-			ssRatio: SSRatio,
-			rank: `${resp.rank}`,
-			sDef: `${resp.soloClears}`,
-			sRank: `${resp.soloRank}`
-		}))
-	})
 }

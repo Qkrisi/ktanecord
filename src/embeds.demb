@@ -97,6 +97,8 @@
     |userColor
   @footer
     |streamer
+  @thumbnail
+    |pfp
   @field
     @name
       Solve / Strike / Score
@@ -144,6 +146,8 @@
     |userColor
   @footer
     |streamer
+  @thumbnail
+    |pfp
   @field
     @name
       Solve / Strike
