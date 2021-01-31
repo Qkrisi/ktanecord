@@ -235,7 +235,8 @@ def ClearCommunityScore(module):
 	index = sheet.find(str(similar["Module Name"]), in_column=2).row
 	for col in CommunityColumn:
 		sheet.update_acell(f"{col}{index}", "")
-		clear_note(sheet, f"{col}{index}")
+		for worksheet in UpdateSheets:
+			clear_note(worksheet, f"{col}{index}")
 		NoteName = f'{similar["Module Name"]}-{col}'
 		if NoteName in Notes:del Notes[NoteName]
 	FetchScores()
