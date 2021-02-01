@@ -12,7 +12,7 @@
     @name
       |helpCMD
     @value
-      ❕ Displays this message (or the admin help message if `--admin` is given)
+      ❕ Displays this message (or the admin help message if `--admin` is given and the community score help message if `--cs` is given)
   @end
   @field
     @name
@@ -37,6 +37,12 @@
       |statsCMD
     @value
       |statsValue
+  @end
+  @field
+    @name
+      |streamCMD
+    @value
+      <:Twitch:702495822281048129> Shows the currently active Twitch Plays streamers (`current`) or the statistics of a specified stream (`data [streamer]`)
   @end
   @field
     @name
@@ -78,6 +84,41 @@
       |cooldownCMD
     @value
       |cooldownValue
+  @end
+  @field
+    @name
+      |manageCMD
+    @value
+      (Scoring admins only) Gives or removes the user the specified role
+  @end
+#end
+
+#CSHelp
+  @title
+    List of community score commands
+  @field
+    @name
+      |setcs
+    @value
+      Sets the general community score of the specified module
+  @end
+  @field
+    @name
+      |setbosscs
+    @value
+      Sets the general and PPM community score of the specified module
+  @end
+  @field
+    @name
+      |clearcs
+    @value
+      (Maintainer only) Clears the community scores and notes of the specified module
+  @end
+  @field
+    @name
+      |getcs
+    @value
+      Gets the community scores and reasons of the specified module
   @end
 #end
 

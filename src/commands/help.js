@@ -4,7 +4,14 @@ const config = require('../../config.json')
 module.exports.run = (client, message, args) => {
 	if (args.admin) return message.channel.send(embed.getEmbed("AdminHelp", {
 		cooldownCMD: `\`${config.token}setcooldown <seconds>\``,
-		cooldownValue: `🕒 Sets the cooldown value of  \`${config.token}repo --random\` (at least 0)`
+		cooldownValue: `🕒 Sets the cooldown value of  \`${config.token}repo --random\` (at least 0)`,
+		manageCMD: `\`${config.token}manage maintainers/bans add/remove <User ID>\``
+	}))
+	if(args.cs) return message.channel.send(embed.getEmbed("CSHelp", {
+		setcs: `\`${config.token}setcs <module>//<value>//<reason>\``,
+		setbosscs: `\`${config.token}setbosscs <module>//<general value>//<ppm value>//<reason>\``,
+		clearcs: `\`${config.token}clearcs <module>\``,
+		getcs: `\`${config.token}getcs <module>\``,
 	}))
 	message.channel.send(embed.getEmbed("Help", {
 		helpCMD: `\`${config.token}help\``,
@@ -12,6 +19,7 @@ module.exports.run = (client, message, args) => {
 		repoCMD: `\`${config.token}repo <module or --random>\``,
 		statsCMD: `\`${config.token}tp stats [player] [streamer]\``,
 		statsValue: `<:Twitch:702495822281048129> Shows player statistics on Twitch Plays (For a list of streamers use \`${config.token}tp streamers\`)`,
+		streamCMD: `\`${config.token}tp current/data [streamer]\``,
 		profileCMD: `\`${config.token}profile\``,
 		matchCMD: `\`${config.token}match <regular expression (full or simple)>\``,
 		matchDesc: "🔑 Shows the number of modules that matches the specified expression and list up to 10 ones.\n[Full RegEx](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Cheatsheet)\n[Simple RegEx](https://kb.iu.edu/d/ahsf)",
