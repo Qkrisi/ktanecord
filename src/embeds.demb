@@ -116,6 +116,12 @@
   @end
   @field
     @name
+      |comment
+    @value
+      Comment on the community score of the specified module
+  @end
+  @field
+    @name
       |getcs
     @value
       Gets the community scores and reasons of the specified module

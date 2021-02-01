@@ -11,7 +11,8 @@ module.exports.run = (client, message, args) => {
 		setcs: `\`${config.token}setcs <module>//<value>//<reason>\``,
 		setbosscs: `\`${config.token}setbosscs <module>//<general value>//<ppm value>//<reason>\``,
 		clearcs: `\`${config.token}clearcs <module>\``,
-		getcs: `\`${config.token}getcs <module>\``,
+		comment: `\`${config.token}comment <module>//<comment>\``,
+		getcs: `\`${config.token}getcs <module>\``
 	}))
 	message.channel.send(embed.getEmbed("Help", {
 		helpCMD: `\`${config.token}help\``,
