@@ -1,4 +1,4 @@
-const { RichEmbed } = require('discord.js')
+const { MessageEmbed } = require('discord.js')
 const Enum = require('enum')
 const fs = require('fs')
 var _ = require('lodash');
@@ -38,7 +38,7 @@ class Embed {
 		this.URL = encodeURI(url)
 	}
 	finalize() {
-		let emb = new RichEmbed()
+		let emb = new MessageEmbed()
 		let rootArgs = ["Title", "URL", "Description", "Color", "Thumbnail", "Footer"]
 		forEach(rootArgs, arg => {
 			let val = Reflect.get(this, arg)

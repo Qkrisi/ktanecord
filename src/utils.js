@@ -11,8 +11,8 @@ class FakeArg {
 
 const cleanseDiscordText = (text) => text.replace(/`/g, "");
 
-function mostSimilarModule(searchItem) {
-	let keys = Array.from(main.ktaneModules().keys())
+function mostSimilarModule(searchItem, obj = undefined) {
+	let keys = obj==undefined ? Array.from(main.ktaneModules().keys()) : Object.keys(obj)
 	let module = keys.sort((entry1, entry2) =>
 		levenshteinRatio(entry2.toLowerCase(), searchItem) - levenshteinRatio(entry1.toLowerCase(), searchItem)
 	)[0]
@@ -104,6 +104,7 @@ const difficulties = new Map([
 
 exports.FakeArg = FakeArg
 exports.levenshteinRatio = levenshteinRatio
+exports.mostSimilarModule = mostSimilarModule
 exports.difficulties = difficulties
 exports.getColor = inputmodule => colors[Math.max(...new Array(inputmodule.DefuserDifficulty ? inputmodule.DefuserDifficulty : "General", inputmodule.ExpertDifficulty ? inputmodule.ExpertDifficulty : "General").map(e => difficulties.get(e)))]
 exports.months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

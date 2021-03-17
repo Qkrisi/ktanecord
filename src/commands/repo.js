@@ -15,6 +15,13 @@ function getRandomModule() {
 
 var Updated = "No data"
 
+class FakeMessage
+{
+	constructor(){
+		this.channel = {send:obj => obj}
+	}
+}
+
 module.exports.run = async (client, message, args) => {
     if (args._.length == 0 && !args.random) return message.channel.send(`🚫 You need to specify a module by entering its name, ID or periodic symbol, or select a random one with \`${config.token}repo --random\``)
 
@@ -78,7 +85,7 @@ module.exports.run = async (client, message, args) => {
         manuals.push('And more...')
     }
 
-    message.channel.send(embed.getEmbed("Repo", {
+   message.channel.send(embed.getEmbed("Repo", {
         moduleName: `${subjectOverrides.get(inputmodule.Name) || `On the Subject of ${inputmodule.Name}`} ${inputmodule.TwitchPlays ? inputmodule.TwitchPlays.Score ? ` \u00B7 <:Twitch:702495822281048129> ${inputmodule.TwitchPlays.Score}` : '' : ''}${inputmodule.RuleSeedSupport === 'Supported' ? ' \u00B7 <:RuleSeed:702495784716992583>' : ''}${inputmodule.Souvenir ? inputmodule.Souvenir.Status == 'Supported' ? ' \u00B7 S' : '' : ''}${inputmodule.MysteryModule == undefined ? " \u00B7 MM" : ""}`,
         moduleDesc: `${inputmodule.Description.split('Tags')[0].trim()}`,
         diff: `Defuser: ${parseDifficulty(inputmodule.DefuserDifficulty)}\nExpert: ${parseDifficulty(inputmodule.ExpertDifficulty)}`,

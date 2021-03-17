@@ -542,3 +542,14 @@
       false
   @end
 #end
+
+#ContactInfo
+	@field
+		@name
+			|Title
+		@value
+			|Contacts
+	@end
+	@footer
+		"
+#end

@@ -93,8 +93,129 @@ const ScoreWhitelist = [
 //	"297565910326181909"		//DireKrow
 ]
 
+const Interactions = [
+	{
+		data:{
+			name:"help",
+			description:"Show KTaNE Bot help",
+			options:[
+				{
+					type:5,
+					name:"admin",
+					description:"Show KTaNE Bot help for server admins"
+				},
+				{
+					type:5,
+					name:"cs",
+					description:"Show KTanE Bot help for community scores"
+				}
+			]
+		}
+	},
+	{
+		data:{
+			name:"ping",
+			description:"Show bot ping"
+		}
+	},
+	{
+		data:{
+			name:"repo",
+			description:"Show information about a KTaNE module",
+			options:[
+				{
+					type:3,
+					name:"module",
+					description:"Show information about the specified module",
+				},
+				{
+					type:5,
+					name:"random",
+					description:"Shows information about a random module"
+				}
+			]
+		}
+	},
+	{
+		data:{
+			name:"score",
+			description:"Show scores of a module",
+			options:[
+				{
+					type:3,
+					name:"module",
+					description:"Module to show scores of",
+					required:true
+				}
+			]
+		}
+	},
+	{
+		data:{
+			name:"tp",
+			description:"Commands related to Twitch Plays",
+			options:[
+				{
+					type:1,
+					name:"stats",
+					description:"Show statistics of player",
+					options:[
+						{
+							type:3,
+							name:"player",
+							description:"Player to show statistics of"
+						},
+						{
+							type:3,
+							name:"streamer",
+							description:"Name of the streamer"
+						}
+					]
+				},
+				{
+					type:1,
+					name:"streamers",
+					description:"Shows a list of available streamers"
+				},
+				{
+					type:1,
+					name:"current",
+					description:"Shows the status of the current streamers"
+				},
+				{
+					type:1,
+					name:"data",
+					description:"Shows the statistics of the specified streamer",
+					options:[
+						{
+							type:3,
+							name:"streamer",
+							description:"Streamer to show statistics of"
+						}
+					]
+				}
+			]
+		},
+	},
+	{
+		data:{
+			name:"match",
+			description:"Search for modules matching a regular expression",
+			options:[
+				{
+					type:3,
+					name:"pattern",
+					description:"RegEx pattern to search for (full or simple)",
+					required:true
+				}
+			]
+		}
+	}
+]
+
 module.exports.aliases = aliases
 module.exports.manualOverride = manualOverride
 module.exports.subjectOverrides = subjectOverrides
 module.exports.profileWhitelist = profileWhitelist
 module.exports.ScoreWhitelist = ScoreWhitelist
+module.exports.Interactions = Interactions

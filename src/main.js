@@ -1,19 +1,69 @@
 const Discord = require('discord.js')
-const client = new Discord.Client()
+let intents = new Discord.Intents(Discord.Intents.NON_PRIVILEGED)
+intents.add("GUILD_MEMBERS")
+const client = new Discord.Client({ws:{intents:intents}})
 const config = require('../config.json')
 const fetch = require('wumpfetch')
 const larg = require('larg')
-const aliases = require('./map.js').aliases
-const profileWhitelist = require('./map.js').profileWhitelist
+const { aliases, profileWhitelist, Interactions } = require('./map.js')
 const lookup = require('./lookup')
 const fs = require('fs')
 
 let ktaneModules = new Map()
 let modIDs = []
 
+let CreatorContacts = {}
+
 function getCooldown() {
     let path = [__dirname, "cooldown.json"].join("/")
     return fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, "utf8")) : {}
+}
+
+const CreateDataFromObject = obj => {
+	let body = {data:{type:4,data:{}}}
+	if(typeof(obj)=="string") body.data.data.content=obj
+	else body.data.data.embeds=[obj]
+	return body
+}
+
+
+
+const CreateMessageFromOptions = (options, base) => {
+	if(options==undefined) return base
+	let CurrentOptions = options
+	CurrentOptions.sort((a, b) => a.value-b.value)
+	let content = ""
+	while(true){
+		let BreakOut = true
+		for(let i = 0;i<CurrentOptions.length;i++){
+			let option = CurrentOptions[i]
+			console.log(option)
+			let BreakOutFor = false
+			switch(option.type){
+				case 1:
+					content+=` ${option.name}`
+					CurrentOptions = option.options
+					if(CurrentOptions!=undefined)
+					{
+						CurrentOptions.sort((a, b) => a.value-b.value)
+						BreakOut = false
+					}
+					BreakOutFor = true
+					break
+				case 3:
+					content+=` ${option.value}`
+					break
+				case 5:
+					if(option.value) content+=` --${option.name}`
+					break
+			}
+			if(BreakOutFor) break
+		}
+		if(BreakOut) break
+	}
+	if(content.startsWith(" ")) content = content.substr(1)
+	base.content = content
+	return base
 }
 
 function getKtaneModules() {
@@ -29,14 +79,73 @@ function getKtaneModules() {
             if (m.Name.toLowerCase().startsWith("the ")) ktaneModules.set(m.Name.toLowerCase().substr(4), m)
             if (m.Symbol != undefined && !aliases.has(m.Symbol) && !ktaneModules.has(m.Symbol) && !symbolBan.has(m.Symbol)) ktaneModules.set(m.Symbol, m)
         }
+        fetch({url: "https://ktane.timwi.de/ContactInfo.json", parse:'json'}).send().then(res => {
+			CreatorContacts = {}
+			Object.keys(res.body).forEach(creator => {
+					let LowerName = creator.toLowerCase()
+					CreatorContacts[LowerName]=res.body[creator]
+					CreatorContacts[LowerName].CreatorName=creator
+				})
+			console.log("Contacts fetched!")
+		})
         fetch({ url: `http://${config.tpServerIP}:${config.tpServerPort}/fetchScores` }).send()
         console.log('fetching complete')
     })
 }
 
+const SetInteractions = (GuildID, enable, callback) => {
+	try{
+		if(enable){
+			let Break = false
+			let cb = true
+			Interactions.forEach(int => {
+					if(!Break)
+						client.api.applications(client.user.id).guilds(GuildID).commands.post(int).then(r => {
+								if(cb)callback("Success!")
+								cb = false
+							}).catch(ex => {
+							console.log("Caught slash command exception")
+							console.log(ex)
+							Break = true
+							callback(`Failed to enable slash commands! Maybe the bot doesn't have permission to create slash commands in this guild. If that's the case, kick the bot and invite it with ${config.Invite}`)
+						})
+			})
+		}
+		else client.api.applications(client.user.id).guilds(GuildID).commands.get().then(resp => {
+				let cb = true
+				resp.forEach(int => {
+						client.api.applications(client.user.id).guilds(GuildID).commands(int.id).delete().then(r => {
+								if(cb)callback("Success!")
+								cb = false
+							}).catch(ex =>{
+							console.log("Caught slash command disable exception")
+							console.log(ex)
+							callback(`Failed to disable slash commands`)
+						})
+				})
+			}).catch(ex => {
+				console.log("Caught slash command disable exception")
+				console.log(ex)
+				callback(`Failed to disable slash commands`)
+			})
+	}
+	catch(ex){
+		console.log("Unknown exception (sc)")
+		console.log(ex)
+		callback("Unknown error occurred")
+	}
+}
 
 client.on('ready', () => {
-    console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.size} servers`)
+	client.ws.on("INTERACTION_CREATE", int => {
+			let CommandFile = require(`./commands/${int.data.name}.js`)
+			let MSG = CreateMessageFromOptions(int.data.options, {author:int.member, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
+			let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
+			CommandFile.run(client, MSG, args)
+	})
+	let body = getCooldown()
+	if(body.SlashCommands) body.SlashCommands.forEach(GuildID => SetInteractions(GuildID, true, r => {}))
+    console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.cache.keyArray().length} servers`)
     client.user.setActivity(`${config.token}help | try ${config.token}repo`)
     if (config.prod) {
         const DBL = require('dblapi.js')
@@ -77,6 +186,8 @@ client.on('message', message => {
 
 client.login(config.discord)
 
-module.exports.ktaneModules = _ => ktaneModules
+module.exports.ktaneModules = () => ktaneModules
+module.exports.CreatorContacts = () => CreatorContacts
 module.exports.modIDs = modIDs
 module.exports.getCooldown = getCooldown
+module.exports.SetInteractions = SetInteractions

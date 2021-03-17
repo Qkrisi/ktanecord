@@ -44,7 +44,8 @@ Paste these lines in it, and replace the values with the proper ones:
     "ScoreSheet": "sheetID",
     "TwitchID": "AppID",
     "TwitchSecret": "AppSecret",
-    "ScoreLog": "ChannelID"
+    "ScoreLog": "ChannelID",
+    "Invite": "Invite link"
 }
 ```
 
@@ -60,6 +61,7 @@ Paste these lines in it, and replace the values with the proper ones:
 | TwitchID | ID of Twitch application (for streamer stats) |
 | TwitchSecret | Secret of Twitch application (for streamer stats) |
 | ScoreLog | ID of the score logging channel |
+| Invite | Invite link of the bot with `applications.commands` |
 
 To run the bot, run the command `node src/main.js`
 

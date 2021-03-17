@@ -14,7 +14,7 @@ module.exports.run = (client, message, args) => {
 		comment: `\`${config.token}comment <module>//<comment>\``,
 		getcs: `\`${config.token}getcs <module>\``
 	}))
-	message.channel.send(embed.getEmbed("Help", {
+	return message.channel.send(embed.getEmbed("Help", {
 		helpCMD: `\`${config.token}help\``,
 		pingCMD: `\`${config.token}ping\``,
 		repoCMD: `\`${config.token}repo <module or --random>\``,
