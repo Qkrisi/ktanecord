@@ -26,18 +26,18 @@ const CreateDataFromObject = obj => {
 	return body
 }
 
+const CSCommands = ["setcs", "setbosscs", "comment", "clearcs"]
 
-
-const CreateMessageFromOptions = (options, base) => {
+const CreateMessageFromOptions = (name, options, base) => {
 	if(options==undefined) return base
 	let CurrentOptions = options
 	CurrentOptions.sort((a, b) => a.value-b.value)
 	let content = ""
+	let Separator = CSCommands.includes(name) ? "//" : " "
 	while(true){
 		let BreakOut = true
 		for(let i = 0;i<CurrentOptions.length;i++){
 			let option = CurrentOptions[i]
-			console.log(option)
 			let BreakOutFor = false
 			switch(option.type){
 				case 1:
@@ -51,7 +51,7 @@ const CreateMessageFromOptions = (options, base) => {
 					BreakOutFor = true
 					break
 				case 3:
-					content+=` ${option.value}`
+					content+=`${content ? Separator : ""}${option.value}`
 					break
 				case 5:
 					if(option.value) content+=` --${option.name}`
@@ -94,25 +94,28 @@ function getKtaneModules() {
 }
 
 const SetInteractions = (GuildID, enable, callback) => {
+	let cb = true
 	try{
 		if(enable){
 			let Break = false
-			let cb = true
 			Interactions.forEach(int => {
 					if(!Break)
 						client.api.applications(client.user.id).guilds(GuildID).commands.post(int).then(r => {
 								if(cb)callback("Success!")
 								cb = false
 							}).catch(ex => {
-							console.log("Caught slash command exception")
+							console.log("Caught slash command enable exception")
 							console.log(ex)
 							Break = true
-							callback(`Failed to enable slash commands! Maybe the bot doesn't have permission to create slash commands in this guild. If that's the case, kick the bot and invite it with ${config.Invite}`)
+							if(cb)
+							{
+								callback(`Failed to enable slash commands! Maybe the bot doesn't have permission to create slash commands in this guild. If that's the case, kick the bot and invite it with ${config.Invite}`)
+								cb = false
+							}
 						})
 			})
 		}
 		else client.api.applications(client.user.id).guilds(GuildID).commands.get().then(resp => {
-				let cb = true
 				resp.forEach(int => {
 						client.api.applications(client.user.id).guilds(GuildID).commands(int.id).delete().then(r => {
 								if(cb)callback("Success!")
@@ -120,28 +123,53 @@ const SetInteractions = (GuildID, enable, callback) => {
 							}).catch(ex =>{
 							console.log("Caught slash command disable exception")
 							console.log(ex)
-							callback(`Failed to disable slash commands`)
+							if(cb)
+							{
+								callback(`Failed to disable slash commands`)
+								cb = false
+							}
 						})
 				})
 			}).catch(ex => {
 				console.log("Caught slash command disable exception")
 				console.log(ex)
-				callback(`Failed to disable slash commands`)
+				if(cb)
+				{
+					callback(`Failed to disable slash commands`)
+					cb = false
+				}
 			})
 	}
 	catch(ex){
 		console.log("Unknown exception (sc)")
 		console.log(ex)
-		callback("Unknown error occurred")
+		if(cb)
+		{
+			callback("Unknown error occurred")
+			cb = false
+		}
 	}
 }
 
 client.on('ready', () => {
 	client.ws.on("INTERACTION_CREATE", int => {
 			let CommandFile = require(`./commands/${int.data.name}.js`)
-			let MSG = CreateMessageFromOptions(int.data.options, {author:int.member, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
-			let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
-			CommandFile.run(client, MSG, args)
+			let run = MSG => {
+				let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
+				CommandFile.run(client, MSG, args)
+			}
+			int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
+			if(CSCommands.includes(int.data.name)){
+				client.channels.fetch(int.channel_id).then(channel => {
+					let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, channel:channel})
+					client.api.interactions(int.id, int.token).callback.post({data:{type:4, data:{content:`Running command: ${config.token}${int.data.name} ${MSG.content}`}}})
+					run(MSG)
+				})
+			}
+			else{
+				let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
+				run(MSG)
+			}
 	})
 	let body = getCooldown()
 	if(body.SlashCommands) body.SlashCommands.forEach(GuildID => SetInteractions(GuildID, true, r => {}))

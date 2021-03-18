@@ -210,6 +210,126 @@ const Interactions = [
 				}
 			]
 		}
+	},
+	{
+		data:{
+			name:"contact",
+			description:"Shows contact information of a modder",
+			options:[
+				{
+					type:3,
+					name:"modder",
+					description:"Name of the modder",
+					required:true
+				}
+			]
+		}
+	},
+	{
+		data:{
+			name:"setcs",
+			description:"Set community score of a module",
+			options:[
+				{
+					type:3,
+					name:"module",
+					description:"Identifier of the module",
+					required:true
+				},
+				{
+					type:3,
+					name:"value",
+					description:"Value",
+					required:true
+				},
+				{
+					type:3,
+					name:"reason",
+					description:"Reasoning behind the value",
+					required:true
+				}
+			]
+		}
+	},
+	{
+		data:{
+			name:"setbosscs",
+			description:"Set community score (general and boss) of a module",
+			options:[
+				{
+					type:3,
+					name:"module",
+					description:"Identifier of the module",
+					required:true
+				},
+				{
+					type:3,
+					name:"value",
+					description:"General score value",
+					required:true
+				},
+				{
+					type:3,
+					name:"ppm",
+					description:"Points per module value",
+					required:true
+				},
+				{
+					type:3,
+					name:"reason",
+					description:"Reasoning behind the value",
+					required:true
+				}
+			]
+		}
+	},
+	{
+		data:{
+			name:"clearcs",
+			description:"(Maintainer only) clear community score of a module",
+			options:[
+				{
+					type:3,
+					name:"module",
+					description:"Identifier of the module",
+					required:true
+				}
+			]
+		}
+	},
+	{
+		data:{
+			name:"comment",
+			description:"Comment on a module's community score",
+			options:[
+				{
+					type:3,
+					name:"module",
+					description:"Idenfitifer of the module",
+					required:true
+				},
+				{
+					type:3,
+					name:"comment",
+					description:"Comment to add",
+					required:true
+				}
+			]
+		}
+	},
+	{
+		data:{
+			name:"getcs",
+			description:"Get community scores and reasons of a module",
+			options:[
+				{
+					type:3,
+					name:"module",
+					description:"Identifier of the module",
+					required:true
+				}
+			]
+		}
 	}
 ]
 

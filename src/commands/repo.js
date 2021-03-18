@@ -15,13 +15,6 @@ function getRandomModule() {
 
 var Updated = "No data"
 
-class FakeMessage
-{
-	constructor(){
-		this.channel = {send:obj => obj}
-	}
-}
-
 module.exports.run = async (client, message, args) => {
     if (args._.length == 0 && !args.random) return message.channel.send(`🚫 You need to specify a module by entering its name, ID or periodic symbol, or select a random one with \`${config.token}repo --random\``)
 

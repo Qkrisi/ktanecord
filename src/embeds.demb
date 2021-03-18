@@ -57,6 +57,12 @@
       |matchDesc
   @end
   @field
+	@name
+		|contactCMD
+	@value
+		:e_mail: Shows contact information of the specified modder
+  @end
+  @field
     @name
       `Inline module lookup`
     @value
@@ -79,6 +85,12 @@
 #AdminHelp
   @title
     List of admin commands
+  @field
+	@name
+		|SCCMD
+	@value
+		Enable or disable slash commands
+  @end
   @field
     @name
       |cooldownCMD
