@@ -59,14 +59,14 @@ exports.GetModule = (message, args, send = true) => {
 		if (result.length == 1) return result[0].Module
 		else {
 			if (send) {
-				message.channel.send(`Expression is ambigious between ${result.length} modules${result.length > 10 ? "; showing first 10" : ""}:`)
+				let msg = `Expression is ambigious between ${result.length} modules${result.length > 10 ? "; showing first 10" : ""}:`
 				let lines = []
 				let ind = -1
 				result.forEach(r => {
 					ind++
 					if (ind < 10) lines.push(r.MessageString)
 				})
-				message.channel.send(lines.join("\n"))
+				message.channel.send(`${msg}\n${lines.join("\n")}`)
 			}
 			return undefined
 		}

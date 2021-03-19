@@ -85,8 +85,8 @@ module.exports.run = (client, message, args) => {
 	res = GetMatching(ConvertToFull(regex))
 	if (!res || res.length == 0) res = GetMatching(regex)
 	if (!res) return message.channel.send(`Invalid regex: ${regexString}`)
-	message.channel.send(`Found ${res.length} result${res.length == 1 ? "" : "s"} for ${regexString}${res.length > 0 ? `${res.length > 10 ? "; showing first 10:" : ":"}` : ""}`)
-	if (res.length < 1) return
+	let msg = `Found ${res.length} result${res.length == 1 ? "" : "s"} for ${regexString}${res.length > 0 ? `${res.length > 10 ? "; showing first 10:" : ":"}` : ""}`
+	if (res.length < 1) return message.channel.send(msg)
 	let lines = []
 	let i = 0
 	res.forEach(module => {
@@ -95,7 +95,7 @@ module.exports.run = (client, message, args) => {
 			i++
 		}
 	})
-	message.channel.send(lines.join("\n"))
+	message.channel.send(`${msg}\n${lines.join("\n")}`)
 }
 
 module.exports.GetMatching = GetMatching
