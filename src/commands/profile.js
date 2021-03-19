@@ -19,12 +19,15 @@ module.exports.run = async (client, message, args) => {
 	}
 	await fetch({ url: arr[0].url }).send().then(async (res) => {
 		let result = undefined
-		try {
-			result = JSON.parse(res.body)
+		if(typeof(res.body)=="string"){
+			try {
+				result = JSON.parse(res.body)
+			}
+			catch (SyntaxError) {
+				return message.channel.send(`Your profile is invalid, <@${message.author.id}>`)
+			}
 		}
-		catch (SyntaxError) {
-			return message.channel.send(`Your profile is invalid, <@${message.author.id}>`)
-		}
+		else result=res.body
 		if (result.DisabledList == undefined || result.Operation == undefined) {
 			return message.channel.send(`Your profile is invalid, <@${message.author.id}>`)
 		}
