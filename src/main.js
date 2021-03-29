@@ -167,7 +167,7 @@ client.on('ready', () => {
 				})
 			}
 			else{
-				let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, guild:{id:int.guild_id} channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
+				let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, guild:{id:int.guild_id}, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
 				run(MSG)
 			}
 	})
