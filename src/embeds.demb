@@ -89,7 +89,7 @@
 	@name
 		|SCCMD
 	@value
-		Enable or disable slash commands
+		|SCValue
   @end
   @field
     @name
