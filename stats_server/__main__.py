@@ -267,12 +267,17 @@ def RemoveScores(pwd):
 	remove = []
 	for module in Notes:
 		ModuleName = module[:-2]
-		MainCell = sheet.cell(sheet.find(ModuleName, in_column=2).row, 11, "UNFORMATTED_VALUE")
-		if not MainCell.value:
-			clear_note(sheet, f"K{MainCell.row}")
-			remove.append(module)
-		for worksheet in UpdateSheets:
-			clear_note(worksheet, f"K{worksheet.find(ModuleName, in_column=2).row}")
+		try:
+			MainCell = sheet.cell(sheet.find(ModuleName, in_column=2).row, 11, "UNFORMATTED_VALUE")
+			if not MainCell.value:
+				clear_note(sheet, f"K{MainCell.row}")
+				remove.append(module)
+			for worksheet in UpdateSheets:
+				clear_note(worksheet, f"K{worksheet.find(ModuleName, in_column=2).row}")
+		except Exception as e:
+			print(str(e))
+			print(f"Removing {ModuleName} because it couldn't be found.")
+			remove.append(ModuleName)
 	for module in remove:del Notes[module]
 	SaveStats(passwd)
 	return "Success!"
