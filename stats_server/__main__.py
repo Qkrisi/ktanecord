@@ -269,7 +269,7 @@ def RemoveScores(pwd):
 		RawModule = module[:-2]
 		Module = GetSimilar("ModuleID", RawModule, True)
 		if Module==None:Module=GetSimilar("Module Name", RawModule, True)
-		if Module==None:return str({"error":f"Module not found: {RawModule}"}).replace("'",'"')
+		if Module==None:continue
 		ModuleName = Module["Module Name"]
 		try:
 			MainCell = sheet.cell(sheet.find(ModuleName, in_column=2).row, 11, "UNFORMATTED_VALUE")
