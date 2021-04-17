@@ -266,7 +266,11 @@ def RemoveScores(pwd):
 	global Notes
 	remove = []
 	for module in Notes:
-		ModuleName = module[:-2]
+		RawModule = module[:-2]
+		Module = GetSimilar("ModuleID", RawModule, True)
+		if Module==None:Module=GetSimilar("Module Name", RawModule, True)
+		if Module=None:return str({"error":f"Module not found: {RawModule}"}).replace("'",'"')
+		ModuleName = Module["Module Name"]
 		try:
 			MainCell = sheet.cell(sheet.find(ModuleName, in_column=2).row, 11, "UNFORMATTED_VALUE")
 			if not MainCell.value:
