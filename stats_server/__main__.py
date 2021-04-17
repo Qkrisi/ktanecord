@@ -31,7 +31,7 @@ client = gspread.authorize(creds)
 sheetInfo = client.open_by_key(ScoreSheetID)
 sheet = sheetInfo.sheet1
 
-UpdateSheets = [sheetInfo.get_worksheet(i) for i in range(1, 5)]
+UpdateSheets = []#[sheetInfo.get_worksheet(i) for i in range(1, 5)]
 
 Records = []
 
