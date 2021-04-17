@@ -260,6 +260,23 @@ def GetCommunityScore(module):
 		body[CommunityColumn[key]]=similar[CommunityColumn[key]]
 	return str(body).replace("'",'"')
 
+@app.route("/RemoveScores/<pwd>")
+def RemoveScores(pwd):
+	if pwd!=passwd:return str({"error": "Invalid password"}).replace("'",'"')
+	global Notes
+	remove = []
+	for module in Notes:
+		ModuleName = module[:-2]
+		MainCell = sheet.cell(sheet.find(ModuleName, in_column=2).row, 11, "UNFORMATTED_VALUE")
+		if not MainCell.value:
+			clear_note(sheet, f"K{MainCell.row}")
+			remove.append(module)
+		for worksheet in UpdateSheets:
+			clear_note(worksheet, f"K{worksheet.find(ModuleName, in_column=2).row}")
+	for module in remove:del Notes[module]
+	SaveStats(passwd)
+	return "Success!"
+
 @app.route("/ScoreDump")
 def ScoreDump():
 	return str(Records)

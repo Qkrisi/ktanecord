@@ -146,6 +146,11 @@ const Interactions = [
 					name:"module",
 					description:"Module to show scores of",
 					required:true
+				},
+				{
+					type:5,
+					name:"mobile",
+					description:"Mobile-friendly response"
 				}
 			]
 		}
