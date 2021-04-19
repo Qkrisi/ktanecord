@@ -339,7 +339,7 @@ const Interactions = [
 	{
 		data:{
 			name:"idea",
-			description:"Show a random (when no name is specified) or specified mod idea (if no states are specified, all of them will be included)",
+			description:"Show a random or specified mod idea",
 			options:[
 				{
 					type:3,
