@@ -335,6 +335,39 @@ const Interactions = [
 				}
 			]
 		}
+	},
+	{
+		data:{
+			name:"idea",
+			description:"Show a random (when no name is specified) or specified mod idea (if no states are specified, all of them will be included)",
+			options:[
+				{
+					type:3,
+					name:"name",
+					description:"Name of the idea",
+				},
+				{
+					type:5,
+					name:"InProgress",
+					description:"Include ideas in progress"
+				},
+				{
+					type:5,
+					name:"NotReady",
+					description:"Include not ready ideas"
+				},
+				{
+					type:5,
+					name:"unknown",
+					description:"Include ideas with unknown state"
+				},
+				{
+					type:5,
+					name:"IsReady",
+					description:"Include ready ideas"
+				}
+			]
+		}
 	}
 ]
 

@@ -63,6 +63,12 @@
 		:e_mail: Shows contact information of the specified modder
   @end
   @field
+	@name
+		|ideaCMD
+	@value
+		<:unknown:833597370201669632> Shows a random (when no name is specified) or specified idea (if no states are specified, all of them will be included)
+  @end
+  @field
     @name
       `Inline module lookup`
     @value
@@ -96,6 +102,23 @@
       |cooldownCMD
     @value
       |cooldownValue
+  @end
+  @field
+    @name
+      |manageCMD
+    @value
+      (Scoring admins only) Gives or removes the user the specified role
+  @end
+#end
+
+#AdminHelpNoCooldown
+  @title
+    List of admin commands
+  @field
+	@name
+		|SCCMD
+	@value
+		|SCValue
   @end
   @field
     @name
@@ -564,4 +587,17 @@
 	@end
 	@footer
 		"
+#end
+
+#Idea
+	@title
+		|name
+	@footer
+		|note
+	@description
+		|description
+	@color
+		|color
+	@url
+		|url
 #end

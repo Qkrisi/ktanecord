@@ -12,7 +12,7 @@ class FakeArg {
 const cleanseDiscordText = (text) => text.replace(/`/g, "");
 
 function mostSimilarModule(searchItem, obj = undefined) {
-	let keys = obj==undefined ? Array.from(main.ktaneModules().keys()) : Object.keys(obj)
+	let keys = obj==undefined ? Array.from(main.ktaneModules().keys()) : Object.keys(obj).filter(key => key!=undefined)
 	let module = keys.sort((entry1, entry2) =>
 		levenshteinRatio(entry2.toLowerCase(), searchItem) - levenshteinRatio(entry1.toLowerCase(), searchItem)
 	)[0]

@@ -66,6 +66,8 @@ const CreateMessageFromOptions = (name, options, base) => {
 	return base
 }
 
+let Ideas = []
+
 function getKtaneModules() {
     fetch({ url: 'https://ktane.timwi.de/json/raw', parse: 'json' }).send().then(res => {
         let tmp = res.body.KtaneModules
@@ -86,6 +88,11 @@ function getKtaneModules() {
 					CreatorContacts[LowerName]=res.body[creator]
 					CreatorContacts[LowerName].CreatorName=creator
 				})
+			fetch({url:"https://ktane.onpointcoding.net/ideas/getmeta.php", parse:'json'}).send().then(res => {
+				let response = res.body
+				Ideas = response.ideas ? response.ideas : []
+				console.log("Ideas fetched!")
+			}).catch(console.log)
 			console.log("Contacts fetched!")
 		})
         fetch({ url: `http://${config.tpServerIP}:${config.tpServerPort}/fetchScores` }).send()
@@ -216,6 +223,8 @@ client.login(config.discord)
 
 module.exports.ktaneModules = () => ktaneModules
 module.exports.CreatorContacts = () => CreatorContacts
+module.exports.Ideas = () => Ideas
 module.exports.modIDs = modIDs
 module.exports.getCooldown = getCooldown
 module.exports.SetInteractions = SetInteractions
+module.exports.Enable_Cooldown = false

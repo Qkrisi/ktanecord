@@ -12,7 +12,7 @@ module.exports.run = (client, message, args) => {
 	}))
 	let body = main.getCooldown()
 	let Slash = `Slash commands are currently ${!body.SlashCommands || !body.SlashCommands.includes(message.guild.id) ? "disabled" : "enabled"} on this server.`
-	if (args.admin) return message.channel.send(embed.getEmbed("AdminHelp", {
+	if (args.admin) return message.channel.send(embed.getEmbed(main.Enable_Cooldown ? "AdminHelp" : "AdminHelpNoCooldown", {
 		SCCMD: `\`${config.token}sc <enable/disable>\``,
 		cooldownCMD: `\`${config.token}setcooldown <seconds>\``,
 		cooldownValue: `🕒 Sets the cooldown value of  \`${config.token}repo --random\` (at least 0)`,
@@ -31,6 +31,7 @@ module.exports.run = (client, message, args) => {
 		matchDesc: "🔑 Shows the number of modules that matches the specified expression and list up to 10 ones.\n[Full RegEx](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions/Cheatsheet)\n[Simple RegEx](https://kb.iu.edu/d/ahsf)",
 		contactCMD: `\`${config.token}contact <modder>\``,
 		scoreCMD: `\`${config.token}score <module>\``,
+		ideaCMD:`\`${config.token}idea [name] [--InProgress --NotReady --Unknown --IsReady]\``,
 		Reference: "**-**Modules can be the name, the ID, the periodic symbol or a Regular Expression to the module\n**-**Simple RegEx also has a `#` wildcard here which represents any numeric character (0-9)\nIf slash commands are enabled on a server, you can also select the command and arguments you wish to invoke by typing `/`. "+Slash,
 		b: '\u200b'
 	}))

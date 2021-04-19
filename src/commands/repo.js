@@ -18,17 +18,19 @@ var Updated = "No data"
 module.exports.run = async (client, message, args) => {
     if (args._.length == 0 && !args.random) return message.channel.send(`🚫 You need to specify a module by entering its name, ID or periodic symbol, or select a random one with \`${config.token}repo --random\``)
 
+	let Enable_Cooldown = main.Enable_Cooldown
+
     // why the fuck is this here?
-    if (cooldown.get(message.author.id) <= Date.now())
+    if (Enable_Cooldown && cooldown.get(message.author.id) <= Date.now())
         cooldown.delete(message.author.id)
 
     //defining the module
     let inputmodule
     if (args.random) {
-        if (cooldown.has(message.author.id))
+        if (Enable_Cooldown && cooldown.has(message.author.id))
             return message.channel.send(`You are on cooldown for ${Math.round((cooldown.get(message.author.id) - Date.now()) / 1000)} seconds! You can still use the repo command with specified modules.`)
         inputmodule = getRandomModule()
-        if (message.guild) {
+        if (Enable_Cooldown && message.guild) {
             let Cooldown = main.getCooldown()
             cooldown.set(message.author.id, Date.now() + (Cooldown.hasOwnProperty(message.guild.id.toString()) ? Cooldown[message.guild.id.toString()] * 1000 : 45000))
         }
