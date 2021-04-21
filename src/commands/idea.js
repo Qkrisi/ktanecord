@@ -15,6 +15,17 @@ const StateData = {
 	"isReady":[0xffff00,"<:isReady:833597369903218739>"]
 }
 
+function GetIdeaEmbed(idea){
+	let data = StateData[idea.state]
+	return embed.getEmbed("Idea", {
+			name:`${data[1]} ${idea.name} (by ${idea.author})`,
+			description:idea.description,
+			note:idea.notes,
+			url:idea.manualUrl,
+			color:data[0]
+	})
+}
+
 module.exports.run = (client, message, args) => {
 	let states = []
 	let keys = Object.keys(args)
@@ -38,12 +49,7 @@ module.exports.run = (client, message, args) => {
 		else return message.channel.send("Couldn't find an idea with the given name")
 	}
 	else idea = Ideas[Math.floor(Math.random()*(Ideas.length+1))]
-	let data = StateData[idea.state]
-	message.channel.send(embed.getEmbed("Idea", {
-			name:`${data[1]} ${idea.name} (by ${idea.author})`,
-			description:idea.description,
-			note:idea.notes,
-			url:idea.manualUrl,
-			color:data[0]
-	}))
+	message.channel.send(GetIdeaEmbed(idea))
 }
+
+module.exports.GetIdeaEmbed = GetIdeaEmbed
