@@ -10,7 +10,7 @@ let ChannelCache = {}
 socket.on("message", data => {
 	let body = JSON.parse(data)
 	let channel = ChannelCache[body.id]
-	messagebody = {}
+	messagebody = undefined
 	if(body.embed){
 		let embed = new Discord.MessageEmbed().setTitle(body.embed.title).setDescription(body.embed.description)
 		if(body.file){
@@ -18,9 +18,10 @@ socket.on("message", data => {
 			embed.attachFiles(attachment)
 		}
 		embed.setImage(body.embed.image)
-		messagebody.embed=embed
+		messagebody = {embed:embed}
 	}
-	channel.send(body.message, messagebody).then(r => {
+	else if(body.file) messagebody = new Discord.MessageAttachment(body.file.path, body.file.filename)
+	channel.send(body.message, messagebody ? messagebody : {}).then(r => {
 		if(body.file) fs.unlinkSync(body.file.path)
 	})
 })
