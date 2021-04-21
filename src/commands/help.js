@@ -1,8 +1,10 @@
 const main = require("../main.js")
+const SimHandler = require("../KtaneSimHandler.js")
 const { embed } = require('../utils')
 const config = require('../../config.json')
 
 module.exports.run = (client, message, args) => {
+	if(args.sim) return SimHandler.send(message)
 	if(args.cs) return message.channel.send(embed.getEmbed("CSHelp", {
 		setcs: `\`${config.token}setcs <module>//<value>//<reason>\``,
 		setbosscs: `\`${config.token}setbosscs <module>//<general value>//<ppm value>//<reason>\``,

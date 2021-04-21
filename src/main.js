@@ -8,6 +8,7 @@ const larg = require('larg')
 const { aliases, profileWhitelist, Interactions } = require('./map.js')
 const lookup = require('./lookup')
 const fs = require('fs')
+const SimHandler = require("./KtaneSimHandler.js")
 
 let ktaneModules = new Map()
 let modIDs = []
@@ -216,6 +217,7 @@ client.on('message', message => {
         commandFile.run(client, message, args)
     } catch (err) {
         console.log(err)
+        SimHandler.send(message)
     }
 })
 

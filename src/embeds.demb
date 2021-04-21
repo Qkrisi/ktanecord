@@ -12,7 +12,7 @@
     @name
       |helpCMD
     @value
-      ❕ Displays this message (or the admin help message if `--admin` is given and the community score help message if `--cs` is given)
+      ❕ Displays this message (KTaNE Simulator help if `--sim` is given, the admin help message if `--admin` is given and the community score help message if `--cs` is given)
   @end
   @field
     @name
