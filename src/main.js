@@ -96,7 +96,7 @@ function getKtaneModules() {
 			}).catch(console.log)
 			console.log("Contacts fetched!")
 		})
-        fetch({ url: `http://${config.tpServerIP}:${config.tpServerPort}/fetchScores` }).send()
+        fetch({ url: `http://${config.tpServerIP}:${config.tpServerPort}/fetchScores` }).send().catch(err => console.log("Failed to connect to the TP server"))
         console.log('fetching complete')
     })
 }

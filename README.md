@@ -45,7 +45,9 @@ Paste these lines in it, and replace the values with the proper ones:
     "TwitchID": "AppID",
     "TwitchSecret": "AppSecret",
     "ScoreLog": "ChannelID",
-    "Invite": "Invite link"
+    "Invite": "Invite link",
+    "SimPort": "port",
+    "EnableSimulator": false
 }
 ```
 
@@ -54,14 +56,18 @@ Paste these lines in it, and replace the values with the proper ones:
 | discord | The token of the bot |
 | token | The prefix of the bot, that it'll use before commands (<prefix>help, etc.)|
 | prod | Should always be `false`! |
-| tpServerIP | The ip of the server that stores Twitch Plays scores, more about that below |
-| tpServerPort | The port of the server that stores Twitch Plays scores, more about that below |
-| tpServerPass | A password to block false scores |
-| ScoreSheet | The ID of the Google Spreadsheet that stores module scores |
-| TwitchID | ID of Twitch application (for streamer stats) |
-| TwitchSecret | Secret of Twitch application (for streamer stats) |
-| ScoreLog | ID of the score logging channel |
-| Invite | Invite link of the bot with `applications.commands` |
+| tpServerIP | The address of the WebSocket server in the KTaNE Simulator and the ip of the server that stores Twitch Plays scores (if needed), more about that below (can be "localhost") |
+| tpServerPort | The port of the server that stores Twitch Plays scores (if needed), more about that below |
+| tpServerPass | A password to block false scores (if needed) |
+| ScoreSheet | The ID of the Google Spreadsheet that stores module scores (if needed) |
+| TwitchID | ID of Twitch application (if needed, for streamer stats) |
+| TwitchSecret | Secret of Twitch application (if needed, for streamer stats) |
+| ScoreLog | ID of the score logging channel (if needed) |
+| Invite | Invite link of the bot with the `applications.commands` scope |
+| SimPort | Port of the WebSocket server in the KTaNE Simulator |
+| EnableSimulator | Boolean value indicating the usage of the KTaNE Simulator bot |
+
+KTaNE Simulator: https://github.com/Qkrisi/ktanesim
 
 To run the bot, run the command `node src/main.js`
 

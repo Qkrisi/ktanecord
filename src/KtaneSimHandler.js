@@ -7,24 +7,26 @@ const socket = config.EnableSimulator ? new WebSocket(`ws://${config.tpServerIP}
 
 let ChannelCache = {}
 
-socket.on("message", data => {
-	let body = JSON.parse(data)
-	let channel = ChannelCache[body.id]
-	messagebody = undefined
-	if(body.embed){
-		let embed = new Discord.MessageEmbed().setTitle(body.embed.title).setDescription(body.embed.description)
-		if(body.file){
-			let attachment = new Discord.MessageAttachment(body.file.path, body.file.filename)
-			embed.attachFiles(attachment)
+if(config.EnableSimulator){
+	socket.on("message", data => {
+		let body = JSON.parse(data)
+		let channel = ChannelCache[body.id]
+		messagebody = undefined
+		if(body.embed){
+			let embed = new Discord.MessageEmbed().setTitle(body.embed.title).setDescription(body.embed.description)
+			if(body.file){
+				let attachment = new Discord.MessageAttachment(body.file.path, body.file.filename)
+				embed.attachFiles(attachment)
+			}
+			embed.setImage(body.embed.image)
+			messagebody = {embed:embed}
 		}
-		embed.setImage(body.embed.image)
-		messagebody = {embed:embed}
-	}
-	else if(body.file) messagebody = new Discord.MessageAttachment(body.file.path, body.file.filename)
-	channel.send(body.message, messagebody ? messagebody : {}).then(r => {
-		if(body.file) fs.unlinkSync(body.file.path)
+		else if(body.file) messagebody = new Discord.MessageAttachment(body.file.path, body.file.filename)
+		channel.send(body.message, messagebody ? messagebody : {}).then(r => {
+			if(body.file) fs.unlinkSync(body.file.path)
+		})
 	})
-})
+}
 
 module.exports.send = (msg) => {
 	if(!socket) return
