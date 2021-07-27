@@ -56,7 +56,10 @@ module.exports.run = async (client, message, args) => {
 	if (!inputmodule) return
 	await fetch({ url: encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/Score/${inputmodule.ModuleID}`), parse: 'json' }).send().then(async (res) => {
 		let body = res.body
-		if (body.error) return message.channel.send(body.error)
+		if (body.error)
+			return message.channel.send(body.error)
+		if (body["Module Name"] != inputmodule.Name)
+			return message.channel.send("Module is not on the scoring sheet!")
 		let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
 		let creator = `${inputmodule.Type == "Widget" ? "Widget" : "Module"} made by ${inputmodule.Author}`
 		let thumbnail = `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`

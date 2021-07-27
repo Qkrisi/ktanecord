@@ -184,6 +184,8 @@ def ChangeCommunityScore(Comment = False, body = {}):
 		ModuleRecord = GetSimilar("ModuleID", module, True)
 		if ModuleRecord==None:ModuleRecord = GetSimilar("Module Name", module, True)
 		if ModuleRecord==None:return str({"error":"Module not found"}).replace("'",'"')
+	if str(ModuleRecord["Module Name"]).lower() != module:
+		return str({"error": "Module is not on the scoring sheet"}).replace("'", '"')
 	index = sheet.find(str(ModuleRecord["Module Name"]), in_column=2).row
 	col = data["column"]
 	ColumnName = CommunityColumn[col]
@@ -232,6 +234,8 @@ def ClearCommunityScore(module):
 	if similar==None:similar = GetSimilar("ModuleID", module, True)
 	if similar==None:similar = GetSimilar("Module Name", module, True)
 	if similar==None:return str({"error":"Module not found"}).replace("'",'"')
+	if str(similar["Module Name"]).lower() != module:
+		return str({"error": "Module is not on the scoring sheet"}).replace("'", '"')
 	index = sheet.find(str(similar["Module Name"]), in_column=2).row
 	for col in CommunityColumn:
 		sheet.update_acell(f"{col}{index}", "")

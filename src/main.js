@@ -89,7 +89,7 @@ function getKtaneModules() {
 					CreatorContacts[LowerName]=res.body[creator]
 					CreatorContacts[LowerName].CreatorName=creator
 				})
-			fetch({url:"https://ktane.onpointcoding.net/ideas/getmeta.php", parse:'json'}).send().then(res => {
+			fetch({url:"https://ktane.onpointcoding.net/ideas-old/getmeta.php", parse:'json'}).send().then(res => {
 				let response = res.body
 				Ideas = response.ideas ? response.ideas : []
 				console.log("Ideas fetched!")

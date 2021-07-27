@@ -6,16 +6,21 @@ const axios = require('axios')
 const config = require('../../config.json')
 const say = require("./say.js")
 
-function GetCallback(message){
+function GetCallback(message, SendOBJ){
 	return send => response => {
 		let body = response.data
-		if(body.error) message.channel.send(`Error: ${body.error}`)
+		if(body.error)
+		{
+			SendOBJ.success = false
+			message.channel.send(`Error: ${body.error}`)
+		}
 		else if(send) message.channel.send(`${body.success} score set successfully`)
 	}
 }
 
-function GetErrorCallback(message){
+function GetErrorCallback(message, SendOBJ){
 	return error => {
+		SendOBJ.success = false
 		console.log(error)
 		message.channel.send(`An error occurrend while communicating with the scoring server (${error.response.status})`)
 	}
@@ -71,8 +76,9 @@ module.exports.run = async(client, message, args) => {
 		"reason":reason
 	}
 	let url = encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/SetCommunityScore`)
-	let Callback = GetCallback(message)
-	let ErrorCallback = GetErrorCallback(message)
+	let SendOBJ = {"success":true}
+	let Callback = GetCallback(message, SendOBJ)
+	let ErrorCallback = GetErrorCallback(message, SendOBJ)
 	await axios.post(url, cloneDeep(body)).then(Callback(true)).catch(ErrorCallback)
 	if(args.boss){
 		console.log("Sending new");
@@ -84,5 +90,6 @@ module.exports.run = async(client, message, args) => {
 		log+=` and boss value to ${BossValue}`
 		await axios.post(url, body).then(Callback(true)).catch(ErrorCallback)
 	}
-	say.run(client, message, new FakeArg(`${config.ScoreLog} ${log}, reason: ${reason} (${message.author.id})`), true)
+	if(SendOBJ.success)
+		say.run(client, message, new FakeArg(`${config.ScoreLog} ${log}, reason: ${reason} (${message.author.id})`), true)
 }

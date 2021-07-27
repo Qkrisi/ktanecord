@@ -22,12 +22,20 @@ module.exports.run = async(client, message, args) => {
 		"column":"K"
 	}
 	let url = encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/Comment`)
+	success = true
 	await axios.post(url, body).then(response => {
 		let data = response.data
-		message.channel.send(data.error ? data.error: "Success!")
+		if(data.error)
+		{
+			success = false
+			message.channel.send(data.error)
+		}
+		else message.channel.send(data.error ? data.error: "Success!")
 	}).catch(error => {
 		console.log(error)
+		success = false
 		message.channel.send(`An error occurrend while communicating with the scoring server (${error.response.status})`)
 	})
-	say.run(client, message, new FakeArg(`${config.ScoreLog} ${message.author.tag} has commented on ${module.Name}: ${reason} (${message.author.id})`), true)
+	if(success)
+		say.run(client, message, new FakeArg(`${config.ScoreLog} ${message.author.tag} has commented on ${module.Name}: ${reason} (${message.author.id})`), true)
 }

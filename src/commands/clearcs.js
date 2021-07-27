@@ -13,12 +13,20 @@ module.exports.run = async (client, message, args) => {
 	if(args._.length==0) return message.channel.send("Please specify a module!")
 	let module = GetModule(message, args)
 	if(!module) return
+	let success = true
 	await fetch({url: encodeURI(`http://${config.tpServerIP}:${config.tpServerPort}/ClearScore/${module.Name}`), parse: "json"}).send().then(response => {
 		let resp = response.body
-		message.channel.send(resp.error ? resp.error : "Success!")
+		if(resp.error)
+		{
+			success = false
+			message.channel.send(resp.error)
+		}
+		else message.channel.send("Success!")
 	}).catch(err => {
+		success = false
 		message.channel.send("An error occurred!")
 		console.log(`Error: ${err}`)
 	})
-	say.run(client, message, new FakeArg(`${config.ScoreLog} ${message.author.tag} has cleared ${module.Name} (${message.author.id})`), true);
+	if(success)
+		say.run(client, message, new FakeArg(`${config.ScoreLog} ${message.author.tag} has cleared ${module.Name} (${message.author.id})`), true);
 }
