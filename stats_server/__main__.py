@@ -1,6 +1,6 @@
 from flask import Flask, request
 from datetime import datetime
-from json import loads
+from json import loads, dumps
 from oauth2client.service_account import ServiceAccountCredentials
 from urllib.parse import unquote
 from Levenshtein import distance
@@ -292,7 +292,7 @@ def RemoveScores(pwd):
 
 @app.route("/ScoreDump")
 def ScoreDump():
-	return str(Records)
+	return dumps(Records)
 
 FetchScores()
 
