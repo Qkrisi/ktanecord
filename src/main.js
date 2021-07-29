@@ -24,7 +24,15 @@ function getCooldown() {
 const CreateDataFromObject = obj => {
 	let body = {data:{type:4,data:{}}}
 	if(typeof(obj)=="string") body.data.data.content=obj
-	else body.data.data.embeds=[obj]
+	else
+	{
+		if(obj.components)
+		{
+			body.data.data.components = obj.components
+			delete obj.components
+		}
+		body.data.data.embeds=[obj]
+	}
 	return body
 }
 
@@ -168,6 +176,8 @@ client.on('ready', () => {
 					let CommandFile = require(`./commands/${int.data.name}.js`)
 					let run = MSG => {
 						let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
+						MSG.slash = true
+						MSG.interaction = int
 						CommandFile.run(client, MSG, args)
 					}
 					int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`

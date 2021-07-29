@@ -118,7 +118,7 @@ async function GetMessageData(regex, page, match, channel)
 			"info": `Page ${page} of ${MaxPage}, match ${match} of ${MaxMatch}`,
 			"matches": JoinedLines ? JoinedLines : "      ​"
 	})
-	const { data, files } = await discord.APIMessage.create(channel, "").resolveData().resolveFiles();
+	const { data, files } = await discord.APIMessage.create(channel, "", {allowedMentions: {}, disableMentions: "none"}).resolveData().resolveFiles();
 	data.embeds.push(emb)
 	if(MaxPage > 1)
 	{
@@ -173,7 +173,13 @@ module.exports.run = async(client, message, args) => {
 	if(!res)
 		return message.channel.send("Invalid regex")
 	const { data, files } = res
-	return client.api.channels[message.channel.id].messages.post({data, files}).then(d => client.actions.MessageCreate.handle(d).message)
+	if(message.slash)
+	{
+		if(data.components)
+			data.embeds[0].components = data.components
+		message.channel.send(data.embeds[0])
+	}
+	else return client.api.channels[message.channel.id].messages.post({data, files}).then(d => client.actions.MessageCreate.handle(d).message)
 }
 
 module.exports.component = async(client, interaction, custom_id, channel, message) => {
