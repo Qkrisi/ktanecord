@@ -601,3 +601,14 @@
 	@url
 		|url
 #end
+
+#Matches
+	@footer
+		|info
+	@field
+		@name
+			|title
+		@value
+			|matches
+     @end
+#end

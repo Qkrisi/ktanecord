@@ -9,6 +9,7 @@ const { aliases, profileWhitelist, Interactions } = require('./map.js')
 const lookup = require('./lookup')
 const fs = require('fs')
 const SimHandler = require("./KtaneSimHandler.js")
+const { embed } = require("./utils.js")
 
 let ktaneModules = new Map()
 let modIDs = []
@@ -161,22 +162,36 @@ const SetInteractions = (GuildID, enable, callback) => {
 
 client.on('ready', () => {
 	client.ws.on("INTERACTION_CREATE", int => {
-			let CommandFile = require(`./commands/${int.data.name}.js`)
-			let run = MSG => {
-				let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
-				CommandFile.run(client, MSG, args)
-			}
-			int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
-			if(CSCommands.includes(int.data.name)){
-				client.channels.fetch(int.channel_id).then(channel => {
-					let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, channel:channel})
-					client.api.interactions(int.id, int.token).callback.post({data:{type:4, data:{content:`Running command: ${config.token}${int.data.name} ${MSG.content}`}}})
-					run(MSG)
-				})
-			}
-			else{
-				let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, guild:{id:int.guild_id}, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
-				run(MSG)
+			switch(int.type)
+			{
+				case 2:		//Slash commands
+					let CommandFile = require(`./commands/${int.data.name}.js`)
+					let run = MSG => {
+						let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
+						CommandFile.run(client, MSG, args)
+					}
+					int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
+					if(CSCommands.includes(int.data.name)){
+						client.channels.fetch(int.channel_id).then(channel => {
+							let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, channel:channel})
+							client.api.interactions(int.id, int.token).callback.post({data:{type:4, data:{content:`Running command: ${config.token}${int.data.name} ${MSG.content}`}}})
+							run(MSG)
+						})
+					}
+					else{
+						let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, guild:{id:int.guild_id}, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
+						run(MSG)
+					}
+					break
+				case 3:		//Components
+					let custom_id = int.data.custom_id.split(' ')
+					let CFile = require(`./commands/${custom_id[0]}.js`)
+					client.channels.fetch(int.message.channel_id).then(channel => {
+							CFile.component(client, int, custom_id[1], channel, int.message)
+					}).catch(console.error)
+					break
+				default:
+					return
 			}
 	})
 	let body = getCooldown()
@@ -230,3 +245,4 @@ module.exports.modIDs = modIDs
 module.exports.getCooldown = getCooldown
 module.exports.SetInteractions = SetInteractions
 module.exports.Enable_Cooldown = false
+module.exports.embed = embed
