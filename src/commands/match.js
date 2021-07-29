@@ -87,7 +87,6 @@ function GetMatching(regex, MIndex = 0, MaxMatches = {}) {
 		modules.push(ModuleBuilder)
 	})
 	MaxMatches.max = m
-	console.log(m)
 	return modules
 }
 
