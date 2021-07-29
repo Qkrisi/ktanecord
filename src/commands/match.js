@@ -114,7 +114,7 @@ async function GetMessageData(regex, page, match, channel)
 		MaxMatch = 1
 	let JoinedLines = lines.join("\n")
 	let emb = main.embed.getEmbed("Matches", {
-			"title": `__Found ${res.length} results for ${regexString}:__`,
+			"title": `__Found ${res.length} result${res.length == 1 ? "" : "s"} for ${regexString}:__`,
 			"info": `Page ${page} of ${MaxPage}, match ${match} of ${MaxMatch}`,
 			"matches": JoinedLines ? JoinedLines : "      ​"
 	})
@@ -184,7 +184,7 @@ module.exports.run = async(client, message, args) => {
 
 module.exports.component = async(client, interaction, custom_id, channel, message) => {
 	let MSGEmbed = message.embeds[0]
-	let regex = MSGEmbed.fields[0].name.match(/^__Found \d+ results for (.*?):__$/)[1]
+	let regex = MSGEmbed.fields[0].name.match(/^__Found \d+ results? for (.*?):__$/)[1]
 	let FooterGroups = MSGEmbed.footer.text.match(/^Page (\d+) of \d+, match (\d+) of \d+$/)
 	let PageNum = FooterGroups[1]-1
 	let MatchNum = FooterGroups[2]-1
