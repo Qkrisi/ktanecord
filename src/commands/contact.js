@@ -9,7 +9,8 @@ const Emojis = {
 	"Discord":"<:Discord:821731910866436116>",
 	"YouTube":"<:YouTube:821733572598562836>",
 	"Twitter":"<:Twitter:821732818865618975>",
-	"Email":":e_mail:"
+	"Email":":e_mail:",
+	"Website":":earth_africa:"
 }
 
 const PlatformURLs = {
@@ -19,6 +20,7 @@ const PlatformURLs = {
 	"Steam":"https://steamcommunity.com/",
 	"YouTube":"https://youtube.com/",
 	"Twitter":"https://twitter.com/",
+	"Website":"https://"
 }
 
 const PlatformAlias = {
