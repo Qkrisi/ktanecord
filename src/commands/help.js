@@ -1,11 +1,11 @@
 const main = require("../main.js")
-const SimHandler = require("../KtaneSimHandler.js")
+const simHandler = require("../KtaneSimHandler.js")
 const { embed } = require('../utils')
 const config = require('../../config.json')
 
 module.exports.run = (client, message, args) => {
-	if(args.sim) return SimHandler.send(message)
-	if(args.cs) return message.channel.send(embed.getEmbed("CSHelp", {
+	if (args.sim) return simHandler.send(message)
+	if (args.cs) return message.channel.send(embed.getEmbed("CSHelp", {
 		setcs: `\`${config.token}setcs <module>//<value>//<reason>\``,
 		setbosscs: `\`${config.token}setbosscs <module>//<general value>//<ppm value>//<reason>\``,
 		clearcs: `\`${config.token}clearcs <module>\``,
@@ -13,13 +13,13 @@ module.exports.run = (client, message, args) => {
 		getcs: `\`${config.token}getcs <module>\``
 	}))
 	let body = main.getCooldown()
-	let Slash = `Slash commands are currently ${!body.SlashCommands || !body.SlashCommands.includes(message.guild.id) ? "disabled" : "enabled"} on this server.`
+	let slash = `Slash commands are currently ${!body.SlashCommands || !body.SlashCommands.includes(message.guild.id) ? "disabled" : "enabled"} on this server.`
 	if (args.admin) return message.channel.send(embed.getEmbed(main.Enable_Cooldown ? "AdminHelp" : "AdminHelpNoCooldown", {
 		SCCMD: `\`${config.token}sc <enable/disable>\``,
 		cooldownCMD: `\`${config.token}setcooldown <seconds>\``,
 		cooldownValue: `🕒 Sets the cooldown value of  \`${config.token}repo --random\` (at least 0)`,
 		manageCMD: `\`${config.token}manage maintainers/bans add/remove <User ID>\``,
-		SCValue: `Enable or disable slash commands (${Slash})`
+		SCValue: `Enable or disable slash commands (${slash})`
 	}))
 	return message.channel.send(embed.getEmbed("Help", {
 		helpCMD: `\`${config.token}help\``,
@@ -34,7 +34,7 @@ module.exports.run = (client, message, args) => {
 		contactCMD: `\`${config.token}contact <modder>\``,
 		scoreCMD: `\`${config.token}score <module>\``,
 		ideaCMD:`\`${config.token}idea [name] [--InProgress --NotReady --Unknown --IsReady]\``,
-		Reference: "**-**Modules can be the name, the ID, the periodic symbol or a Regular Expression to the module\n**-**Simple RegEx also has a `#` wildcard here which represents any numeric character (0-9)\nIf slash commands are enabled on a server, you can also select the command and arguments you wish to invoke by typing `/`. "+Slash,
+		Reference: "**-**Modules can be the name, the ID, the periodic symbol or a Regular Expression to the module\n**-**Simple RegEx also has a `#` wildcard here which represents any numeric character (0-9)\nIf slash commands are enabled on a server, you can also select the command and arguments you wish to invoke by typing `/`. "+slash,
 		b: '\u200b'
 	}))
 }

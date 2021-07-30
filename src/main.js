@@ -5,78 +5,76 @@ const client = new Discord.Client({ws:{intents:intents}})
 const config = require('../config.json')
 const fetch = require('wumpfetch')
 const larg = require('larg')
-const { aliases, profileWhitelist, Interactions } = require('./map.js')
+const { aliases, profileWhitelist, interactions } = require('./map.js')
 const lookup = require('./lookup')
 const fs = require('fs')
-const SimHandler = require("./KtaneSimHandler.js")
+const simHandler = require("./KtaneSimHandler.js")
 const { embed } = require("./utils.js")
 
 let ktaneModules = new Map()
 let modIDs = []
 
-let CreatorContacts = {}
+let creatorContacts = {}
 
 function getCooldown() {
     let path = [__dirname, "cooldown.json"].join("/")
     return fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, "utf8")) : {}
 }
 
-const CreateDataFromObject = obj => {
-	let body = {data:{type:4,data:{}}}
-	if(typeof(obj)=="string") body.data.data.content=obj
-	else
-	{
-		if(obj.components)
-		{
+const createDataFromObject = obj => {
+	let body =  {data:{ type: 4, data: {} } }
+	if (typeof(obj)=="string") body.data.data.content = obj
+	else {
+		if (obj.components) {
 			body.data.data.components = obj.components
 			delete obj.components
 		}
-		body.data.data.embeds=[obj]
+		body.data.data.embeds= [obj]
 	}
 	return body
 }
 
-const CSCommands = ["setcs", "setbosscs", "comment", "clearcs"]
+const csCommands = ["setcs", "setbosscs", "comment", "clearcs"]
 
-const CreateMessageFromOptions = (name, options, base) => {
-	if(options==undefined) return base
-	let CurrentOptions = options
-	CurrentOptions.sort((a, b) => a.value-b.value)
+const createMessageFromOptions = (name, options, base) => {
+	if (options==undefined) return base
+	let currentOptions = options
+	currentOptions.sort((a, b) => a.value - b.value)
 	let content = ""
-	let Separator = CSCommands.includes(name) ? "//" : " "
-	while(true){
-		let BreakOut = true
-		for(let i = 0;i<CurrentOptions.length;i++){
-			let option = CurrentOptions[i]
-			let BreakOutFor = false
-			switch(option.type){
+	let seperator = csCommands.includes(name) ? "//" : " "
+	while (true) {
+		let breakout = true
+		for (let i = 0; i < currentOptions.length; i++) {
+			let option = currentOptions[i]
+			let breakoutFor = false
+			switch (option.type) {
 				case 1:
-					content+=` ${option.name}`
-					CurrentOptions = option.options
-					if(CurrentOptions!=undefined)
+					content += ` ${option.name}`
+					currentOptions = option.options
+					if(currentOptions != undefined)
 					{
-						CurrentOptions.sort((a, b) => a.value-b.value)
-						BreakOut = false
+						currentOptions.sort((a, b) => a.value - b.value)
+						breakout = false
 					}
-					BreakOutFor = true
+					breakoutFor = true
 					break
 				case 3:
-					content+=`${content ? Separator : ""}${option.value}`
+					content += `${content ? seperator : ""}${option.value}`
 					break
 				case 5:
-					if(option.value) content+=` --${option.name}`
+					if (option.value) content += ` --${option.name}`
 					break
 			}
-			if(BreakOutFor) break
+			if (breakoutFor) break
 		}
-		if(BreakOut) break
+		if (breakout) break
 	}
-	if(content.startsWith(" ")) content = content.substr(1)
+	if (content.startsWith(" ")) content = content.substr(1)
 	base.content = content
 	return base
 }
 
-let Ideas = []
+let ideas = []
 
 function getKtaneModules() {
     fetch({ url: 'https://ktane.timwi.de/json/raw', parse: 'json' }).send().then(res => {
@@ -92,15 +90,15 @@ function getKtaneModules() {
             if (m.Symbol != undefined && !aliases.has(m.Symbol) && !ktaneModules.has(m.Symbol) && !symbolBan.has(m.Symbol)) ktaneModules.set(m.Symbol, m)
         }
         fetch({url: "https://ktane.timwi.de/ContactInfo.json", parse:'json'}).send().then(res => {
-			CreatorContacts = {}
+			creatorContacts = {}
 			Object.keys(res.body).forEach(creator => {
-					let LowerName = creator.toLowerCase()
-					CreatorContacts[LowerName]=res.body[creator]
-					CreatorContacts[LowerName].CreatorName=creator
-				})
+				let LowerName = creator.toLowerCase()
+				creatorContacts[LowerName] = res.body[creator]
+				creatorContacts[LowerName].CreatorName = creator
+			})
 			fetch({url:"https://ktane.onpointcoding.net/ideas-old/getmeta.php", parse:'json'}).send().then(res => {
 				let response = res.body
-				Ideas = response.ideas ? response.ideas : []
+				ideas = response.ideas ? response.ideas : []
 				console.log("Ideas fetched!")
 			}).catch(console.log)
 			console.log("Contacts fetched!")
@@ -110,58 +108,54 @@ function getKtaneModules() {
     })
 }
 
-const SetInteractions = (GuildID, enable, callback) => {
+const setInteractions = (GuildID, enable, callback) => {
 	let cb = true
-	try{
-		if(enable){
-			let Break = false
-			Interactions.forEach(int => {
-					if(!Break)
-						client.api.applications(client.user.id).guilds(GuildID).commands.post(int).then(r => {
-								if(cb)callback("Success!")
-								cb = false
-							}).catch(ex => {
-							console.log("Caught slash command enable exception")
-							console.log(ex)
-							Break = true
-							if(cb)
-							{
-								callback(`Failed to enable slash commands! Maybe the bot doesn't have permission to create slash commands in this guild. If that's the case, kick the bot and invite it with ${config.Invite}`)
-								cb = false
-							}
-						})
+	try {
+		if (enable) {
+			let breakout = false
+			interactions.forEach(int => {
+				if(!breakout)
+					client.api.applications(client.user.id).guilds(GuildID).commands.post(int).then(r => {
+						if (cb) callback("Success!")
+						cb = false
+					}).catch(ex => {
+					console.log("Caught slash command enable exception")
+					console.log(ex)
+					breakout = true
+					if(cb) {
+						callback(`Failed to enable slash commands! Maybe the bot doesn't have permission to create slash commands in this guild. If that's the case, kick the bot and invite it with ${config.Invite}`)
+						cb = false
+					}
+				})
 			})
 		}
 		else client.api.applications(client.user.id).guilds(GuildID).commands.get().then(resp => {
-				resp.forEach(int => {
-						client.api.applications(client.user.id).guilds(GuildID).commands(int.id).delete().then(r => {
-								if(cb)callback("Success!")
-								cb = false
-							}).catch(ex =>{
-							console.log("Caught slash command disable exception")
-							console.log(ex)
-							if(cb)
-							{
-								callback(`Failed to disable slash commands`)
-								cb = false
-							}
-						})
-				})
-			}).catch(ex => {
-				console.log("Caught slash command disable exception")
-				console.log(ex)
-				if(cb)
-				{
-					callback(`Failed to disable slash commands`)
+			resp.forEach(int => {
+				client.api.applications(client.user.id).guilds(GuildID).commands(int.id).delete().then(r => {
+					if (cb) callback("Success!")
 					cb = false
-				}
+				}).catch(ex =>{
+					console.log("Caught slash command disable exception")
+					console.log(ex)
+					if (cb) {
+						callback(`Failed to disable slash commands`)
+						cb = false
+					}
+				})
 			})
+		}).catch(ex => {
+			console.log("Caught slash command disable exception")
+			console.log(ex)
+			if (cb) {
+				callback(`Failed to disable slash commands`)
+				cb = false
+			}
+		})
 	}
-	catch(ex){
+	catch (ex) {
 		console.log("Unknown exception (sc)")
 		console.log(ex)
-		if(cb)
-		{
+		if (cb) {
 			callback("Unknown error occurred")
 			cb = false
 		}
@@ -170,42 +164,49 @@ const SetInteractions = (GuildID, enable, callback) => {
 
 client.on('ready', () => {
 	client.ws.on("INTERACTION_CREATE", int => {
-			switch(int.type)
-			{
-				case 2:		//Slash commands
-					let CommandFile = require(`./commands/${int.data.name}.js`)
-					let run = MSG => {
-						let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
-						MSG.slash = true
-						MSG.interaction = int
-						CommandFile.run(client, MSG, args)
-					}
-					int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
-					if(CSCommands.includes(int.data.name)){
-						client.channels.fetch(int.channel_id).then(channel => {
-							let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, channel:channel})
-							client.api.interactions(int.id, int.token).callback.post({data:{type:4, data:{content:`Running command: ${config.token}${int.data.name} ${MSG.content}`}}})
-							run(MSG)
-						})
-					}
-					else{
-						let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, guild:{id:int.guild_id}, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
-						run(MSG)
-					}
-					break
-				case 3:		//Components
-					let custom_id = int.data.custom_id.split(' ')
-					let CFile = require(`./commands/${custom_id[0]}.js`)
-					client.channels.fetch(int.message.channel_id).then(channel => {
-							CFile.component(client, int, custom_id[1], channel, int.message)
-					}).catch(console.error)
-					break
-				default:
-					return
-			}
+		switch (int.type) {
+			case 2:	// Slash commands
+				let commandFile = require(`./commands/${int.data.name}.js`)
+				let run = msg => {
+					let args = msg.content ? larg(msg.content.split(' ')) : {_:[]}
+					msg.slash = true
+					msg.interaction = int
+					commandFile.run(client, msg, args)
+				}
+				int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
+				if (csCommands.includes(int.data.name)) {
+					client.channels.fetch(int.channel_id).then(channel => {
+						let msg = createMessageFromOptions(int.data.name, int.data.options, { author: int.member.user, channel: channel })
+						client.api.interactions(int.id, int.token).callback.post({ data: { type: 4, data: { content: `Running command: ${config.token}${int.data.name} ${msg.content}` } } })
+						run(msg)
+					})
+				}
+				else {
+					let msg  = createMessageFromOptions(int.data.name, int.data.options, {
+						author: int.member.user, guild:{id:int.guild_id},
+						channel: {
+							id: int.channel_id,
+							send: obj => { client.api.interactions(int.id, int.token).callback.post(createDataFromObject(obj)) }
+						}
+					})
+					run(msg)
+				}
+				break
+
+			case 3: // Components
+				let customId = int.data.custom_id.split(' ')
+				let cFile = require(`./commands/${customId[0]}.js`)
+				client.channels.fetch(int.message.channel_id).then(channel => {
+					cFile.component(client, int, customId[1], channel, int.message)
+				}).catch(console.error)
+				break
+
+			default:
+				return
+		}
 	})
 	let body = getCooldown()
-	if(body.SlashCommands) body.SlashCommands.forEach(GuildID => SetInteractions(GuildID, true, r => {}))
+	if (body.SlashCommands) body.SlashCommands.forEach(guildId => setInteractions(guildId, true, r => {}))
     console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.cache.keyArray().length} servers`)
     client.user.setActivity(`${config.token}help | try ${config.token}repo`)
     if (config.prod) {
@@ -231,7 +232,7 @@ client.on('message', message => {
     if (!message.content.startsWith(config.token)) return
 	if (!profileWhitelist.includes(message.author.id) && message.content.length > 600) return message.channel.send("Please don't send messages containing more than 600 characters!") // why is this here
 
-	while(message.content.includes("  ")) message.content = message.content.replace("  ", " ")
+	while (message.content.includes("  ")) message.content = message.content.replace("  ", " ")
 
     let args = larg(message.content.slice(config.token.length).split(' '))
 
@@ -242,17 +243,17 @@ client.on('message', message => {
         commandFile.run(client, message, args)
     } catch (err) {
         console.log(err)
-        SimHandler.send(message)
+        simHandler.send(message)
     }
 })
 
 client.login(config.discord)
 
 module.exports.ktaneModules = () => ktaneModules
-module.exports.CreatorContacts = () => CreatorContacts
-module.exports.Ideas = () => Ideas
+module.exports.creatorContacts = () => creatorContacts
+module.exports.ideas = () => ideas
 module.exports.modIDs = modIDs
 module.exports.getCooldown = getCooldown
-module.exports.SetInteractions = SetInteractions
-module.exports.Enable_Cooldown = false
+module.exports.setInteractions = setInteractions
+module.exports.enableCooldown = false
 module.exports.embed = embed

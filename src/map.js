@@ -88,114 +88,114 @@ const profileWhitelist = [
     "321242389106786314"		//Cyber28
 ]
 
-const ScoreWhitelist = [
+const scoreWhitelist = [
 	"121400102148505600",		//Rexkix
 //	"297565910326181909"		//DireKrow
 ]
 
-const Interactions = [
+const interactions = [
 	{
-		data:{
-			name:"help",
-			description:"Show KTaNE Bot help",
-			options:[
+		data: {
+			name: "help",
+			description: "Show KTaNE Bot help",
+			options :[
 				{
-					type:5,
-					name:"admin",
-					description:"Show KTaNE Bot help for server admins"
+					type: 5,
+					name: "admin",
+					description: "Show KTaNE Bot help for server admins"
 				},
 				{
-					type:5,
-					name:"cs",
-					description:"Show KTanE Bot help for community scores"
+					type: 5,
+					name: "cs",
+					description: "Show KTanE Bot help for community scores"
 				}
 			]
 		}
 	},
 	{
-		data:{
-			name:"ping",
-			description:"Show bot ping"
+		data: {
+			name: "ping",
+			description: "Show bot ping"
 		}
 	},
 	{
-		data:{
-			name:"repo",
-			description:"Show information about a KTaNE module",
-			options:[
+		data: {
+			name: "repo",
+			description: "Show information about a KTaNE module",
+			options: [
 				{
-					type:3,
-					name:"module",
-					description:"Show information about the specified module",
+					type: 3,
+					name: "module",
+					description: "Show information about the specified module",
 				},
 				{
-					type:5,
-					name:"random",
-					description:"Shows information about a random module"
+					type: 5,
+					name: "random",
+					description: "Shows information about a random module"
 				}
 			]
 		}
 	},
 	{
-		data:{
-			name:"score",
-			description:"Show scores of a module",
-			options:[
+		data: {
+			name: "score",
+			description: "Show scores of a module",
+			options: [
 				{
-					type:3,
-					name:"module",
-					description:"Module to show scores of",
-					required:true
+					type: 3,
+					name: "module",
+					description: "Module to show scores of",
+					required: true
 				},
 				{
-					type:5,
-					name:"mobile",
-					description:"Mobile-friendly response"
+					type: 5,
+					name: "mobile",
+					description: "Mobile-friendly response"
 				}
 			]
 		}
 	},
 	{
-		data:{
-			name:"tp",
-			description:"Commands related to Twitch Plays",
-			options:[
+		data: {
+			name: "tp",
+			description: "Commands related to Twitch Plays",
+			options: [
 				{
-					type:1,
-					name:"stats",
-					description:"Show statistics of player",
-					options:[
+					type: 1,
+					name: "stats",
+					description: "Show statistics of player",
+					options: [
 						{
-							type:3,
-							name:"player",
-							description:"Player to show statistics of"
+							type: 3,
+							name: "player",
+							description: "Player to show statistics of"
 						},
 						{
-							type:3,
-							name:"streamer",
-							description:"Name of the streamer"
+							type: 3,
+							name: "streamer",
+							description: "Name of the streamer"
 						}
 					]
 				},
 				{
-					type:1,
-					name:"streamers",
-					description:"Shows a list of available streamers"
+					type: 1,
+					name: "streamers",
+					description: "Shows a list of available streamers"
 				},
 				{
-					type:1,
-					name:"current",
-					description:"Shows the status of the current streamers"
+					type: 1,
+					name: "current",
+					description: "Shows the status of the current streamers"
 				},
 				{
-					type:1,
-					name:"data",
-					description:"Shows the statistics of the specified streamer",
-					options:[
+					type: 1,
+					name: "data",
+					description: "Shows the statistics of the specified streamer",
+					options: [
 						{
-							type:3,
-							name:"streamer",
-							description:"Streamer to show statistics of"
+							type: 3,
+							name: "streamer",
+							description: "Streamer to show statistics of"
 						}
 					]
 				}
@@ -204,167 +204,167 @@ const Interactions = [
 	},
 	{
 		data:{
-			name:"match",
-			description:"Search for modules matching a regular expression",
-			options:[
+			name: "match",
+			description: "Search for modules matching a regular expression",
+			options: [
 				{
-					type:3,
-					name:"pattern",
-					description:"RegEx pattern to search for (full or simple)",
-					required:true
+					type: 3,
+					name: "pattern",
+					description: "RegEx pattern to search for (full or simple)",
+					required: true
+				}
+			]
+		}
+	},
+	{
+		data: {
+			name: "contact",
+			description: "Shows contact information of a modder",
+			options: [
+				{
+					type: 3,
+					name: "modder",
+					description: "Name of the modder",
+					required: true
 				}
 			]
 		}
 	},
 	{
 		data:{
-			name:"contact",
-			description:"Shows contact information of a modder",
-			options:[
+			name: "setcs",
+			description: "Set community score of a module",
+			options: [
 				{
-					type:3,
-					name:"modder",
-					description:"Name of the modder",
-					required:true
+					type: 3,
+					name: "module",
+					description:"I dentifier of the module",
+					required: true
+				},
+				{
+					type: 3,
+					name: "value",
+					description: "Value",
+					required: true
+				},
+				{
+					type: 3,
+					name: "reason",
+					description: "Reasoning behind the value",
+					required: true
 				}
 			]
 		}
 	},
 	{
 		data:{
-			name:"setcs",
-			description:"Set community score of a module",
-			options:[
+			name: "setbosscs",
+			description: "Set community score (general and boss) of a module",
+			options: [
 				{
-					type:3,
-					name:"module",
-					description:"Identifier of the module",
-					required:true
+					type: 3,
+					name: "module",
+					description: "Identifier of the module",
+					required: true
 				},
 				{
-					type:3,
-					name:"value",
-					description:"Value",
-					required:true
+					type: 3,
+					name: "value",
+					description: "General score value",
+					required: true
 				},
 				{
-					type:3,
-					name:"reason",
-					description:"Reasoning behind the value",
-					required:true
+					type: 3,
+					name: "ppm",
+					description: "Points per module value",
+					required: true
+				},
+				{
+					type: 3,
+					name: "reason",
+					description: "Reasoning behind the value",
+					required: true
+				}
+			]
+		}
+	},
+	{
+		data: {
+			name: "clearcs",
+			description: "(Maintainer only) clear community score of a module",
+			options: [
+				{
+					type: 3,
+					name: "module",
+					description: "Identifier of the module",
+					required: true
 				}
 			]
 		}
 	},
 	{
 		data:{
-			name:"setbosscs",
-			description:"Set community score (general and boss) of a module",
-			options:[
+			name: "comment",
+			description: "Comment on a module's community score",
+			options: [
 				{
-					type:3,
-					name:"module",
-					description:"Identifier of the module",
-					required:true
+					type: 3,
+					name: "module",
+					description: "Idenfitifer of the module",
+					required: true
 				},
 				{
-					type:3,
-					name:"value",
-					description:"General score value",
-					required:true
-				},
-				{
-					type:3,
-					name:"ppm",
-					description:"Points per module value",
-					required:true
-				},
-				{
-					type:3,
-					name:"reason",
-					description:"Reasoning behind the value",
-					required:true
+					type: 3,
+					name: "comment",
+					description: "Comment to add",
+					required: true
 				}
 			]
 		}
 	},
 	{
 		data:{
-			name:"clearcs",
-			description:"(Maintainer only) clear community score of a module",
-			options:[
+			name: "getcs",
+			description: "Get community scores and reasons of a module",
+			options: [
 				{
-					type:3,
-					name:"module",
-					description:"Identifier of the module",
-					required:true
+					type: 3,
+					name: "module",
+					description: "Identifier of the module",
+					required: true
 				}
 			]
 		}
 	},
 	{
 		data:{
-			name:"comment",
-			description:"Comment on a module's community score",
-			options:[
+			name: "idea",
+			description: "Show a random or specified mod idea",
+			options: [
 				{
-					type:3,
-					name:"module",
-					description:"Idenfitifer of the module",
-					required:true
+					type: 3,
+					name: "name",
+					description: "Name of the idea",
 				},
 				{
-					type:3,
-					name:"comment",
-					description:"Comment to add",
-					required:true
-				}
-			]
-		}
-	},
-	{
-		data:{
-			name:"getcs",
-			description:"Get community scores and reasons of a module",
-			options:[
-				{
-					type:3,
-					name:"module",
-					description:"Identifier of the module",
-					required:true
-				}
-			]
-		}
-	},
-	{
-		data:{
-			name:"idea",
-			description:"Show a random or specified mod idea",
-			options:[
-				{
-					type:3,
-					name:"name",
-					description:"Name of the idea",
+					type: 5,
+					name: "InProgress",
+					description: "Include ideas in progress"
 				},
 				{
-					type:5,
-					name:"InProgress",
-					description:"Include ideas in progress"
+					type: 5,
+					name: "NotReady",
+					description: "Include not ready ideas"
 				},
 				{
-					type:5,
-					name:"NotReady",
-					description:"Include not ready ideas"
+					type: 5,
+					name: "unknown",
+					description: "Include ideas with unknown state"
 				},
 				{
-					type:5,
-					name:"unknown",
-					description:"Include ideas with unknown state"
-				},
-				{
-					type:5,
-					name:"IsReady",
-					description:"Include ready ideas"
+					type: 5,
+					name: "IsReady",
+					description: "Include ready ideas"
 				}
 			]
 		}
@@ -375,5 +375,5 @@ module.exports.aliases = aliases
 module.exports.manualOverride = manualOverride
 module.exports.subjectOverrides = subjectOverrides
 module.exports.profileWhitelist = profileWhitelist
-module.exports.ScoreWhitelist = ScoreWhitelist
-module.exports.Interactions = Interactions
+module.exports.scoreWhitelist = scoreWhitelist
+module.exports.interactions = interactions

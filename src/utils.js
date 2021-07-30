@@ -12,7 +12,7 @@ class FakeArg {
 const cleanseDiscordText = (text) => text.replace(/`/g, "");
 
 function mostSimilarModule(searchItem, obj = undefined) {
-	let keys = obj==undefined ? Array.from(main.ktaneModules().keys()) : Object.keys(obj).filter(key => key!=undefined)
+	let keys = obj == undefined ? Array.from(main.ktaneModules().keys()) : Object.keys(obj).filter(key => key!=undefined)
 	let module = keys.sort((entry1, entry2) =>
 		levenshteinRatio(entry2.toLowerCase(), searchItem) - levenshteinRatio(entry1.toLowerCase(), searchItem)
 	)[0]
@@ -49,17 +49,16 @@ const levenshteinRatio = (target, source) => {
 	return 1.0 - distance[sourceWordCount][targetWordCount] / Math.max(source.length, target.length)
 }
 
-exports.GetModule = (message, args, send = true) => {
-	if(args._.join(' ').includes("`"))
-	{
+exports.getModule = (message, args, send = true) => {
+	if (args._.join(' ').includes("`")) {
 		message.channel.send("Please don't use backticks in the input!")
 		return undefined
 	}
-	let HandleRegex = result => {
+	let handleRegex = result => {
 		if (result.length == 1) return result[0].Module
 		else {
 			if (send) {
-				let msg = `Expression is ambigious between ${result.length} modules${result.length > 10 ? "; showing first 10" : ""}:`
+				let msg = `Expression is ambiguous between ${result.length} modules${result.length > 10 ? "; showing first 10" : ""}:`
 				let lines = []
 				let ind = -1
 				result.forEach(r => {
@@ -78,11 +77,10 @@ exports.GetModule = (message, args, send = true) => {
 	if (!module) module = modules.get(mostSimilarModule(args._.join(' ').toLowerCase()))
 	if (!module) {
 		let result = GetMatching(ConvertToFull(args._.join(' ')))
-		if (result && result.length > 0) return HandleRegex(result)
+		if (result && result.length > 0) return handleRegex(result)
 		else {
 			result = GetMatching(args._.join(' '))
-			if (result && result.length > 0) return HandleRegex(result)
-			{
+			if (result && result.length > 0) return handleRegex(result) {
 				if (send) message.channel.send(`🚫 Couldn't find a module by the ID of \`${cleanseDiscordText(args._[0])}\` (case-sensitive), name of \`${cleanseDiscordText(args._.join(' '))}\` (not case-sensitive) or periodic symbol of \`${cleanseDiscordText(args._[0])}\` (not case-sensitive)`)
 				return undefined
 			}

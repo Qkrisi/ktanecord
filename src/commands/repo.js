@@ -1,4 +1,4 @@
-const { embed, parseDifficulty, getColor, months, GetModule } = require('../utils.js')
+const { embed, parseDifficulty, getColor, months, getModule } = require('../utils.js')
 const main = require('../main.js')
 const { aliases, subjectOverrides, manualOverride } = require('../map.js')
 const config = require('../../config.json')
@@ -13,33 +13,31 @@ function getRandomModule() {
     return main.ktaneModules().get(keys[Math.floor(Math.random() * keys.length)])
 }
 
-var Updated = "No data"
-
 module.exports.run = async (client, message, args) => {
     if (args._.length == 0 && !args.random) return message.channel.send(`🚫 You need to specify a module by entering its name, ID or periodic symbol, or select a random one with \`${config.token}repo --random\``)
 
-	let Enable_Cooldown = main.Enable_Cooldown
+	let enableCooldown = main.enableCooldown
 
     // why the fuck is this here?
-    if (Enable_Cooldown && cooldown.get(message.author.id) <= Date.now())
+    if (enableCooldown && cooldown.get(message.author.id) <= Date.now())
         cooldown.delete(message.author.id)
 
-    //defining the module
+    // defining the module
     let inputmodule
     if (args.random) {
-        if (Enable_Cooldown && cooldown.has(message.author.id))
+        if (enableCooldown && cooldown.has(message.author.id))
             return message.channel.send(`You are on cooldown for ${Math.round((cooldown.get(message.author.id) - Date.now()) / 1000)} seconds! You can still use the repo command with specified modules.`)
         inputmodule = getRandomModule()
-        if (Enable_Cooldown && message.guild) {
+        if (enableCooldown && message.guild) {
             let Cooldown = main.getCooldown()
             cooldown.set(message.author.id, Date.now() + (Cooldown.hasOwnProperty(message.guild.id.toString()) ? Cooldown[message.guild.id.toString()] * 1000 : 45000))
         }
     }
-    if (!inputmodule) inputmodule = GetModule(message, args)
+    if (!inputmodule) inputmodule = getModule(message, args)
     if (!inputmodule) return
 
 
-    //adding the links of the module
+    // adding the links of the module
     let links = []
     inputmodule.SteamID ? links.push(`[Workshop](http://steamcommunity.com/sharedfiles/filedetails/?id=${inputmodule.SteamID})`) : doNothing()
     inputmodule.SourceUrl ? links.push(`[Source code](${inputmodule.SourceUrl})`) : doNothing()
@@ -49,7 +47,7 @@ module.exports.run = async (client, message, args) => {
     }
 
 
-    //adding the manuals of the module
+    // adding the manuals of the module
     let manuals = []
     let base
     let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
@@ -63,14 +61,14 @@ module.exports.run = async (client, message, args) => {
         manuals.push(base)
     })
 
-    let Updated = "No data"
+    let updated = "No data"
 
     await axios.get(encodeURI(`https://ktane.timwi.de/ManualLastUpdated/${manualId}.html`)).then(async (resp) => {
         let LastUpdatedDate = new Date(resp.data)
-        Updated = `${LastUpdatedDate.getUTCFullYear()}-${LastUpdatedDate.getUTCMonth() + 1}-${LastUpdatedDate.getUTCDate()}`
+        updated = `${LastUpdatedDate.getUTCFullYear()}-${LastUpdatedDate.getUTCMonth() + 1}-${LastUpdatedDate.getUTCDate()}`
     }).catch()
 
-    //making sure the manuals fit into the embed
+    // making sure the manuals fit into the embed
     let thisvariableprobablyisntneededbutfuckit = false
     while (manuals.toString().length > 1000) {
         thisvariableprobablyisntneededbutfuckit = true
@@ -87,7 +85,7 @@ module.exports.run = async (client, message, args) => {
         moduleID: inputmodule.ModuleID,
         symbol: inputmodule.Symbol == undefined ? "-" : inputmodule.Symbol,
         pDate: inputmodule.Published,
-        uDate: Updated,
+        uDate: updated,
         manuals: manuals.join('\n'),
         links: links.join(' | '),
         creator: `${inputmodule.Type == 'Widget' ? 'Widget' : 'Module'} made by ${inputmodule.Author}`,

@@ -1,4 +1,4 @@
-const {embed, mostSimilarModule} = require("../utils.js")
+const { embed, mostSimilarModule } = require("../utils.js")
 const main = require("../main.js")
 
 const IdeaState = [
@@ -15,41 +15,41 @@ const StateData = {
 	"isReady":[0xffff00,"<:isReady:833597369903218739>"]
 }
 
-function GetIdeaEmbed(idea){
+function getIdeaEmbed(idea){
 	let data = StateData[idea.state]
 	return embed.getEmbed("Idea", {
-			name:`${data[1]} ${idea.name} (by ${idea.author})`,
-			description:idea.description,
-			note:idea.notes,
-			url:idea.manualUrl,
-			color:data[0]
+			name: `${data[1]} ${idea.name} (by ${idea.author})`,
+			description: idea.description,
+			note: idea.notes,
+			url: idea.manualUrl,
+			color: data[0]
 	})
 }
 
 module.exports.run = (client, message, args) => {
 	let states = []
 	let keys = Object.keys(args)
-	for(let i = 0;i<keys.length;i++)
-		args[keys[i].toLowerCase()]=args[keys[i]]
-	for(let i = 0;i<IdeaState.length;i++){
-		if(args[IdeaState[i].toLowerCase()]) states.push(IdeaState[i])
+	for (let i = 0; i<keys.length; i++)
+		args[keys[i].toLowerCase()] = args[keys[i]]
+	for (let i = 0; i<IdeaState.length; i++){
+		if (args[IdeaState[i].toLowerCase()]) states.push(IdeaState[i])
 	}
-	if(states.length==0) states=IdeaState
-	let IdeaName = args._.join(" ")
-	let Ideas = IdeaName ? main.Ideas() : main.Ideas().filter(idea => states.includes(idea.state))
-	if(Ideas.length==0) return message.channel.send("Couldn't find any ideas")
+	if (states.length==0) states=IdeaState
+	let ideaName = args._.join(" ")
+	let ideas = ideaName ? main.ideas() : main.ideas().filter(idea => states.includes(idea.state))
+	if (ideas.length==0) return message.channel.send("Couldn't find any ideas")
 	let idea
-	if(IdeaName){
-		let NamedIdeas = {}
-		for(let i = 0;i<Ideas.length;i++){
-			NamedIdeas[Ideas[i].name]=Ideas[i]
+	if (ideaName) {
+		let namedIdeas = {}
+		for (let i = 0; i<ideas.length; i++) {
+			namedIdeas[ideas[i].name] = ideas[i]
 		}
-		let SimilarName = mostSimilarModule(IdeaName, NamedIdeas)
-		if(SimilarName) idea=NamedIdeas[SimilarName]
+		let similarName = mostSimilarModule(ideaName, namedIdeas)
+		if (similarName) idea=namedIdeas[similarName]
 		else return message.channel.send("Couldn't find an idea with the given name")
 	}
-	else idea = Ideas[Math.floor(Math.random()*(Ideas.length+1))]
-	message.channel.send(GetIdeaEmbed(idea))
+	else idea = ideas[Math.floor(Math.random()*(ideas.length+1))]
+	message.channel.send(getIdeaEmbed(idea))
 }
 
-module.exports.GetIdeaEmbed = GetIdeaEmbed
+module.exports.getIdeaEmbed = getIdeaEmbed

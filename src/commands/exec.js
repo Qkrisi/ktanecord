@@ -1,7 +1,7 @@
 const Discord = require("discord.js")
 const fs = require("fs")
 const exec = require('child_process').exec
-const {profileWhitelist} = require("../map.js")
+const { profileWhitelist } = require("../map.js")
 
 const clean = text => {
     if(typeof(text) === "string")
@@ -11,8 +11,8 @@ const clean = text => {
 }
 
 module.exports.run = (client, message, args) => {
-    if (!profileWhitelist.includes(message.author.id)) return    
-    var code = message.content.slice(5)
+    if (!profileWhitelist.includes(message.author.id)) return
+    let code = message.content.slice(5)
     exec(code, (error, stdout, stderr) => {
         if (!error && stdout) {
             if (stdout.length > 1000) {

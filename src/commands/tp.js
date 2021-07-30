@@ -21,7 +21,7 @@ const available = [
 	"Strike_Kaboom",
 ]
 
-const FetchStatus = [
+const fetchStatus = [
 	"MrPeanut1028",
 	"Marksam32",
 	"Heres_Fangy",
@@ -44,41 +44,38 @@ function getDecimal(num) {
 
 module.exports.run = async (client, message, args) => {
 	let argList = args._
-	if(argList[0]) argList[0] = argList[0].toLowerCase()
-	if(["current","data", "stats"].includes(argList[0])) {
+	if (argList[0]) argList[0] = argList[0].toLowerCase()
+	if (["current","data", "stats"].includes(argList[0])) {
 		let token
-		let ClientID = config.TwitchID
-		await axios.post(`https://id.twitch.tv/oauth2/token?client_id=${ClientID}&client_secret=${config.TwitchSecret}&grant_type=client_credentials`, {}).then(async(response) => token = response.data.access_token)
-		if(!token) return message.channel.send("Failed to get Twitch token")
+		let clientId = config.TwitchID
+		await axios.post(`https://id.twitch.tv/oauth2/token?client_id=${clientId}&client_secret=${config.TwitchSecret}&grant_type=client_credentials`, {}).then(async(response) => token = response.data.access_token)
+		if (!token) return message.channel.send("Failed to get Twitch token")
 		let msg = ""
-		let StreamerInfo = {}
+		let streamerInfo = {}
 		let counter = 0
-		if(argList[0]=="current")
-		{
-			FetchStatus.forEach(async(streamer) => {
+		if (argList[0]=="current") {
+			fetchStatus.forEach(async(streamer) => {
 				let url = encodeURI(`https://api.twitch.tv/helix/streams?user_login=${streamer}`)
-				await fetch({url: url, parse: "json", headers:{Authorization:`Bearer ${token}`, "Client-Id": ClientID}}).send().then(async(response) => {
-					counter+=1
+				await fetch({url: url, parse: "json", headers:{Authorization:`Bearer ${token}`, "Client-Id": clientId}}).send().then(async(response) => {
+					counter += 1
 					let body = response.body.data[0]
-					let online = body!=undefined && body.type=="live" && body["game_name"]=="Keep Talking and Nobody Explodes" && ["Twitch Plays", "TP"].some(element => body.title.includes(element))
-					StreamerInfo[streamer]=online ? "online :green_circle:" : "offline :red_circle:"
+					let online = body != undefined && body.type == "live" && body["game_name"] == "Keep Talking and Nobody Explodes" && ["Twitch Plays", "TP"].some(element => body.title.includes(element))
+					streamerInfo[streamer] = online ? "online :green_circle:" : "offline :red_circle:"
 				})
-				if(counter==FetchStatus.length)
-				{
-					FetchStatus.forEach(streamer => msg+=`\n[${streamer}](https://twitch.tv/${streamer}): ${StreamerInfo[streamer]}`)
+				if (counter == fetchStatus.length) {
+					fetchStatus.forEach(streamer => msg+=`\n[${streamer}](https://twitch.tv/${streamer}): ${streamerInfo[streamer]}`)
 					message.channel.send(embed.getEmbed("CurrentStreamers", {streamers:msg}))
 				}
-			})	
+			})
 		}
-		else if(argList[0]=="data")
-		{
+		else if (argList[0] == "data") {
 			let streamer = argList[1]
-			if(!streamer) streamer = "MrPeanut1028"
+			if (!streamer) streamer = "MrPeanut1028"
 			let url = encodeURI(`https://api.twitch.tv/helix/streams?user_login=${streamer}`)
-			await fetch({url: url, parse: "json", headers:{Authorization:`Bearer ${token}`, "Client-Id": ClientID}}).send().then(async(response) => {
+			await fetch({ url: url, parse: "json", headers: { Authorization: `Bearer ${token}`, "Client-Id": clientId } }).send().then(async(response) => {
 				let body = response.body.data[0]
 				let online = body!=undefined && body.type=="live" && body["game_name"]=="Keep Talking and Nobody Explodes" && ["Twitch Plays", "TP"].some(element => body.title.includes(element))
-				if(!online) return message.channel.send(`${streamer} is currently not online or isn't streaming TP:KTaNE`)
+				if (!online) return message.channel.send(`${streamer} is currently not online or isn't streaming TP:KTaNE`)
 				message.channel.send(embed.getEmbed("StreamerData", {
 					viewers: body["viewer_count"],
 					start: body["started_at"].replace("T", " ").replace("Z",""),
@@ -86,11 +83,10 @@ module.exports.run = async (client, message, args) => {
 					thumbnail: body["thumbnail_url"].replace("{width}", "1920").replace("{height}", "1080")+`?${new Date().getMilliseconds()}`,
 					streamer: `Statistics of ${streamer}'s stream`,
 					name: body["title"]
-				}))		
+				}))
 			})
 		}
-		else
-		{
+		else {
 			let streamer
 			let name
 			let originalStreamer
@@ -98,7 +94,7 @@ module.exports.run = async (client, message, args) => {
 			if (argList.length > 1) {
 				argList = argList.splice(1, argList.length)
 				let sDone = false
-				streamer
+				streamer // ????????????????????????????????????????
 				if (argList.length == 1) {
 					streamer = "MrPeanut1028"
 					sDone = true
@@ -119,28 +115,28 @@ module.exports.run = async (client, message, args) => {
 				let resp = res.body
 				if (resp.error) return message.channel.send(resp.error)
 				let pfp = ""
-				await fetch({url: encodeURI(`https://api.twitch.tv/helix/users?login=${originalName}`), parse: 'json', headers:{Authorization:`Bearer ${token}`, "Client-Id": ClientID}}).send().then(async(response) => {
-						let body = response.body.data[0]
-						if(!body["profile_image_url"]) return
-						pfp = body["profile_image_url"]
-					})
+				await fetch({ url: encodeURI(`https://api.twitch.tv/helix/users?login=${originalName}`), parse: 'json', headers: {Authorization: `Bearer ${token}`, "Client-Id": clientId } }).send().then(async response => {
+					let body = response.body.data[0]
+					if (!body["profile_image_url"]) return
+					pfp = body["profile_image_url"]
+				})
 				let hex = rgbToHex(resp.color.r, resp.color.g, resp.color.b)
 
 				let r1 = resp.strike > 0 ? getDecimal(resp.solve / resp.strike) : resp.solve
 				let r2 = resp.strike > 0 ? getDecimal(resp.score / resp.strike) : resp.score
 
-				let SS = `${resp.solve} **/** ${resp.strike}`
-				let SSRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
+				let solveStrike = `${resp.solve} **/** ${resp.strike}`
+				let solveStrikeRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
 
 				message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
 					name: `${originalName}`,
 					userColor: hex,
 					pfp: pfp,
 					streamer: `Statistics from ${originalStreamer}'s stream`,
-					sss: `${SS} **/** ${resp.score}`,
-					ss: SS,
-					sssRatio: `${SSRatio} **:** ${r2}`,
-					ssRatio: SSRatio,
+					sss: `${solveStrike} **/** ${resp.score}`,
+					ss: solveStrike,
+					sssRatio: `${solveStrikeRatio} **:** ${r2}`,
+					ssRatio: solveStrikeRatio,
 					rank: `${resp.rank}`,
 					sDef: `${resp.soloClears}`,
 					sRank: `${resp.soloRank}`

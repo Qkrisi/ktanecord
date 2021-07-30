@@ -1,5 +1,5 @@
-const {embed, getColor, GetModule} = require('../utils.js')
-const {manualOverride} = require('../map.js')
+const { embed, getColor, getModule } = require('../utils.js')
+const { manualOverride } = require('../map.js')
 const fetch = require('wumpfetch')
 const config = require('../../config.json')
 
@@ -11,19 +11,20 @@ module.exports.run = async (client, message, args) => {
 		let body = res.body
 		let manualId = manualOverride.has(inputmodule.Name) ? manualOverride.get(inputmodule.Name) : inputmodule.Name
 		let thumbnail = `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`
-		let ConstructedBody = {
-			ScoreTitle:`__Community scores of ${inputmodule.Name}__`,
-			diffColor:getColor(inputmodule),
-			tn:thumbnail,
-			GeneralScore:body["Community Score"],
-			Reason:body["MainReason"],
-			PPMScore:body["Community Boss Score"],
+		let constructedBody = {
+			// too scared to change these
+			ScoreTitle: `__Community scores of ${inputmodule.Name}__`,
+			diffColor: getColor(inputmodule),
+			tn: thumbnail,
+			GeneralScore: body["Community Score"],
+			Reason: body["MainReason"],
+			PPMScore: body["Community Boss Score"],
 		}
-		if(!ConstructedBody.GeneralScore && !ConstructedBody.PPMScore) ConstructedBody.desc="*none*"
-		Object.keys(ConstructedBody).forEach(key => {
-			if(!ConstructedBody[key] || ConstructedBody[key].toString().trim()=="" || !ConstructedBody[key]) ConstructedBody[key]="."
+		if (!constructedBody.GeneralScore && !constructedBody.PPMScore) constructedBody.desc = "*none*"
+		Object.keys(constructedBody).forEach(key => {
+			if (!constructedBody[key] || constructedBody[key].toString().trim() == "" || !constructedBody[key]) constructedBody[key] = "."
 		})
-		let emb = embed.getEmbed("CommunityScore", ConstructedBody)
+		let emb = embed.getEmbed("CommunityScore", constructedBody)
 		emb.fields = emb.fields.filter(field => field.value!=".")
 		message.channel.send(emb)
 	})

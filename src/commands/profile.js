@@ -1,4 +1,4 @@
-const { embed, difficulties, getColor, FakeArg, GetModule } = require('../utils')
+const { embed, difficulties, getColor, FakeArg, getModule } = require('../utils')
 const main = require('../main.js')
 const { modIDs } = require('../main.js')
 const fetch = require('wumpfetch')
@@ -19,7 +19,7 @@ module.exports.run = async (client, message, args) => {
 	}
 	await fetch({ url: arr[0].url }).send().then(async (res) => {
 		let result = undefined
-		if(typeof(res.body)=="string"){
+		if (typeof(res.body) == "string") {
 			try {
 				result = JSON.parse(res.body)
 			}
@@ -27,23 +27,23 @@ module.exports.run = async (client, message, args) => {
 				return message.channel.send(`Your profile is invalid, <@${message.author.id}>`)
 			}
 		}
-		else result=res.body
+		else result = res.body
 		if (result.DisabledList == undefined || result.Operation == undefined) {
 			return message.channel.send(`Your profile is invalid, <@${message.author.id}>`)
 		}
 		let len = 0
 		let avgDef = 0
 		let avgExp = 0
-		let EnabledList = result.EnabledList
-		if (EnabledList == undefined) {
-			EnabledList = []
+		let enabledList = result.EnabledList
+		if (enabledList == undefined) {
+			enabledList = []
 			modIDs.forEach(module => {
-				if (!result.DisabledList.includes(module)) EnabledList.push(module)
+				if (!result.DisabledList.includes(module)) enabledList.push(module)
 			})
 		}
-		EnabledList.forEach(module => {
+		enabledList.forEach(module => {
 			if (module) {
-				let inputmodule = GetModule(message, new FakeArg(module), false)
+				let inputmodule = getModule(message, new FakeArg(module), false)
 				if (inputmodule) {
 					defNum = difficulties.get(inputmodule.DefuserDifficulty)
 					expNum = difficulties.get(inputmodule.ExpertDifficulty)
@@ -64,7 +64,7 @@ module.exports.run = async (client, message, args) => {
 		message.channel.send(embed.getEmbed("Profile", {
 			name: `Profile of ${message.author.username}`,
 			diff: avgDef == "No data" || avgExp == "No data" ? 0x7289DA : getColor({ DefuserDifficulty: avgDef.replace(' ', ''), ExpertDifficulty: avgExp.replace(' ', '') }),
-			enableds: EnabledList.length,
+			enableds: enabledList.length,
 			disableds: result.DisabledList.length,
 			defDif: avgDef,
 			expDif: avgExp,
