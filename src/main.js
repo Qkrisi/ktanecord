@@ -10,6 +10,7 @@ const lookup = require('./lookup')
 const fs = require('fs')
 const SimHandler = require("./KtaneSimHandler.js")
 const { embed } = require("./utils.js")
+const dp = require("./DiscordPlaysHandler.js")
 
 let ktaneModules = new Map()
 let modIDs = []
@@ -228,7 +229,7 @@ client.on('ready', () => {
 client.on('message', message => {
     if (message.author.bot) return
     lookup(ktaneModules, message)
-    if (!message.content.startsWith(config.token)) return
+    if (!message.content.startsWith(config.token)) return dp.ValidateMessage(message)
 	if (!profileWhitelist.includes(message.author.id) && message.content.length > 600) return message.channel.send("Please don't send messages containing more than 600 characters!") // why is this here
 
 	while(message.content.includes("  ")) message.content = message.content.replace("  ", " ")
@@ -242,7 +243,7 @@ client.on('message', message => {
         commandFile.run(client, message, args)
     } catch (err) {
         console.log(err)
-        SimHandler.send(message)
+		SimHandler.send(message)
     }
 })
 

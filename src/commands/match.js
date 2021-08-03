@@ -31,7 +31,7 @@ const ConvertToFull = simple => {
 				s[ind] = "(.)"
 				break
 			case "#":
-				s[ind] = "([0-9])"
+				s[ind] = "(\\d)"
 				break
 			default:
 				s[ind] = GetEscape(char)
