@@ -27,6 +27,12 @@
       📕 Shows information about a given (or random) entry from the [Repository of KTaNE Manuals](https://ktane.timwi.de)
   @end
   @field
+	@name
+		|dpCMD
+	@value
+		|dpValue
+  @end
+  @field
     @name
       |scoreCMD
     @value
@@ -109,6 +115,12 @@
     @value
       (Scoring admins only) Gives or removes the user the specified role
   @end
+  @field
+	@name
+		|manageDP
+	@value
+		<:DiscordPlays:872414252596596748> Enables/Disables Discord Plays in this channel
+  @end
 #end
 
 #AdminHelpNoCooldown
@@ -125,6 +137,12 @@
       |manageCMD
     @value
       (Scoring admins only) Gives or removes the user the specified role
+  @end
+  @field
+	@name
+		|manageDP
+	@value
+		<:DiscordPlays:872414252596596748> Enables/Disables Discord Plays in this channel
   @end
 #end
 

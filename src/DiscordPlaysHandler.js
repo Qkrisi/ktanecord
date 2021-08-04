@@ -10,7 +10,21 @@ var Clients = {}
 var ChannelUsers = {}
 
 const Emojis = {
-		"LUL": "<:LUL:732584833628241920>"
+		"LUL": "<:LUL:732584833628241920>",
+		"VoteYea": "<:VoteYea:872393782941855744>",
+		"VoteNay": "<:VoteNay:872394870780739604>",
+		"KAPOW": "<:KAPOW:872394837930938369>",
+		"PraiseIt": "<:PraiseIt:872394838195208192>",
+		"DansGame": "<:DansGame:872394838237143101>",
+		"BabyRage": "<:BabyRage:872394838228750366>",
+		"SeemsGood": "<:SeemsGood:872394838136455248>",
+		"NotLikeThis": "<:NotLikeThis:872394838111293470>",
+		"4Head": "<:4Head:872394837805125663>",
+		"Kappa": "<:Kappa:872394838102908969>",
+		"SwiftRage": "<:SwiftRage:872394837813522433>",
+		"panicBasket": "<:panicBasket:872394837805105193>",
+		"MrDestructoid": "<:MrDestructoid:872394838157443092>",
+		"copyThis": "<:copyThis:872407125329051649>"
 }
 	
 function GetRunningSessions()
@@ -69,7 +83,11 @@ WSServer.on("connection", client => {
 			return
 		}
 		for(const emoji of Object.keys(Emojis))
-			message = message.replace(new RegExp(`(\\s|^)${emoji}(\\s|$)`, "gm"), ` ${Emojis[emoji]} `)
+			{
+				let re = new RegExp(`(\\s|^)${emoji}(\\s|$)`, "gm")
+				while(re.test(message))
+					message = message.replace(re, ` ${Emojis[emoji]} `)
+			}
 		let Users = ChannelUsers[ChannelID]
 		for(const tag of Object.keys(Users))
 			message = message.replace(`@${tag}`, `<@${Users[tag]}>`)

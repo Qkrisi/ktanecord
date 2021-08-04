@@ -19,11 +19,15 @@ module.exports.run = (client, message, args) => {
 		cooldownCMD: `\`${config.token}setcooldown <seconds>\``,
 		cooldownValue: `🕒 Sets the cooldown value of  \`${config.token}repo --random\` (at least 0)`,
 		manageCMD: `\`${config.token}manage maintainers/bans add/remove <User ID>\``,
-		SCValue: `Enable or disable slash commands (${Slash})`
+		SCValue: `Enable or disable slash commands (${Slash})`,
+		manageDP: `\`${config.token}dp --enable/--disable\``
 	}))
+	let DP = `${body.DPChannels.includes(message.channel.id) ? "Enabled" : "Disabled"} in this channel`
 	return message.channel.send(embed.getEmbed("Help", {
 		helpCMD: `\`${config.token}help\``,
 		pingCMD: `\`${config.token}ping\``,
+		dpCMD: `\`${config.token}dp\``,
+		dpValue: `<:DiscordPlays:872414252596596748> Gets token for a Discord Plays: KTaNE session (${DP})`,
 		repoCMD: `\`${config.token}repo <module or --random>\``,
 		statsCMD: `\`${config.token}tp stats [player] [streamer]\``,
 		statsValue: `<:Twitch:702495822281048129> Shows player statistics on Twitch Plays (For a list of streamers use \`${config.token}tp streamers\`)`,
