@@ -58,7 +58,6 @@ module.exports.run = async(client, message, args) => {
 		let Complete = false
 		let Edit = false
 		message.guild.members.fetch().then(members => {
-			console.log(members.values().forEach)
 			for(const member of members.values())
 			{
 				if(!Complete && member.user.tag==ContactInfo.Discord){
@@ -70,6 +69,7 @@ module.exports.run = async(client, message, args) => {
 					Edit = false
 					msg.edit({embeds: [embed.getEmbed("ContactInfo", HandlePlatforms())]})
 				}
-			}})
-		}
+			}
+		})
 	}
+}
