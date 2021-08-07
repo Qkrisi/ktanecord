@@ -49,7 +49,7 @@ module.exports.run = (client, message, args) => {
 		else return message.channel.send("Couldn't find an idea with the given name")
 	}
 	else idea = Ideas[Math.floor(Math.random()*(Ideas.length+1))]
-	message.channel.send(GetIdeaEmbed(idea))
+	message.channel.send({embeds: [GetIdeaEmbed(idea)]})
 }
 
 module.exports.GetIdeaEmbed = GetIdeaEmbed

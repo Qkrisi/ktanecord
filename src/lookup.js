@@ -30,13 +30,13 @@ module.exports = async (modules, message) => {
 			Updated = `${LastUpdatedDate.getUTCFullYear()}-${LastUpdatedDate.getUTCMonth() + 1}-${LastUpdatedDate.getUTCDate()}`
 		}).catch()
 		message.channel.send('', {
-			embed: embed.getEmbed("IML", {
+			embeds: [embed.getEmbed("IML", {
 				imlT: `${inputmodule.Name}${sb}${inputmodule.TwitchPlays ? inputmodule.TwitchPlays.Score ? ` \u00B7 <:Twitch:702495822281048129> ${inputmodule.TwitchPlays.Score}` : '' : ''}${inputmodule.RuleSeedSupport === 'Supported' ? ' \u00B7 <:RuleSeed:702495784716992583>' : ''}${inputmodule.Souvenir ? inputmodule.Souvenir.Status == 'Supported' ? ' \u00B7 S' : '' : ''}${inputmodule.MysteryModule == undefined ? " \u00B7 MM" : ""}`,
 				imlD: '[Manual](' + encodeURI(`https://ktane.timwi.de/HTML/${manualId}.html`) + `) | ${parseDifficulty(inputmodule.DefuserDifficulty)} (d), ${parseDifficulty(inputmodule.ExpertDifficulty)} (e)\n` + inputmodule.Description.split('Tags')[0].trim(),
 				imlF: `${inputmodule.Type == 'Widget' ? 'Widget' : 'Module'} made by ${inputmodule.Author}; published on ${inputmodule.Published}, last updated on ${Updated}`,
 				imlU: `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`,
 				diffColor: getColor(inputmodule)
-			})
+			})]
 		})
 	}
 	else{
@@ -47,7 +47,7 @@ module.exports = async (modules, message) => {
 		}
 		let SimilarName = mostSimilarModule(m, NamedIdeas)
 		if(SimilarName) message.channel.send('', {
-			embed: GetIdeaEmbed(NamedIdeas[SimilarName])
+			embeds: [GetIdeaEmbed(NamedIdeas[SimilarName])]
 		})
 	}
 }

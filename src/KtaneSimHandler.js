@@ -19,7 +19,7 @@ if(config.EnableSimulator){
 				embed.attachFiles(attachment)
 			}
 			embed.setImage(body.embed.image)
-			messagebody = {embed:embed}
+			messagebody = {embeds:[embed]}
 		}
 		else if(body.file) messagebody = new Discord.MessageAttachment(body.file.path, body.file.filename)
 		channel.send(body.message, messagebody ? messagebody : {}).then(r => {

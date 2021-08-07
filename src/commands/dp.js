@@ -12,7 +12,7 @@ module.exports.run = (client, message, args) => {
 	let body = getCooldown()
 	if(!body.DPChannels)
 		body.DPChannels = []
-	let IsAdmin = message.member.hasPermission(Permissions.MANAGE_GUILD)
+	let IsAdmin = message.member.permissions.has(Permissions.MANAGE_GUILD)
 	if(args.enable || args.disable)
 	{
 		if(!IsAdmin)

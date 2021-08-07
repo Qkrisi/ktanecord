@@ -69,7 +69,7 @@ module.exports.run = async (client, message, args) => {
 				if(counter==FetchStatus.length)
 				{
 					FetchStatus.forEach(streamer => msg+=`\n[${streamer}](https://twitch.tv/${streamer}): ${StreamerInfo[streamer]}`)
-					message.channel.send(embed.getEmbed("CurrentStreamers", {streamers:msg}))
+					message.channel.send({embeds: [embed.getEmbed("CurrentStreamers", {streamers:msg})]})
 				}
 			})	
 		}
@@ -82,14 +82,14 @@ module.exports.run = async (client, message, args) => {
 				let body = response.body.data[0]
 				let online = body!=undefined && body.type=="live" && body["game_name"]=="Keep Talking and Nobody Explodes" && ["Twitch Plays", "TP"].some(element => body.title.includes(element))
 				if(!online) return message.channel.send(`${streamer} is currently not online or isn't streaming TP:KTaNE`)
-				message.channel.send(embed.getEmbed("StreamerData", {
+				message.channel.send({embeds: [embed.getEmbed("StreamerData", {
 					viewers: body["viewer_count"],
 					start: body["started_at"].replace("T", " ").replace("Z",""),
 					language: body["language"],
 					thumbnail: body["thumbnail_url"].replace("{width}", "1920").replace("{height}", "1080")+`?${new Date().getMilliseconds()}`,
 					streamer: `Statistics of ${streamer}'s stream`,
 					name: body["title"]
-				}))		
+				})]})		
 			})
 		}
 		else
@@ -136,7 +136,7 @@ module.exports.run = async (client, message, args) => {
 				let SS = `${resp.solve} **/** ${resp.strike}`
 				let SSRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
 
-				message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
+				message.channel.send({embeds: [embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
 					name: `${originalName}`,
 					userColor: hex,
 					pfp: pfp,
@@ -148,7 +148,7 @@ module.exports.run = async (client, message, args) => {
 					rank: `${resp.rank}`,
 					sDef: `${resp.soloClears}`,
 					sRank: `${resp.soloRank}`
-				}))
+				})]})
 			})
 		}
 		return

@@ -1,7 +1,7 @@
 const Discord = require('discord.js')
 let intents = new Discord.Intents(Discord.Intents.NON_PRIVILEGED)
 intents.add("GUILD_MEMBERS")
-const client = new Discord.Client({ws:{intents:intents}})
+const client = new Discord.Client({intents:[intents, Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES]})
 const config = require('../config.json')
 const fetch = require('wumpfetch')
 const larg = require('larg')
@@ -32,7 +32,7 @@ const CreateDataFromObject = obj => {
 			body.data.data.components = obj.components
 			delete obj.components
 		}
-		body.data.data.embeds=[obj]
+		body.data.data.embeds=obj.embeds
 	}
 	return body
 }
@@ -207,7 +207,7 @@ client.on('ready', () => {
 	})
 	let body = getCooldown()
 	if(body.SlashCommands) body.SlashCommands.forEach(GuildID => SetInteractions(GuildID, true, r => {}))
-    console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.cache.keyArray().length} servers`)
+    console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.cache.map(g => g).length} servers`)
     client.user.setActivity(`${config.token}help | try ${config.token}repo`)
     if (config.prod) {
         const DBL = require('dblapi.js')
@@ -226,7 +226,7 @@ client.on('ready', () => {
     }, 1800000)
 })
 
-client.on('message', message => {
+client.on('messageCreate', message => {
     if (message.author.bot) return
     lookup(ktaneModules, message)
     if (!message.content.startsWith(config.token)) return dp.ValidateMessage(message)

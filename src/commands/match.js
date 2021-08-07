@@ -118,8 +118,8 @@ async function GetMessageData(regex, page, match, channel)
 			"info": `Page ${page} of ${MaxPage}, match ${match} of ${MaxMatch}`,
 			"matches": JoinedLines ? JoinedLines : "      ​"
 	})
-	const { data, files } = await discord.APIMessage.create(channel, "", {allowedMentions: {}, disableMentions: "none"}).resolveData().resolveFiles();
-	data.embeds.push(emb)
+	const { data, files } = await discord.MessagePayload.create(channel, "⠀", {allowedMentions: {}, disableMentions: "none"}).resolveData().resolveFiles();
+	data.embeds = [emb]
 	if(MaxPage > 1)
 	{
 		data.components = [{"type": 1, "components": []}]

@@ -53,23 +53,23 @@ module.exports.run = async(client, message, args) => {
 		})
 		return ConstructedBody
 	}
-	let msg = await message.channel.send(embed.getEmbed("ContactInfo", HandlePlatforms()))
+	let msg = await message.channel.send({embeds: [embed.getEmbed("ContactInfo", HandlePlatforms())]})
 	if(ContactInfo.Discord && message.guild){
 		let Complete = false
 		let Edit = false
 		message.guild.members.fetch().then(members => {
-			members.array().forEach(member => {
+			console.log(members.values().forEach)
+			for(const member of members.values())
+			{
 				if(!Complete && member.user.tag==ContactInfo.Discord){
 					Complete = true
 					Edit = true
 					ContactInfo.Discord=`<@${member.id}>`
-					console.log(ContactInfo.Discord)
 				}
-				else if(Edit){
-					Edit = false	
-					msg.edit(embed.getEmbed("ContactInfo", HandlePlatforms()))
+				if(Edit){
+					Edit = false
+					msg.edit({embeds: [embed.getEmbed("ContactInfo", HandlePlatforms())]})
 				}
-			})
-		})
+			}})
+		}
 	}
-}
