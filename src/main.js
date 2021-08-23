@@ -3,6 +3,12 @@ let intents = new Discord.Intents(Discord.Intents.NON_PRIVILEGED)
 intents.add("GUILD_MEMBERS")
 const client = new Discord.Client({intents:[intents, Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES]})
 const config = require('../config.json')
+var savefile = {}
+try
+{
+	savefile = require("./save.json")
+}
+catch {}
 const fetch = require('wumpfetch')
 const larg = require('larg')
 const { aliases, profileWhitelist, Interactions } = require('./map.js')
@@ -170,6 +176,16 @@ const SetInteractions = (GuildID, enable, callback) => {
 }
 
 client.on('ready', () => {
+	for(const command of Object.keys(savefile))
+	{
+		try
+		{
+			let CommandFile = require(`./commands/${command}.js`)
+			if(CommandFile.load)
+				CommandFile.load(savefile[command])
+		}
+		catch {}
+	}
 	client.ws.on("INTERACTION_CREATE", int => {
 			switch(int.type)
 			{
@@ -249,6 +265,13 @@ client.on('messageCreate', message => {
 
 client.login(config.discord)
 
+module.exports.Save = (key, data) => savefile[key] = data
+module.exports.WriteSave = () => {
+	let path = [__dirname, "save.json"].join("/")
+	fs.writeFileSync(path, JSON.stringify(savefile), "utf8")
+}
+
+module.exports.Bot = () => client
 module.exports.ktaneModules = () => ktaneModules
 module.exports.CreatorContacts = () => CreatorContacts
 module.exports.Ideas = () => Ideas

@@ -7,8 +7,8 @@ const fs = require("fs")
 module.exports.run = (client, message, args) => {
 	if(args.n)
 		return message.channel.send(`Number of running sessions: ${dp.GetRunningSessions()}`)
-	if(!message.guild)
-		return message.channel.send("Please run this command in a guild channel!")
+	if(message.channel.type != "GUILD_TEXT")
+		return message.channel.send("Please run this command in a non-thread guild text channel!")
 	let body = getCooldown()
 	if(!body.DPChannels)
 		body.DPChannels = []
@@ -36,9 +36,7 @@ module.exports.run = (client, message, args) => {
 	if(!body.DPChannels.includes(message.channel.id))
 		return message.channel.send("Discord Plays is not enabled in this channel." + (IsAdmin ? `\nYou can enable it by running \`${config.token}dp --enable\`.` : ""))
 	message.author.createDM().then(channel => {
-		let token = dp.GenerateToken(message.channel)
-		if(!token)
-			return message.channel.send("A Discord Plays session is already running in this channel!")
+		let token = dp.GenerateToken(message.channel, message.author)
 		channel.send(`Token: \`${token}\``)
 		message.channel.send("Sent token in DM")
 	}).catch(err => {
@@ -46,3 +44,6 @@ module.exports.run = (client, message, args) => {
 		message.channel.send("An error occurred. Please make sure you have DMs enabled on this server!")
 	})
 }
+
+module.exports.save = dp.GetSave
+module.exports.load = dp.SetSave

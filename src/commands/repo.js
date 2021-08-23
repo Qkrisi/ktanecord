@@ -43,7 +43,7 @@ module.exports.run = async (client, message, args) => {
     let links = []
     inputmodule.SteamID ? links.push(`[Workshop](http://steamcommunity.com/sharedfiles/filedetails/?id=${inputmodule.SteamID})`) : doNothing()
     inputmodule.SourceUrl ? links.push(`[Source code](${inputmodule.SourceUrl})`) : doNothing()
-    inputmodule.TutorialVideoUrl ? links.push(`[Tutorial video](${inputmodule.TutorialVideoUrl})`) : doNothing()
+    inputmodule.TutorialVideoUrl ? links.push(`[Tutorial video](${inputmodule.TutorialVideoUrl.default})`) : doNothing()
     if (links.length == 0) {
         links.push('No links')
     }
