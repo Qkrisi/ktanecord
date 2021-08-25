@@ -174,7 +174,7 @@ WSServer.on("connection", (client, req) => {
 				}
 				else Callback()
 			}
-			else client.close()
+			else client.close(1014, "Invalid token")
 			return
 		}
 		else if(Thread)
