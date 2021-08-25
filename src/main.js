@@ -221,6 +221,19 @@ client.on('ready', () => {
 					return
 			}
 	})
+	client.ws.on("THREAD_MEMBERS_UPDATE", ThreadUpdate => {
+		if(ThreadUpdate.added_members && dp.GetDPThreads().includes(ThreadUpdate.id))
+		{
+			client.guilds.fetch(ThreadUpdate.guild_id).then(guild => {
+				for(const member of ThreadUpdate.added_members)
+				{
+					guild.members.fetch(member.user_id).then(m => {
+						m.createDM().then(dm => dm.send("Welcome to Discord Plays: KTaNE! Commands work in the exact same way as they do on Twitch Plays.\nFor a list of commands, visit https://samfundev.github.io/KtaneTwitchPlays/ (Use the !help command for more info)"))
+					})
+				}
+			})
+		}
+	})
 	let body = getCooldown()
 	if(body.SlashCommands) body.SlashCommands.forEach(GuildID => SetInteractions(GuildID, true, r => {}))
     console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.cache.map(g => g).length} servers`)
@@ -270,7 +283,6 @@ module.exports.WriteSave = () => {
 	let path = [__dirname, "save.json"].join("/")
 	fs.writeFileSync(path, JSON.stringify(savefile), "utf8")
 }
-
 module.exports.Bot = () => client
 module.exports.ktaneModules = () => ktaneModules
 module.exports.CreatorContacts = () => CreatorContacts

@@ -103,7 +103,30 @@ function GetThread(name, id, channel, Callback)
 	})
 }
 
-WSServer.on("connection", client => {
+const MinimumVersion = [1, 9, 24]
+
+function ValidateVersion(version)
+{
+	if(!version || !version.startsWith("Version="))
+		return false
+	let VersionNumbers = version.replace("Version=", "", 1).split(".")
+	for(let i = 0; i < MinimumVersion.length; i++)
+	{
+		let n = !VersionNumbers[i] ? 0 : parseInt(VersionNumbers[i])
+		if(isNaN(n) || n < MinimumVersion[i])
+			return false
+	}
+	return true
+}
+
+WSServer.on("connection", (client, req) => {
+	let version = req.headers.cookie
+	if(!ValidateVersion(version))
+	{
+		console.log(`Received invalid version: ${version}`)
+		client.close(1003, "Game version mismatch")
+		return
+	}
 	console.log("connected")
 	let token
 	let ChannelID
@@ -178,6 +201,7 @@ WSServer.on("connection", client => {
 	})
 })
 
+module.exports.GetDPThreads = () => Object.keys(Clients)
 module.exports.GetSave = () => TokenSave
 module.exports.SetSave = data => Tokens = data
 module.exports.GetRunningSessions = GetRunningSessions

@@ -25,9 +25,9 @@ module.exports.run = (client, message, args) => {
 	let DP = `${body.DPChannels.includes(message.channel.id) ? "Enabled" : "Disabled"} in this channel`
 	return message.channel.send({embeds: [embed.getEmbed("Help", {
 		helpCMD: `\`${config.token}help\``,
+		DiscordPlaysCMD: `\`${config.token}dp\``,
+		DiscordPlaysValue: `<:DiscordPlays:872414252596596748> Gets token for a Discord Plays: KTaNE session (${DP})`,
 		pingCMD: `\`${config.token}ping\``,
-		dpCMD: `\`${config.token}dp\``,
-		dpValue: `<:DiscordPlays:872414252596596748> Gets token for a Discord Plays: KTaNE session (${DP})`,
 		repoCMD: `\`${config.token}repo <module or --random>\``,
 		statsCMD: `\`${config.token}tp stats [player] [streamer]\``,
 		statsValue: `<:Twitch:702495822281048129> Shows player statistics on Twitch Plays (For a list of streamers use \`${config.token}tp streamers\`)`,
@@ -38,7 +38,7 @@ module.exports.run = (client, message, args) => {
 		contactCMD: `\`${config.token}contact <modder>\``,
 		scoreCMD: `\`${config.token}score <module>\``,
 		ideaCMD:`\`${config.token}idea [name] [--InProgress --NotReady --Unknown --IsReady]\``,
-		Reference: "**-**Modules can be the name, the ID, the periodic symbol or a Regular Expression to the module\n**-**Simple RegEx also has a `#` wildcard here which represents any numeric character (0-9)\nIf slash commands are enabled on a server, you can also select the command and arguments you wish to invoke by typing `/`. "+Slash,
+		Reference: "**-**Modules can be the name, the ID, the periodic symbol or a Regular Expression to the module\n**-**Simple RegEx also has a `#` wildcard here which represents any numeric character (0-9)\n**-**[Discord Plays command reference](https://samfundev.github.io/KtaneTwitchPlays/)\nIf slash commands are enabled on a server, you can also select the command and arguments you wish to invoke by typing `/`. "+Slash,
 		b: '\u200b'
 	})]})
 }
