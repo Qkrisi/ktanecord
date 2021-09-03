@@ -35,6 +35,8 @@ module.exports.run = (client, message, args) => {
 	}
 	if(!body.DPChannels.includes(message.channel.id))
 		return message.channel.send("Discord Plays is not enabled in this channel." + (IsAdmin ? `\nYou can enable it by running \`${config.token}dp --enable\`.` : ""))
+	if(dp.IsRunning(message.author.id))
+		return message.channel.send("Please finish your running session before starting a new one!")
 	message.author.createDM().then(channel => {
 		let token = dp.GenerateToken(message.channel, message.author)
 		channel.send(`Token: \`${token}\``)

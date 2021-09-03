@@ -145,6 +145,7 @@ WSServer.on("connection", (client, req) => {
 					let EditCallback = () => {
 						Thread = thread
 						ChannelID = Thread.id
+						client.AuthorID = info[2]
 						Clients[ChannelID] = client
 						ChannelID = ChannelID
 						TokenSave[token] = info
@@ -201,6 +202,7 @@ WSServer.on("connection", (client, req) => {
 	})
 })
 
+module.exports.IsRunning = id => Object.values(Clients).some(c => c.AuthorID == id)
 module.exports.GetDPThreads = () => Object.keys(Clients)
 module.exports.GetSave = () => TokenSave
 module.exports.SetSave = data => Tokens = data
