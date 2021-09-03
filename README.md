@@ -47,7 +47,8 @@ Paste these lines in it, and replace the values with the proper ones:
     "ScoreLog": "ChannelID",
     "Invite": "Invite link",
     "SimPort": "port",
-    "EnableSimulator": false
+    "EnableSimulator": false,
+    "DPPort": 6000
 }
 ```
 
@@ -66,6 +67,7 @@ Paste these lines in it, and replace the values with the proper ones:
 | Invite | Invite link of the bot with the `applications.commands` scope |
 | SimPort | Port of the WebSocket server in the KTaNE Simulator |
 | EnableSimulator | Boolean value indicating the usage of the KTaNE Simulator bot |
+| DPPort | Port of the Discord Plays server |
 
 KTaNE Simulator: https://github.com/Qkrisi/ktanesim
 
