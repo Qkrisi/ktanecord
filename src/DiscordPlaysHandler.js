@@ -191,8 +191,11 @@ WSServer.on("connection", (client, req) => {
 						message = message.replace(re, ` ${Emojis[emoji]} `)
 				}
 			let Users = ChannelUsers[ChannelID]
-			for(const tag of Object.keys(Users))
-				message = message.replace(`@${tag}`, `<@${Users[tag]}>`)
+			if(Users)
+			{
+				for(const tag of Object.keys(Users))
+					message = message.replace(`@${tag}`, `<@${Users[tag]}>`)
+			}
 			Thread.send(message)
 		}
 	})
