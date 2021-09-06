@@ -95,8 +95,9 @@ function GetThread(name, id, channel, Callback)
 				}
 				if(!Completed)
 				{
+					console.log(channel.guild.features)
 					Completed = true
-					channel.threads.create({name: name, autoArchiveDuration: 1440, reason: "New Discord Plays session"}).then(Callback)
+					channel.threads.create({name: name, autoArchiveDuration: channel.guild.features.includes("THREE_DAY_THREAD_ARCHIVE") ? 4320 : 1440, reason: "New Discord Plays session"}).then(Callback)
 				}
 			})
 		}
