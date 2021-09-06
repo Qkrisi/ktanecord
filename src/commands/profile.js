@@ -13,7 +13,7 @@ const difficulties2 = [
 ]
 
 module.exports.run = async (client, message, args) => {
-	let arr = message.attachments.clone().array()
+	let arr = message.attachments.map(attachment => attachment)
 	if (arr.length < 1) {
 		return message.channel.send("No profile attached")
 	}
@@ -63,9 +63,9 @@ module.exports.run = async (client, message, args) => {
 		}
 		message.channel.send({embeds: [embed.getEmbed("Profile", {
 			name: `Profile of ${message.author.username}`,
-			diff: avgDef == "No data" || avgExp == "No data" ? 0x7289DA : getColor({ DefuserDifficulty: avgDef.replace(' ', ''), ExpertDifficulty: avgExp.replace(' ', '') }),
-			enableds: EnabledList.length,
-			disableds: result.DisabledList.length,
+			diff: avgDef == "No data" || avgExp == "No data" ? "0x7289DA" : getColor({ DefuserDifficulty: avgDef.replace(' ', ''), ExpertDifficulty: avgExp.replace(' ', '') }).toString(16),
+			enableds: EnabledList.length.toString(),
+			disableds: result.DisabledList.length.toString(),
 			defDif: avgDef,
 			expDif: avgExp,
 			operation: result.Operation ? "Defuser" : "Expert"

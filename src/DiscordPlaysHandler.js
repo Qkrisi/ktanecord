@@ -95,7 +95,6 @@ function GetThread(name, id, channel, Callback)
 				}
 				if(!Completed)
 				{
-					console.log(channel.guild.features)
 					Completed = true
 					channel.threads.create({name: name, autoArchiveDuration: channel.guild.features.includes("THREE_DAY_THREAD_ARCHIVE") ? 4320 : 1440, reason: "New Discord Plays session"}).then(Callback)
 				}
@@ -176,7 +175,11 @@ WSServer.on("connection", (client, req) => {
 				}
 				else Callback()
 			}
-			else client.close(1014, "Invalid token")
+			else
+			{
+				console.log("Received invalid token")
+				client.close(1014, "Invalid token")
+			}
 			return
 		}
 		else if(Thread)

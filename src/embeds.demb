@@ -352,10 +352,10 @@
 #Profile
   @title
     Profile statistics
-  @color
-    |diff
   @description
     "
+  @color
+	|diff
   @footer
     |name
   @field
