@@ -221,7 +221,7 @@ client.on('ready', () => {
 					return
 			}
 	})
-	client.ws.on("THREAD_MEMBERS_UPDATE", ThreadUpdate => {
+	/*client.ws.on("THREAD_MEMBERS_UPDATE", ThreadUpdate => {
 		if(ThreadUpdate.added_members && dp.GetDPThreads().includes(ThreadUpdate.id))
 		{
 			client.guilds.fetch(ThreadUpdate.guild_id).then(guild => {
@@ -233,7 +233,7 @@ client.on('ready', () => {
 				}
 			})
 		}
-	})
+	})*/
 	let body = getCooldown()
 	if(body.SlashCommands) body.SlashCommands.forEach(GuildID => SetInteractions(GuildID, true, r => {}))
     console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.cache.map(g => g).length} servers`)
