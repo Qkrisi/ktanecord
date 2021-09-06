@@ -10,7 +10,7 @@
 
 -[axios](https://www.npmjs.com/package/axios)
 
--[discord.js](https://www.npmjs.com/package/discord.js) - **v11**
+-[discord.js](https://www.npmjs.com/package/discord.js) - **v13**
 
 -[enum](https://www.npmjs.com/package/enum)
 
@@ -19,6 +19,8 @@
 -[lodash](https://www.npmjs.com/package/lodash)
 
 -[wumpfetch](https://www.npmjs.com/package/wumpfetch)
+
+You can use `npm install` to install these packages automatically.
 
 **Run**
 
