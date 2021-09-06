@@ -187,6 +187,8 @@ client.on('ready', () => {
 		catch {}
 	}
 	client.ws.on("INTERACTION_CREATE", int => {
+		try
+		{
 			switch(int.type)
 			{
 				case 2:		//Slash commands
@@ -220,6 +222,11 @@ client.on('ready', () => {
 				default:
 					return
 			}
+		}
+		catch(e)
+		{
+			console.log(e)
+		}
 	})
 	/*client.ws.on("THREAD_MEMBERS_UPDATE", ThreadUpdate => {
 		if(ThreadUpdate.added_members && dp.GetDPThreads().includes(ThreadUpdate.id))

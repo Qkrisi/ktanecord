@@ -133,70 +133,77 @@ WSServer.on("connection", (client, req) => {
 	let Channel
 	let Thread
 	client.on("message", message => {
-		if(!token)
+		try
 		{
-			if(Tokens[message])
+			if(!token)
 			{
-				token = message
-				let info = Tokens[token]
-				ChannelID = info[0]
-				Channel = ChannelIDs[ChannelID]
-				let ThreadCallback = thread => {
-					let EditCallback = () => {
-						Thread = thread
-						ChannelID = Thread.id
-						client.AuthorID = info[2]
-						Clients[ChannelID] = client
-						ChannelID = ChannelID
-						TokenSave[token] = info
-						delete Tokens[token]
+				if(Tokens[message])
+				{
+					token = message
+					let info = Tokens[token]
+					ChannelID = info[0]
+					Channel = ChannelIDs[ChannelID]
+					let ThreadCallback = thread => {
+						let EditCallback = () => {
+							Thread = thread
+							ChannelID = Thread.id
+							client.AuthorID = info[2]
+							Clients[ChannelID] = client
+							ChannelID = ChannelID
+							TokenSave[token] = info
+							delete Tokens[token]
+						}
+						if(thread.editable && thread.name != info[1])
+						{
+							thread.edit({name: info[1]}, "Username change").then(t => {
+								thread = t
+								EditCallback()
+							})
+						}
+						else EditCallback()
 					}
-					if(thread.editable && thread.name != info[1])
+					let Callback = () => {
+						if(ThreadTypes.includes(Channel.type))
+							ThreadCallback(Channel)
+						else GetThread(info[1], info[2], Channel, ThreadCallback)
+					}
+					if(!Channel)
 					{
-						thread.edit({name: info[1]}, "Username change").then(t => {
-							thread = t
-							EditCallback()
+						main.Bot().channels.fetch(ChannelID).then(ch => {
+							Channel = ch
+							if(Channel)
+								Callback()
 						})
 					}
-					else EditCallback()
+					else Callback()
 				}
-				let Callback = () => {
-					if(ThreadTypes.includes(Channel.type))
-						ThreadCallback(Channel)
-					else GetThread(info[1], info[2], Channel, ThreadCallback)
-				}
-				if(!Channel)
+				else
 				{
-					main.Bot().channels.fetch(ChannelID).then(ch => {
-						Channel = ch
-						if(Channel)
-							Callback()
-					})
+					console.log("Received invalid token")
+					client.close(1014, "Invalid token")
 				}
-				else Callback()
+				return
 			}
-			else
+			else if(Thread)
 			{
-				console.log("Received invalid token")
-				client.close(1014, "Invalid token")
+				for(const emoji of Object.keys(Emojis))
+					{
+						let re = new RegExp(`(\\s|^)${emoji}(\\s|$)`, "gm")
+						while(re.test(message))
+							message = message.replace(re, ` ${Emojis[emoji]} `)
+					}
+				let Users = ChannelUsers[ChannelID]
+				if(Users)
+				{
+					for(const tag of Object.keys(Users))
+						message = message.replace(`@${tag}`, `<@${Users[tag]}>`)
+				}
+				Thread.send(message)
 			}
-			return
 		}
-		else if(Thread)
+		catch(e)
 		{
-			for(const emoji of Object.keys(Emojis))
-				{
-					let re = new RegExp(`(\\s|^)${emoji}(\\s|$)`, "gm")
-					while(re.test(message))
-						message = message.replace(re, ` ${Emojis[emoji]} `)
-				}
-			let Users = ChannelUsers[ChannelID]
-			if(Users)
-			{
-				for(const tag of Object.keys(Users))
-					message = message.replace(`@${tag}`, `<@${Users[tag]}>`)
-			}
-			Thread.send(message)
+			console.log(e)
 		}
 	})
 	client.on("close", () => {
