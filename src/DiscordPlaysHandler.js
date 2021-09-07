@@ -12,6 +12,7 @@ var ChannelIDs = {}
 var Clients = {}
 var ChannelUsers = {}
 var TokenSave = {}
+var Timeouts = {}
 
 const Emojis = {
 		"LUL": "<:LUL:732584833628241920>",
@@ -132,6 +133,7 @@ WSServer.on("connection", (client, req) => {
 	let ChannelID
 	let Channel
 	let Thread
+	let info
 	client.on("message", message => {
 		try
 		{
@@ -140,7 +142,12 @@ WSServer.on("connection", (client, req) => {
 				if(Tokens[message])
 				{
 					token = message
-					let info = Tokens[token]
+					if(Timeouts[token])
+					{
+						clearTimeout(Timeouts[token])
+						delete Timeouts[token]
+					}
+					info = Tokens[token]
 					ChannelID = info[0]
 					Channel = ChannelIDs[ChannelID]
 					let ThreadCallback = thread => {
@@ -211,8 +218,15 @@ WSServer.on("connection", (client, req) => {
 		delete Clients[ChannelID]
 		delete ChannelUsers[ChannelID]
 		delete TokenSave[token]
+		Tokens[token] = info
 		if(Thread && !Thread.archived && Thread.editable)
 			Thread.setArchived(true, "Session has ended")
+		if(Timeouts[token])
+			clearTimeout(Timeouts[token])
+		Timeouts[token] = setTimeout(() => {
+			delete Tokens[token]
+			delete Timeouts[token]
+		}, 7500)
 	})
 })
 
