@@ -168,8 +168,8 @@ def GetScore(module):
 	return str({"error":"Module not found"}).replace("'",'"')
 	
 CommunityColumn = {
-	"K":"Community Score",
-	"L":"Community Boss Score",
+	"L":"Community Score",
+	"M":"Community Boss Score",
 }
 
 @app.route("/SetCommunityScore", methods=["POST"])

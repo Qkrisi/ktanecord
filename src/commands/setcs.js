@@ -71,7 +71,7 @@ module.exports.run = async(client, message, args) => {
 	body = {
 		"module":inputmodule.Name,
 		"discord":message.author.tag,
-		"column":"K",
+		"column":"L",
 		"value":value,
 		"reason":reason
 	}
@@ -84,7 +84,7 @@ module.exports.run = async(client, message, args) => {
 		console.log("Sending new");
 		let BossValue = ValidateNumber(input[2], message)
 		if(BossValue==undefined) return
-		body["column"]="L"
+		body["column"]="M"
 		body["value"]=BossValue
 		body["IgnoreReason"]=""
 		log+=` and boss value to ${BossValue}`
