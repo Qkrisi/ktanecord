@@ -1,6 +1,7 @@
 node_modules/
 config.json
 src/cooldown.json
+src/save.json
 stats_server/credentials.json
 stats_server/__pycache__
 stats_server/stats.json

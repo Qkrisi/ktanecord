@@ -26,6 +26,6 @@ module.exports.run = async (client, message, args) => {
 		})
 		let emb = embed.getEmbed("CommunityScore", constructedBody)
 		emb.fields = emb.fields.filter(field => field.value!=".")
-		message.channel.send(emb)
+		message.channel.send({embeds: [emb]})
 	})
 }

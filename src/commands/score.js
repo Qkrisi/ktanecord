@@ -110,6 +110,6 @@ module.exports.run = async (client, message, args) => {
 			}
 			return true
 		})
-		message.channel.send(emb)
-	}) // .catch(error => message.channel.send(`An error occurred while fetching module scores: ${error}`))
+		message.channel.send({ embeds: [emb] })
+	})//.catch(error => message.channel.send(`An error occurred while fetching module scores: ${error}`))
 }

@@ -68,8 +68,8 @@ module.exports.run = async(client, message, args) => {
 	let log = `${message.author.tag} has changed the value of ${inputmodule.Name} to ${value}`
 	body = {
 		"module": inputmodule.Name,
-		"discord" :message.author.tag,
-		"column": "K",
+		"discord": message.author.tag,
+		"column": "L",
 		"value": value,
 		"reason": reason
 	}
@@ -80,12 +80,12 @@ module.exports.run = async(client, message, args) => {
 	await axios.post(url, cloneDeep(body)).then(callback(true)).catch(errorCallback)
 	if (args.boss) {
 		console.log("Sending new");
-		let bossValue = validateNumber(input[2], message)
-		if (bossValue == undefined) return
-		body["column"] = "L"
-		body["value"] = bossValue
+		let bossValue = ValidateNumber(input[2], message)
+		if (bossValue==undefined) return
+		body["column"] = "M"
+		body["value"] = BossValue
 		body["IgnoreReason"] = ""
-		log += ` and boss value to ${bossValue}`
+		log += ` and boss value to ${BossValue}`
 		await axios.post(url, body).then(callback(true)).catch(errorCallback)
 	}
 	if (sendobj.success)

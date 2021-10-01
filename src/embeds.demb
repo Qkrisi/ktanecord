@@ -15,6 +15,12 @@
       ❕ Displays this message (KTaNE Simulator help if `--sim` is given, the admin help message if `--admin` is given and the community score help message if `--cs` is given)
   @end
   @field
+	@name
+		|DiscordPlaysCMD
+	@value
+		|DiscordPlaysValue
+  @end
+  @field
     @name
       |pingCMD
     @value
@@ -93,6 +99,12 @@
     List of admin commands
   @field
 	@name
+		|manageDP
+	@value
+		<:DiscordPlays:872414252596596748> Enables/Disables Discord Plays in this channel
+  @end
+  @field
+	@name
 		|SCCMD
 	@value
 		|SCValue
@@ -114,6 +126,12 @@
 #AdminHelpNoCooldown
   @title
     List of admin commands
+  @field
+	@name
+		|manageDP
+	@value
+		<:DiscordPlays:872414252596596748> Enables/Disables Discord Plays in this channel
+  @end
   @field
 	@name
 		|SCCMD
@@ -334,10 +352,10 @@
 #Profile
   @title
     Profile statistics
-  @color
-    |diff
   @description
     "
+  @color
+	|diff
   @footer
     |name
   @field

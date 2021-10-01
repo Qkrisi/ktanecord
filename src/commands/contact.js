@@ -43,31 +43,30 @@ module.exports.run = async(client, message, args) => {
 		if (platform != "CreatorName")
 			contactInfo[platformAlias[platform] ? platformAlias[platform] : platform] = creator[platform]
 	})
-	let HandlePlatforms = () => {
-		let ConstructedBody = { Title: `Contact information of ${creator.CreatorName}`, Contacts: "" }
+	let handlePlatforms = () => {
+		let constructedBody = { Title: `Contact information of ${creator.CreatorName}`, Contacts: "" }
 		Object.keys(contactInfo).forEach(platform => {
-			let MainPlatform = platformURLs[platform ] ? `[${platform}](${platformURLs[platform]}${contactInfo[platform]})` : contactInfo[platform]
-			ConstructedBody.Contacts += `${emojis[platform] ? emojis[platform] : platform+":"} ${MainPlatform}\n`
+			let mainPlatform = platformURLs[platform ] ? `[${platform}](${platformURLs[platform]}${contactInfo[platform]})` : contactInfo[platform]
+			constructedBody.Contacts += `${emojis[platform] ? emojis[platform] : platform+":"} ${mainPlatform}\n`
 		})
-		return ConstructedBody
+		return constructedBody
 	}
-	let msg = await message.channel.send(embed.getEmbed("ContactInfo", HandlePlatforms()))
+	let msg = await message.channel.send({ embeds: [embed.getEmbed("ContactInfo", handlePlatforms())] })
 	if (contactInfo.Discord && message.guild) {
 		let complete = false
 		let edit = false
 		message.guild.members.fetch().then(members => {
-			members.array().forEach(member => {
-				if (!complete && member.user.tag==contactInfo.Discord) {
+			for (const member of members.values()) {
+				if (!complete && member.user.tag == contactInfo.Discord) {
 					complete = true
 					edit = true
 					contactInfo.Discord=`<@${member.id}>`
-					console.log(contactInfo.Discord)
 				}
-				else if (edit) {
+				if (edit) {
 					edit = false
-					msg.edit(embed.getEmbed("ContactInfo", HandlePlatforms()))
+					msg.edit({ embeds: [embed.getEmbed("ContactInfo", handlePlatforms())] })
 				}
-			})
+			}
 		})
 	}
 }

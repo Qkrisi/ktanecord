@@ -41,7 +41,7 @@ module.exports.run = async (client, message, args) => {
     let links = []
     inputmodule.SteamID ? links.push(`[Workshop](http://steamcommunity.com/sharedfiles/filedetails/?id=${inputmodule.SteamID})`) : doNothing()
     inputmodule.SourceUrl ? links.push(`[Source code](${inputmodule.SourceUrl})`) : doNothing()
-    inputmodule.TutorialVideoUrl ? links.push(`[Tutorial video](${inputmodule.TutorialVideoUrl})`) : doNothing()
+    inputmodule.TutorialVideoUrl ? links.push(`[Tutorial video](${inputmodule.TutorialVideoUrl.default})`) : doNothing()
     if (links.length == 0) {
         links.push('No links')
     }
@@ -78,7 +78,7 @@ module.exports.run = async (client, message, args) => {
         manuals.push('And more...')
     }
 
-   message.channel.send(embed.getEmbed("Repo", {
+   message.channel.send({embeds: [embed.getEmbed("Repo", {
         moduleName: `${subjectOverrides.get(inputmodule.Name) || `On the Subject of ${inputmodule.Name}`} ${inputmodule.TwitchPlays ? inputmodule.TwitchPlays.Score ? ` \u00B7 <:Twitch:702495822281048129> ${inputmodule.TwitchPlays.Score}` : '' : ''}${inputmodule.RuleSeedSupport === 'Supported' ? ' \u00B7 <:RuleSeed:702495784716992583>' : ''}${inputmodule.Souvenir ? inputmodule.Souvenir.Status == 'Supported' ? ' \u00B7 S' : '' : ''}${inputmodule.MysteryModule == undefined ? " \u00B7 MM" : ""}`,
         moduleDesc: `${inputmodule.Description.split('Tags')[0].trim()}`,
         diff: `Defuser: ${parseDifficulty(inputmodule.DefuserDifficulty)}\nExpert: ${parseDifficulty(inputmodule.ExpertDifficulty)}`,
@@ -91,5 +91,5 @@ module.exports.run = async (client, message, args) => {
         creator: `${inputmodule.Type == 'Widget' ? 'Widget' : 'Module'} made by ${inputmodule.Author}`,
         moduleIcon: `https://raw.githubusercontent.com/Timwi/KtaneContent/master/Icons/${manualId}.png`,
         diffColor: getColor(inputmodule)
-    }))
+    })]})
 }

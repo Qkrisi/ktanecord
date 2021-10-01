@@ -1,8 +1,14 @@
 const Discord = require('discord.js')
 let intents = new Discord.Intents(Discord.Intents.NON_PRIVILEGED)
 intents.add("GUILD_MEMBERS")
-const client = new Discord.Client({ws:{intents:intents}})
+const client = new Discord.Client({intents:[intents, Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES]})
 const config = require('../config.json')
+var savefile = {}
+try
+{
+	savefile = require("./save.json")
+}
+catch {}
 const fetch = require('wumpfetch')
 const larg = require('larg')
 const { aliases, profileWhitelist, interactions } = require('./map.js')
@@ -10,6 +16,7 @@ const lookup = require('./lookup')
 const fs = require('fs')
 const simHandler = require("./KtaneSimHandler.js")
 const { embed } = require("./utils.js")
+const dp = require("./DiscordPlaysHandler.js")
 
 let ktaneModules = new Map()
 let modIDs = []
@@ -29,7 +36,7 @@ const createDataFromObject = obj => {
 			body.data.data.components = obj.components
 			delete obj.components
 		}
-		body.data.data.embeds= [obj]
+		body.data.data.embeds = obj.embeds
 	}
 	return body
 }
@@ -163,51 +170,69 @@ const setInteractions = (GuildID, enable, callback) => {
 }
 
 client.on('ready', () => {
+	for (const command of Object.keys(savefile)) {
+		try {
+			let commandFile = require(`./commands/${command}.js`)
+			if (commandFile.load)
+				commandFile.load(savefile[command])
+		}
+		catch {}
+	}
 	client.ws.on("INTERACTION_CREATE", int => {
-		switch (int.type) {
-			case 2:	// Slash commands
-				let commandFile = require(`./commands/${int.data.name}.js`)
-				let run = msg => {
-					let args = msg.content ? larg(msg.content.split(' ')) : {_:[]}
-					msg.slash = true
-					msg.interaction = int
-					commandFile.run(client, msg, args)
-				}
-				int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
-				if (csCommands.includes(int.data.name)) {
-					client.channels.fetch(int.channel_id).then(channel => {
-						let msg = createMessageFromOptions(int.data.name, int.data.options, { author: int.member.user, channel: channel })
-						client.api.interactions(int.id, int.token).callback.post({ data: { type: 4, data: { content: `Running command: ${config.token}${int.data.name} ${msg.content}` } } })
-						run(msg)
-					})
-				}
-				else {
-					let msg  = createMessageFromOptions(int.data.name, int.data.options, {
-						author: int.member.user, guild:{id:int.guild_id},
-						channel: {
-							id: int.channel_id,
-							send: obj => { client.api.interactions(int.id, int.token).callback.post(createDataFromObject(obj)) }
-						}
-					})
-					run(msg)
-				}
-				break
-
-			case 3: // Components
-				let customId = int.data.custom_id.split(' ')
-				let cFile = require(`./commands/${customId[0]}.js`)
-				client.channels.fetch(int.message.channel_id).then(channel => {
-					cFile.component(client, int, customId[1], channel, int.message)
-				}).catch(console.error)
-				break
-
-			default:
-				return
+		try {
+			switch (int.type) {
+				case 2:		//Slash commands
+					let commandFile = require(`./commands/${int.data.name}.js`)
+					let run = m => {
+						let args = m.content ? larg(m.content.split(' ')) : {_:[]}
+						m.slash = true
+						m.interaction = int
+						commandFile.run(client, m, args)
+					}
+					int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
+					if (CSCommands.includes(int.data.name)) {
+						client.channels.fetch(int.channel_id).then(channel => {
+							let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, channel:channel})
+							client.api.interactions(int.id, int.token).callback.post({data:{type:4, data:{content:`Running command: ${config.token}${int.data.name} ${MSG.content}`}}})
+							run(MSG)
+						})
+					}
+					else {
+						let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, guild:{id:int.guild_id}, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
+						run(MSG)
+					}
+					break
+				case 3:		//Components
+					let custom_id = int.data.custom_id.split(' ')
+					let CFile = require(`./commands/${custom_id[0]}.js`)
+					client.channels.fetch(int.message.channel_id).then(channel => {
+						CFile.component(client, int, custom_id[1], channel, int.message)
+					}).catch(console.error)
+					break
+				default:
+					return
+			}
+		}
+		catch(e) {
+			console.log(e)
 		}
 	})
+	/*client.ws.on("THREAD_MEMBERS_UPDATE", ThreadUpdate => {
+		if(ThreadUpdate.added_members && dp.GetDPThreads().includes(ThreadUpdate.id))
+		{
+			client.guilds.fetch(ThreadUpdate.guild_id).then(guild => {
+				for(const member of ThreadUpdate.added_members)
+				{
+					guild.members.fetch(member.user_id).then(m => {
+						m.createDM().then(dm => dm.send("Welcome to Discord Plays: KTaNE! Commands work in the exact same way as they do on Twitch Plays.\nFor a list of commands, visit https://samfundev.github.io/KtaneTwitchPlays/ (Use the !help command for more info)"))
+					})
+				}
+			})
+		}
+	})*/
 	let body = getCooldown()
 	if (body.SlashCommands) body.SlashCommands.forEach(guildId => setInteractions(guildId, true, r => {}))
-    console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.cache.keyArray().length} servers`)
+    console.log(`Hello world!\nLogged in as ${client.user.tag}\nI am in ${client.guilds.cache.map(g => g).length} servers`)
     client.user.setActivity(`${config.token}help | try ${config.token}repo`)
     if (config.prod) {
         const DBL = require('dblapi.js')
@@ -226,10 +251,10 @@ client.on('ready', () => {
     }, 1800000)
 })
 
-client.on('message', message => {
+client.on('messageCreate', message => {
     if (message.author.bot) return
     lookup(ktaneModules, message)
-    if (!message.content.startsWith(config.token)) return
+    if (!message.content.startsWith(config.token)) return dp.ValidateMessage(message)
 	if (!profileWhitelist.includes(message.author.id) && message.content.length > 600) return message.channel.send("Please don't send messages containing more than 600 characters!") // why is this here
 
 	while (message.content.includes("  ")) message.content = message.content.replace("  ", " ")
@@ -249,6 +274,12 @@ client.on('message', message => {
 
 client.login(config.discord)
 
+module.exports.Save = (key, data) => savefile[key] = data
+module.exports.WriteSave = () => {
+	let path = [__dirname, "save.json"].join("/")
+	fs.writeFileSync(path, JSON.stringify(savefile), "utf8")
+}
+module.exports.Bot = () => client
 module.exports.ktaneModules = () => ktaneModules
 module.exports.creatorContacts = () => creatorContacts
 module.exports.ideas = () => ideas

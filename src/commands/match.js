@@ -31,7 +31,7 @@ const convertToFull = simple => {
 				s[ind] = "(.)"
 				break
 			case "#":
-				s[ind] = "([0-9])"
+				s[ind] = "(\\d)"
 				break
 			default:
 				s[ind] = getEscape(char)
@@ -115,8 +115,8 @@ async function getMessageData(regex, page, match, channel) {
 		"info": `Page ${page} of ${maxPage}, match ${match} of ${maxMatch}`,
 		"matches": joinedLines ? joinedLines : "      ​"
 	})
-	const { data, files } = await discord.APIMessage.create(channel, "", {allowedMentions: {}, disableMentions: "none"}).resolveData().resolveFiles();
-	data.embeds.push(emb)
+	const { data, files } = await discord.MessagePayload.create(channel, "⠀", { allowedMentions: {}, disableMentions: "none" }).resolveData().resolveFiles();
+	data.embeds = [emb]
 	if (maxPage > 1) {
 		data.components = [{ "type": 1, "components": [] }]
 		if(page > 1)

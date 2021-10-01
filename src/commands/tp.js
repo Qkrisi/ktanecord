@@ -4,7 +4,7 @@ const config = require('../../config.json')
 const Discord = require('discord.js')
 const axios = require('axios')
 
-const Streamers = new Map([
+/*const Streamers = new Map([
 	["MrPeanut1028", "MrPeanut1028 (Weekday + Whitelist)"],
 	["Derfer99", "Derfer99 (Weekend)"],
 	["Strike_Kaboom", "Strike_Kaboom (Training)"],
@@ -12,13 +12,14 @@ const Streamers = new Map([
 	["eXish", "eXish (Backup)"],
 	["MrMelon54", "MrMelon54 (Backup)"],
 	["Qkrisi", "Qkrisi (Backup)"]
-])
+])*/
 
 const available = [
+	"Marksam32",
 	"MrPeanut1028",
 	"eXish",
 	"Heres_Fangy",
-	"Strike_Kaboom",
+	"Strike_Kaboom"
 ]
 
 const fetchStatus = [
@@ -26,6 +27,8 @@ const fetchStatus = [
 	"Marksam32",
 	"Heres_Fangy",
 ]
+
+const defaultStreamer = "Marksam32"
 
 function componentToHex(c) {
 	var hex = c.toString(16);
@@ -64,26 +67,26 @@ module.exports.run = async (client, message, args) => {
 				})
 				if (counter == fetchStatus.length) {
 					fetchStatus.forEach(streamer => msg+=`\n[${streamer}](https://twitch.tv/${streamer}): ${streamerInfo[streamer]}`)
-					message.channel.send(embed.getEmbed("CurrentStreamers", {streamers:msg}))
+					message.channel.send({ embeds: [embed.getEmbed("CurrentStreamers", { streamers:msg })] })
 				}
 			})
 		}
 		else if (argList[0] == "data") {
 			let streamer = argList[1]
-			if (!streamer) streamer = "MrPeanut1028"
+			if (!streamer) streamer = defaultStreamer
 			let url = encodeURI(`https://api.twitch.tv/helix/streams?user_login=${streamer}`)
 			await fetch({ url: url, parse: "json", headers: { Authorization: `Bearer ${token}`, "Client-Id": clientId } }).send().then(async(response) => {
 				let body = response.body.data[0]
 				let online = body!=undefined && body.type=="live" && body["game_name"]=="Keep Talking and Nobody Explodes" && ["Twitch Plays", "TP"].some(element => body.title.includes(element))
 				if (!online) return message.channel.send(`${streamer} is currently not online or isn't streaming TP:KTaNE`)
-				message.channel.send(embed.getEmbed("StreamerData", {
+				message.channel.send({ embeds: [embed.getEmbed("StreamerData", {
 					viewers: body["viewer_count"],
 					start: body["started_at"].replace("T", " ").replace("Z",""),
 					language: body["language"],
 					thumbnail: body["thumbnail_url"].replace("{width}", "1920").replace("{height}", "1080")+`?${new Date().getMilliseconds()}`,
 					streamer: `Statistics of ${streamer}'s stream`,
 					name: body["title"]
-				}))
+				})]})
 			})
 		}
 		else {
@@ -96,7 +99,7 @@ module.exports.run = async (client, message, args) => {
 				let sDone = false
 				streamer // ????????????????????????????????????????
 				if (argList.length == 1) {
-					streamer = "MrPeanut1028"
+					streamer = DefaultStreamer
 					sDone = true
 				}
 				name = argList.length == 1 ? argList[0] : argList.splice(0, argList.length - 1).join(" ")
@@ -105,8 +108,9 @@ module.exports.run = async (client, message, args) => {
 				streamer = streamer.toLowerCase()
 			}
 			else {
-				streamer = "MrPeanut1028"
-				name = message.author.username
+				streamer = DefaultStreamer
+				let username = message.author.username
+				name = message.guild ? (message.member.nickname ?? username) : username
 			}
 			let url = `http://${config.tpServerIP}:${config.tpServerPort}/get/${streamer}/${name}`
 			originalName = name
@@ -128,7 +132,7 @@ module.exports.run = async (client, message, args) => {
 				let solveStrike = `${resp.solve} **/** ${resp.strike}`
 				let solveStrikeRatio = `${r1} **:** ${resp.strike > 0 ? 1 : 0}`
 
-				message.channel.send(embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
+				message.channel.send({embeds: [embed.getEmbed(!resp.OptedOut ? "TwitchPlays" : "TPOptedOut", {
 					name: `${originalName}`,
 					userColor: hex,
 					pfp: pfp,
@@ -140,7 +144,7 @@ module.exports.run = async (client, message, args) => {
 					rank: `${resp.rank}`,
 					sDef: `${resp.soloClears}`,
 					sRank: `${resp.soloRank}`
-				}))
+				})]})
 			})
 		}
 		return
