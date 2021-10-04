@@ -34,7 +34,7 @@ module.exports.run = async(client, message, args) => {
 	}).catch(error => {
 		console.log(error)
 		success = false
-		message.channel.send(`An error occurrend while communicating with the scoring server (${error.response.status})`)
+		message.channel.send(`An error has occurred while communicating with the scoring server (${error.response.status})`)
 	})
 	if(success)
 		say.run(client, message, new FakeArg(`${config.ScoreLog} ${message.author.tag} has commented on ${module.Name}: ${reason} (${message.author.id})`), true)

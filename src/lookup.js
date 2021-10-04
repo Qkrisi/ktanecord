@@ -46,7 +46,7 @@ module.exports = async (modules, message) => {
 			NamedIdeas[Ideas[i].name]=Ideas[i]
 		}
 		let SimilarName = mostSimilarModule(m, NamedIdeas)
-		if(SimilarName) message.channel.send('', {
+		if(SimilarName) message.channel.send({
 			embeds: [GetIdeaEmbed(NamedIdeas[SimilarName])]
 		})
 	}

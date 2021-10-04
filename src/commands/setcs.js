@@ -22,7 +22,7 @@ function GetErrorCallback(message, SendOBJ){
 	return error => {
 		SendOBJ.success = false
 		console.log(error)
-		message.channel.send(`An error occurrend while communicating with the scoring server (${error.response.status})`)
+		message.channel.send(`An error has occurred while communicating with the scoring server (${error.response.status})`)
 	}
 }
 
