@@ -159,52 +159,57 @@ module.exports.run = async(client, message, args) => {
 					message.channel.send("Not enough arguments!")
 					break
 				}
-				let module = argList.slice(2).join(" ")
+				let modules = argList.slice(2).join(" ").split("//")
 				message.guild.roles.fetch().then(async(roles) => {
-					roles = roles.map(r => r)
-					roles.sort((a, b) => b.position - a.position)
 					let success = true
-					let current_roles = []
-					let record = false
-					let bounds = config.TPBounds
-					let start_pos = 0
-					for(const r of roles)
+					for(const module of modules)
 					{
-						if(r.id == bounds[0])
-							record=true
-						else if(r.id == bounds[1])
+						roles = roles.map(r => r)
+						roles.sort((a, b) => b.position - a.position)
+						let current_roles = []
+						let record = false
+						let bounds = config.TPBounds
+						let start_pos = 0
+						for(const r of roles)
 						{
-							start_pos = r.position
-							break
+							if(r.id == bounds[0])
+								record=true
+							else if(r.id == bounds[1])
+							{
+								start_pos = r.position
+								break
+							}
+							else if(record)
+								current_roles.push(r)
 						}
-						else if(record)
-							current_roles.push(r)
-					}
-					let role_names = current_roles.map(r => r.name)
-					if(key == "add")
-					{
-						if(role_names.includes(module))
+						let role_names = current_roles.map(r => r.name)
+						if(key == "add")
 						{
-							success = false
-							return message.channel.send("A role with the specified name already exists")
+							if(role_names.includes(module))
+							{
+								success = false
+								return message.channel.send("A role with the specified name already exists")
+							}
+							role_names.push(module)
+							role_names.sort()
+							role_names = role_names.reverse()
+							let role = await message.guild.roles.create({
+								name: module,
+								mentionable: true,
+								position: start_pos+role_names.indexOf(module)+1
+							})
+							roles.push(role)
 						}
-						role_names.push(module)
-						role_names.sort()
-						role_names = role_names.reverse()
-						await message.guild.roles.create({
-							name: module,
-							mentionable: true,
-							position: start_pos+role_names.indexOf(module)+1
-						})
-					}
-					else
-					{
-						if(!role_names.includes(module))
+						else
 						{
-							success = false
-							return message.channel.send("A role with the specified name doesn't exist")
+							if(!role_names.includes(module))
+							{
+								success = false
+								return message.channel.send("A role with the specified name doesn't exist")
+							}
+							await current_roles.find(r => r.name == module).delete()
+							roles = roles.filter(r => r.name != module)
 						}
-						await current_roles.find(r => r.name == module).delete()
 					}
 					if(success)
 						update()
