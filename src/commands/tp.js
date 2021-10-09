@@ -3,6 +3,8 @@ const fetch = require('wumpfetch')
 const config = require('../../config.json')
 const Discord = require('discord.js')
 const axios = require('axios')
+const { CreateAPIMessage } = require('../utils.js')
+const { profileWhitelist } = require('../map.js')
 
 /*const Streamers = new Map([
 	["MrPeanut1028", "MrPeanut1028 (Weekday + Whitelist)"],
@@ -30,6 +32,9 @@ const FetchStatus = [
 
 const DefaultStreamer = "Marksam32"
 
+var RoleSelect_ChannelID = 0
+var RoleSelect_MessageID = []
+
 function componentToHex(c) {
 	var hex = c.toString(16);
 	return hex.length == 1 ? "0" + hex : hex;
@@ -40,14 +45,174 @@ function rgbToHex(r, g, b) {
 }
 
 function getDecimal(num) {
-	console.log(num)
 	let splitted = num.toString().split(".")
 	return splitted.length == 1 ? `${splitted[0]}` : `${splitted[0]}**.**${splitted[1].charAt(0)}`
 }
 
-module.exports.run = async (client, message, args) => {
+
+async function GetMessages(roles, message, client, SendMessages) {
+	let bounds = config.TPBounds
+	let record = false
+	let messages = []
+	let rows = []
+	let datas = []
+	roles = roles.map(r => r)
+	/*for(let i = 3;i<100;i++)
+		roles.push({position: i, name: `TP_Created${i}`, id: `${i}`})*/
+	if(SendMessages)
+	{
+		RoleSelect_ChannelID = message.channel.id
+		RoleSelect_MessageID = []
+	}
+	roles.sort((a, b) => b.position - a.position)
+	let modules = []
+	for(const role of roles.map(r => r))
+	{
+		if(role.id == bounds[0])
+			record = true
+		else if(role.id == bounds[1])
+			break
+		else if(record)
+			modules.push({"label": role.name, "value": role.id})
+	}
+	while(modules.length > 0)
+		rows.push(modules.splice(0, 3))
+	while(rows.length > 0)
+		messages.push(rows.splice(0, 3))
+	let i = 0
+	let row_i = 0
+	for(const msg of messages)
+	{
+		const { data, files, send } = await CreateAPIMessage(message.channel, client, ++i == 1 ? "Select the roles you wish to toggle:" : "⠀")
+		data.components = []
+		for(const row of msg)
+		{
+			let action_row = {"type": 1, "components": [{"type": 3, "custom_id": `tp role_${row_i++}_${i}`, "options": [], "max_values": row.length}]}
+			for(const module of row)
+				action_row.components[0].options.push(module)
+			action_row.components[0].placeholder = action_row.components[0].options[0].label
+			let options_length = action_row.components[0].options.length
+			if(options_length > 1)
+				action_row.components[0].placeholder += " - " + action_row.components[0].options[options_length-1].label
+			data.components.push(action_row)
+		}
+		datas.push([data, files, send])
+		if(SendMessages)
+			await send(data, msg => RoleSelect_MessageID.push(msg.id))
+	}
+	if(SendMessages)
+		await message.delete()
+	return datas
+}
+
+
+module.exports.run = async(client, message, args) => {
 	let argList = args._
 	if(argList[0]) argList[0] = argList[0].toLowerCase()
+	if(argList[0] == "roles") {
+		if(message.guild.id != config.TPServer)
+			return message.channel.send("This command cannot be used in this server.")
+		if(!profileWhitelist.includes(message.author.id) && !message.member.roles.cache.some(r => r.id == config.TPAdmins))
+			return message.channel.send("You don't have permission to execute this command!")
+		if(!argList[1])
+			return message.channel.send("Not enough arguments!")
+		let update = () => {
+			message.guild.roles.fetch().then(async(roles) => {
+						let messages = await GetMessages(roles, message, client, false)
+						let i = -1
+						while(++i < messages.length)
+						{
+							let msg = messages[i]
+							let data = msg[0]
+							let files = msg[1]
+							if(RoleSelect_MessageID.length > i)
+								await client.api.channels[RoleSelect_ChannelID].messages[RoleSelect_MessageID[i]].patch({data, files})
+							else await msg[2](data, m => RoleSelect_MessageID.push(m.id), RoleSelect_ChannelID)
+						}
+						for(let j = i; j < RoleSelect_MessageID.length;j++)
+							await client.api.channels[RoleSelect_ChannelID].messages[RoleSelect_MessageID[j]].delete()
+						RoleSelect_MessageID = RoleSelect_MessageID.slice(0, messages.length)
+						message.channel.send("Success!")
+					})
+		}
+		let key = argList[1].toLowerCase()
+		switch(key)
+		{
+			case "message":
+				if(RoleSelect_MessageID.length > 0)
+				{
+					for(const msg of RoleSelect_MessageID)
+						await client.api.channels[RoleSelect_ChannelID].messages[msg].delete()
+				}
+				message.guild.roles.fetch().then(async(roles) => await GetMessages(roles, message, client, true))
+				break
+			case "update":
+				update()
+				break
+			case "add":
+			case "remove":
+				if(!argList[2])
+				{
+					message.channel.send("Not enough arguments!")
+					break
+				}
+				let module = argList.slice(2).join(" ")
+				message.guild.roles.fetch().then(async(roles) => {
+					roles = roles.map(r => r)
+					roles.sort((a, b) => b.position - a.position)
+					let success = true
+					let current_roles = []
+					let record = false
+					let bounds = config.TPBounds
+					let start_pos = 0
+					for(const r of roles)
+					{
+						if(r.id == bounds[0])
+							record=true
+						else if(r.id == bounds[1])
+						{
+							start_pos = r.position
+							break
+						}
+						else if(record)
+							current_roles.push(r)
+					}
+					let role_names = current_roles.map(r => r.name)
+					if(key == "add")
+					{
+						if(role_names.includes(module))
+						{
+							success = false
+							return message.channel.send("A role with the specified name already exists")
+						}
+						role_names.push(module)
+						role_names.sort()
+						role_names = role_names.reverse()
+						await message.guild.roles.create({
+							name: module,
+							mentionable: true,
+							position: start_pos+role_names.indexOf(module)+1
+						})
+					}
+					else
+					{
+						if(!role_names.includes(module))
+						{
+							success = false
+							return message.channel.send("A role with the specified name doesn't exist")
+						}
+						await current_roles.find(r => r.name == module).delete()
+					}
+					if(success)
+						update()
+				})
+				break
+			default:
+				message.channel.send("Invalid argument")
+				break
+		}
+		return
+	}
 	if(["current","data", "stats"].includes(argList[0])) {
 		let token
 		let ClientID = config.TwitchID
@@ -154,4 +319,50 @@ module.exports.run = async (client, message, args) => {
 		return
 	}
 	if (argList[0] == "streamers") return message.channel.send(`Current available streamers: ${available.join(', ')}`)
+}
+
+module.exports.component = async(client, interaction, custom_id, channel, message) => {
+	client.guilds.fetch(interaction.guild_id).then(guild => {
+		guild.members.fetch(interaction.member.user.id).then(member => {
+			let length = interaction.data.values.length
+			let current_roles = member.roles.cache.map(r => r.id)
+			let i = 0
+			let roles_add = []
+			let roles_remove = []
+			guild.roles.fetch().then(roles => {
+				for(const role_id of interaction.data.values)
+				{
+						let role = roles.find(r => r.id == role_id)
+						if(current_roles.includes(role_id))
+							roles_remove.push(role)
+						else roles_add.push(role)
+						if(++i == length)
+						{
+							member.roles.add(roles_add).then(async(_) => {
+								member.roles.remove(roles_remove).then(async(__) => {
+									let datas = await GetMessages(roles, {channel: channel}, client, false)
+									let msg = ""
+									if(roles_add.length > 0)
+										msg += `**Added roles:** ${roles_add.map(r => r.name).join(", ")}`
+									if(roles_remove.length > 0)
+										msg += `${msg ? "\n\n" : ""}**Removed roles:** ${roles_remove.map(r => r.name).join(", ")}`
+									client.api.interactions(interaction.id, interaction.token).callback.post({data: {type: 4, data: {content: msg, flags: 1 << 6}}}).then(async(___) => {
+										let d = datas[parseInt(custom_id.split("_")[2])-1]
+										let data = d[0]
+										let files = d[1]
+										await client.api.channels[channel.id].messages[message.id].patch({data, files})		//Reset dropdown
+									})
+							})
+						})	
+					}
+				}
+			})
+		})
+	})
+}
+
+module.exports.save = () => {return {"Channel": RoleSelect_ChannelID, "Messages": RoleSelect_MessageID}}
+module.exports.load = data => {
+	RoleSelect_ChannelID = data.Channel
+	RoleSelect_MessageID = data.Messages
 }

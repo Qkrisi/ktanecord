@@ -1,7 +1,7 @@
 const {profileWhitelist} = require("../map.js")
 const main = require("../main.js")
 
-const SaveCommands = ["dp"]
+const SaveCommands = ["dp", "tp"]
 
 module.exports.run = (client, message, args) => {
 	if (!profileWhitelist.includes(message.author.id)) return

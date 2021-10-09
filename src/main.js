@@ -15,7 +15,7 @@ const { aliases, profileWhitelist, Interactions } = require('./map.js')
 const lookup = require('./lookup')
 const fs = require('fs')
 const SimHandler = require("./KtaneSimHandler.js")
-const { embed } = require("./utils.js")
+const { embed, CreateAPIMessage } = require("./utils.js")
 const dp = require("./DiscordPlaysHandler.js")
 
 let ktaneModules = new Map()
@@ -191,6 +191,9 @@ client.on('ready', () => {
 		{
 			switch(int.type)
 			{
+				case 1:		//Ping
+				    client.api.interactions(int.id, int.token).callback.post({data: {type: 1}})
+				    break
 				case 2:		//Slash commands
 					let CommandFile = require(`./commands/${int.data.name}.js`)
 					let run = MSG => {
@@ -219,7 +222,7 @@ client.on('ready', () => {
 							CFile.component(client, int, custom_id[1], channel, int.message)
 					}).catch(console.error)
 					break
-				default:
+				default:	//Just in case
 					return
 			}
 		}
@@ -228,6 +231,7 @@ client.on('ready', () => {
 			console.log(e)
 		}
 	})
+	client.ws.on("GUILD_ROLE_UPDATE", arg => {console.log(arg)})
 	/*client.ws.on("THREAD_MEMBERS_UPDATE", ThreadUpdate => {
 		if(ThreadUpdate.added_members && dp.GetDPThreads().includes(ThreadUpdate.id))
 		{
@@ -299,3 +303,4 @@ module.exports.getCooldown = getCooldown
 module.exports.SetInteractions = SetInteractions
 module.exports.Enable_Cooldown = false
 module.exports.embed = embed
+module.exports.CreateAPIMessage = CreateAPIMessage

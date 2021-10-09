@@ -90,7 +90,7 @@ function GetMatching(regex, MIndex = 0, MaxMatches = {}) {
 	return modules
 }
 
-async function GetMessageData(regex, page, match, channel)
+async function GetMessageData(regex, page, match, channel, client)
 {
 	let regexString = regex
 	let MaxMatches = {"max":0}
@@ -118,7 +118,7 @@ async function GetMessageData(regex, page, match, channel)
 			"info": `Page ${page} of ${MaxPage}, match ${match} of ${MaxMatch}`,
 			"matches": JoinedLines ? JoinedLines : "      ​"
 	})
-	const { data, files } = await discord.MessagePayload.create(channel, "⠀", {allowedMentions: {}, disableMentions: "none"}).resolveData().resolveFiles();
+	const { data, files, send } = await main.CreateAPIMessage(channel, client, "⠀")
 	data.embeds = [emb]
 	if(MaxPage > 1)
 	{
@@ -162,24 +162,24 @@ async function GetMessageData(regex, page, match, channel)
 					"style": 3
 				})
 	}
-	return { data, files }
+	return { data, files, send }
 }
 
 
 module.exports.run = async(client, message, args) => {
 	if (args._.length == 0) return message.channel.send("🚫 You need to specify a regular expression!")
 	let regex = args._.join(" ")
-	let res = await GetMessageData(regex, 0, 0, message.channel)
+	let res = await GetMessageData(regex, 0, 0, message.channel, client)
 	if(!res)
 		return message.channel.send("Invalid regex")
-	const { data, files } = res
+	const { data, files, send } = res
 	if(message.slash)
 	{
 		if(data.components)
 			data.embeds[0].components = data.components
 		message.channel.send(data.embeds[0])
 	}
-	else return client.api.channels[message.channel.id].messages.post({data, files}).then(d => client.actions.MessageCreate.handle(d).message)
+	else return await send(data)
 }
 
 module.exports.component = async(client, interaction, custom_id, channel, message) => {
@@ -203,7 +203,7 @@ module.exports.component = async(client, interaction, custom_id, channel, messag
 			MatchNum++
 			break
 	}
-	const { data, files } = await GetMessageData(regex, PageNum, MatchNum, channel)
+	const { data, files, send } = await GetMessageData(regex, PageNum, MatchNum, channel, client)
 	client.api.interactions(interaction.id, interaction.token).callback.post({data: {type: 7, data: data}})
 }
 

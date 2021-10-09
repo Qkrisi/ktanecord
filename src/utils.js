@@ -1,5 +1,6 @@
 const dembParser = require("./dembParser.js")
 const main = require('./main.js')
+const discord = require('discord.js')
 const { aliases } = require("./map.js")
 const { GetMatching, ConvertToFull } = require("./commands/match.js")
 
@@ -89,6 +90,16 @@ exports.GetModule = (message, args, send = true) => {
 		}
 	}
 	return module
+}
+
+exports.CreateAPIMessage = async(channel, client, content) => {
+	let { data, files } = await discord.MessagePayload.create(channel, content, {allowedMentions: {}, disableMentions: "none"}).resolveData().resolveFiles()
+	let send = async(dataOverride = null, callback = _ => {}, ChannelOverride = null) => {
+		if(dataOverride != null)
+			data = dataOverride
+		return await client.api.channels[ChannelOverride ?? channel.id].messages.post({data, files}).then(async(d) => await callback(client.actions.MessageCreate.handle(d).message))
+	}
+	return { data, files, send }
 }
 
 
