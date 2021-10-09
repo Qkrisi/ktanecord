@@ -3,6 +3,7 @@ const fetch = require('wumpfetch')
 const config = require('../../config.json')
 const Discord = require('discord.js')
 const axios = require('axios')
+const save = require('./save.js')
 const { CreateAPIMessage } = require('../utils.js')
 const { profileWhitelist } = require('../map.js')
 
@@ -129,11 +130,26 @@ module.exports.run = async(client, message, args) => {
 							let data = msg[0]
 							let files = msg[1]
 							if(RoleSelect_MessageID.length > i)
-								await client.api.channels[RoleSelect_ChannelID].messages[RoleSelect_MessageID[i]].patch({data, files})
+							{
+								try
+								{
+									await client.api.channels[RoleSelect_ChannelID].messages[RoleSelect_MessageID[i]].patch({data, files})
+								}
+								catch
+								{
+									RoleSelect_MessageID.splice(i--, 1)
+								}
+							}
 							else await msg[2](data, m => RoleSelect_MessageID.push(m.id), RoleSelect_ChannelID)
 						}
 						for(let j = i; j < RoleSelect_MessageID.length;j++)
-							await client.api.channels[RoleSelect_ChannelID].messages[RoleSelect_MessageID[j]].delete()
+						{
+							try
+							{
+								await client.api.channels[RoleSelect_ChannelID].messages[RoleSelect_MessageID[j]].delete()
+							}
+							catch {}
+						}
 						RoleSelect_MessageID = RoleSelect_MessageID.slice(0, messages.length)
 						message.channel.send("Success!")
 					})
@@ -145,9 +161,18 @@ module.exports.run = async(client, message, args) => {
 				if(RoleSelect_MessageID.length > 0)
 				{
 					for(const msg of RoleSelect_MessageID)
-						await client.api.channels[RoleSelect_ChannelID].messages[msg].delete()
+					{
+						try
+						{
+							await client.api.channels[RoleSelect_ChannelID].messages[msg].delete()
+						}
+						catch {}
+					}
 				}
-				message.guild.roles.fetch().then(async(roles) => await GetMessages(roles, message, client, true))
+				message.guild.roles.fetch().then(async(roles) => {
+					await GetMessages(roles, message, client, true)
+					save.run(client, message, {}, true)
+				})
 				break
 			case "update":
 				update()

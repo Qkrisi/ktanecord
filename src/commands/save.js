@@ -3,8 +3,8 @@ const main = require("../main.js")
 
 const SaveCommands = ["dp", "tp"]
 
-module.exports.run = (client, message, args) => {
-	if (!profileWhitelist.includes(message.author.id)) return
+module.exports.run = (client, message, args, skipCheck = false) => {
+	if (!skipCheck && !profileWhitelist.includes(message.author.id)) return
 	for(const command of SaveCommands)
 	{
 		try
@@ -16,5 +16,6 @@ module.exports.run = (client, message, args) => {
 		catch {}
 	}
 	main.WriteSave()
-	message.channel.send("Saved!")
+	if(!skipCheck)
+		message.channel.send("Saved!")
 }
