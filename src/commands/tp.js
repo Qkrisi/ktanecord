@@ -161,7 +161,7 @@ module.exports.run = async(client, message, args) => {
 				}
 				let modules = argList.slice(2).join(" ").split("//")
 				message.guild.roles.fetch().then(async(roles) => {
-					let success = true
+					let success = false
 					for(const module of modules)
 					{
 						roles = roles.map(r => r)
@@ -187,8 +187,8 @@ module.exports.run = async(client, message, args) => {
 						{
 							if(role_names.includes(module))
 							{
-								success = false
-								return message.channel.send("A role with the specified name already exists")
+								await message.channel.send(`A role with the specified name already exists (${module})`)
+								continue
 							}
 							role_names.push(module)
 							role_names.sort()
@@ -199,16 +199,18 @@ module.exports.run = async(client, message, args) => {
 								position: start_pos+role_names.indexOf(module)+1
 							})
 							roles.push(role)
+							success = true
 						}
 						else
 						{
 							if(!role_names.includes(module))
 							{
-								success = false
-								return message.channel.send("A role with the specified name doesn't exist")
+								await message.channel.send(`A role with the specified name doesn't exist (${module})`)
+								continue
 							}
 							await current_roles.find(r => r.name == module).delete()
 							roles = roles.filter(r => r.name != module)
+							success = true
 						}
 					}
 					if(success)
