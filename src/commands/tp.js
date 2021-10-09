@@ -6,6 +6,9 @@ const axios = require('axios')
 const { CreateAPIMessage } = require('../utils.js')
 const { profileWhitelist } = require('../map.js')
 
+const Roles_MaxModules = 3
+const Roles_MaxRows = 3
+
 /*const Streamers = new Map([
 	["MrPeanut1028", "MrPeanut1028 (Weekday + Whitelist)"],
 	["Derfer99", "Derfer99 (Weekend)"],
@@ -76,9 +79,9 @@ async function GetMessages(roles, message, client, SendMessages) {
 			modules.push({"label": role.name, "value": role.id})
 	}
 	while(modules.length > 0)
-		rows.push(modules.splice(0, 3))
+		rows.push(modules.splice(0, Roles_MaxModules))
 	while(rows.length > 0)
-		messages.push(rows.splice(0, 3))
+		messages.push(rows.splice(0, Roles_MaxRows))
 	let i = 0
 	let row_i = 0
 	for(const msg of messages)

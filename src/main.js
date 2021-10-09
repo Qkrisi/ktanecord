@@ -231,7 +231,6 @@ client.on('ready', () => {
 			console.log(e)
 		}
 	})
-	client.ws.on("GUILD_ROLE_UPDATE", arg => {console.log(arg)})
 	/*client.ws.on("THREAD_MEMBERS_UPDATE", ThreadUpdate => {
 		if(ThreadUpdate.added_members && dp.GetDPThreads().includes(ThreadUpdate.id))
 		{
