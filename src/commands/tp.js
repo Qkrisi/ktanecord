@@ -110,7 +110,7 @@ module.exports.run = async(client, message, args) => {
 	let argList = args._
 	if(argList[0]) argList[0] = argList[0].toLowerCase()
 	if(argList[0] == "roles") {
-		if(message.guild.id != config.TPServer)
+		if(!message.guild || message.guild.id != config.TPServer)
 			return message.channel.send("This command cannot be used in this server.")
 		if(!profileWhitelist.includes(message.author.id) && !message.member.roles.cache.some(r => r.id == config.TPAdmins))
 			return message.channel.send("You don't have permission to execute this command!")
