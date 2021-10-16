@@ -50,7 +50,10 @@ Paste these lines in it, and replace the values with the proper ones:
     "Invite": "Invite link",
     "SimPort": "port",
     "EnableSimulator": false,
-    "DPPort": 6000
+    "DPPort": 6000,
+    "TPBounds": [0, 0],
+    "TPAdmins": 0,
+    "TPServer": 0
 }
 ```
 
