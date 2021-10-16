@@ -21,9 +21,11 @@ const GetEscape = ch => ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 
 const ConvertToFull = simple => {
 	let s = simple.split("")
 	let ind = -1
-	s.forEach(char => {
+	for(const char of s)
+	{
 		ind++
-		switch (char) {
+		switch (char)
+		{
 			case "*":
 				s[ind] = "(.*?)"
 				break
@@ -37,7 +39,7 @@ const ConvertToFull = simple => {
 				s[ind] = GetEscape(char)
 				break
 		}
-	})
+	}
 	return `/^${s.join("")}${"$"}/i`
 }
 //`/^${simple.replace(/\?/g,"(.)").replace(/\*/g,"(.*?)").replace(/\#/g, "([0-9])")}${"$"}/i`
@@ -83,7 +85,8 @@ function GetMatching(regex, MIndex = 0, MaxMatches = {}) {
 		let match = module.Matches[MInd]
 		let MSGString = ModuleBuilder.MessageString
 		ModuleBuilder.MessageString = MSGString.substring(0, match[0])+"**"+match[2]+"**"+MSGString.substring(match[1], MSGString.length)
-		if (new RegExp("\\*\\*\\*\\*(.*?)", "i").exec(ModuleBuilder.MessageString)) ModuleBuilder.MessageString = `**${ModuleBuilder.Module.Name}**`
+		if (new RegExp("\\*\\*\\*\\*(.*?)", "i").exec(ModuleBuilder.MessageString))
+			ModuleBuilder.MessageString = `**${ModuleBuilder.Module.Name}**`
 		modules.push(ModuleBuilder)
 	})
 	MaxMatches.max = m

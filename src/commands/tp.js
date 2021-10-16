@@ -120,8 +120,8 @@ module.exports.run = async(client, message, args) => {
 			return message.channel.send("You don't have permission to execute this command!")
 		if(!argList[1])
 			return message.channel.send("Not enough arguments!")
-		let update = () => {
-			message.guild.roles.fetch().then(async(roles) => {
+		let update = async(_r = undefined) => {
+			let callback = async(roles) => {
 						let messages = await GetMessages(roles, message, client, false)
 						let i = -1
 						while(++i < messages.length)
@@ -152,7 +152,10 @@ module.exports.run = async(client, message, args) => {
 						}
 						RoleSelect_MessageID = RoleSelect_MessageID.slice(0, messages.length)
 						message.channel.send("Success!")
-					})
+			}
+			if(_r != undefined)
+				await callback(_r)
+			else message.guild.roles.fetch().then(callback)
 		}
 		let key = argList[1].toLowerCase()
 		switch(key)
@@ -175,7 +178,7 @@ module.exports.run = async(client, message, args) => {
 				})
 				break
 			case "update":
-				update()
+				await update()
 				break
 			case "add":
 			case "remove":
@@ -187,8 +190,15 @@ module.exports.run = async(client, message, args) => {
 				let modules = argList.slice(2).join(" ").split("//")
 				message.guild.roles.fetch().then(async(roles) => {
 					let success = false
-					for(const module of modules)
+					let _r = roles
+					for(let module of modules)
 					{
+						module = module.trim()
+						if(!module)
+						{
+							await message.channel.send("Invalid role name")
+							continue
+						}
 						roles = roles.map(r => r)
 						roles.sort((a, b) => b.position - a.position)
 						let current_roles = []
@@ -237,9 +247,10 @@ module.exports.run = async(client, message, args) => {
 							roles = roles.filter(r => r.name != module)
 							success = true
 						}
+						_r = roles
 					}
 					if(success)
-						update()
+						await update(_r)
 				})
 				break
 			default:
