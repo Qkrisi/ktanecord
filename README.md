@@ -70,6 +70,9 @@ Paste these lines in it, and replace the values with the proper ones:
 | SimPort | Port of the WebSocket server in the KTaNE Simulator |
 | EnableSimulator | Boolean value indicating the usage of the KTaNE Simulator bot |
 | DPPort | Port of the Discord Plays server |
+| TPBounds | A list of 2 role IDs: the IDs of the roles denoting the start and the end of the TP role list |
+| TPAdmins | The role ID of the admin role on the TP server |
+| TPServer | The ID of the TP server |
 
 KTaNE Simulator: https://github.com/Qkrisi/ktanesim
 
