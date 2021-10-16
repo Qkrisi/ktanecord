@@ -7,7 +7,7 @@ const save = require('./save.js')
 const { CreateAPIMessage } = require('../utils.js')
 const { profileWhitelist } = require('../map.js')
 
-const Roles_MaxModules = 25
+const Roles_MaxModules = 15
 const Roles_MaxRows = 5
 
 /*const Streamers = new Map([
