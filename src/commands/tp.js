@@ -228,13 +228,21 @@ module.exports.run = async(client, message, args) => {
 							role_names.push(module)
 							role_names.sort()
 							role_names = role_names.reverse()
-							let role = await message.guild.roles.create({
-								name: module,
-								mentionable: true,
-								position: start_pos+role_names.indexOf(module)+1
-							})
-							roles.push(role)
 							success = true
+							try
+							{
+								let role = await message.guild.roles.create({
+									name: module,
+									mentionable: true,
+									position: start_pos+role_names.indexOf(module)+1
+								})
+								roles.push(role)
+							}
+							catch
+							{
+								await message.channel.send(`Failed to create role "${module}". Please make sure I have permission to create roles. If I do, the server has probably reached its maximum role capacity. (250)`)
+								break
+							}
 						}
 						else
 						{
