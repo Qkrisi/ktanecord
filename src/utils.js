@@ -82,11 +82,10 @@ exports.GetModule = (message, args, send = true) => {
 		if (result && result.length > 0) return HandleRegex(result)
 		else {
 			result = GetMatching(args._.join(' '))
-			if (result && result.length > 0) return HandleRegex(result)
-			{
-				if (send) message.channel.send(`🚫 Couldn't find a module by the ID of \`${cleanseDiscordText(args._[0])}\` (case-sensitive), name of \`${cleanseDiscordText(args._.join(' '))}\` (not case-sensitive) or periodic symbol of \`${cleanseDiscordText(args._[0])}\` (not case-sensitive)`)
-				return undefined
-			}
+			if (result && result.length > 0)
+				return HandleRegex(result)
+			if (send) message.channel.send(result === null ? "Regular expression timeout" : `🚫 Couldn't find a module by the ID of \`${cleanseDiscordText(args._[0])}\` (case-sensitive), name of \`${cleanseDiscordText(args._.join(' '))}\` (not case-sensitive) or periodic symbol of \`${cleanseDiscordText(args._[0])}\` (not case-sensitive)`)
+			return undefined
 		}
 	}
 	return module

@@ -1,6 +1,7 @@
 const main = require("../main.js")
 const config = require("../../config.json")
 const discord = require("discord.js")
+const vm = require("vm")
 
 class RegexModule {
 	constructor(module, msgString) {
@@ -42,7 +43,6 @@ const ConvertToFull = simple => {
 	}
 	return `/^${s.join("")}${"$"}/i`
 }
-//`/^${simple.replace(/\?/g,"(.)").replace(/\*/g,"(.*?)").replace(/\#/g, "([0-9])")}${"$"}/i`
 
 function GetMatching(regex, MIndex = 0, MaxMatches = {}) {
 	if (regex.startsWith("/")) regex = regex.substring(1)
@@ -64,10 +64,28 @@ function GetMatching(regex, MIndex = 0, MaxMatches = {}) {
 	}
 	let modules = []
 	let matches = {}
+	let timeout = false
+	let context_vars = {
+		re: re,
+		matches: null
+	}
+	let script = new vm.Script("matches = ModuleName.matchAll(re)")
+	let context = vm.createContext(context_vars)
 	main.ktaneModules().forEach(value => {
+		if(timeout)
+			return
 		let result
 		let ModuleName = value.Name
-		for(const result of ModuleName.matchAll(re)) {
+		context_vars.ModuleName = ModuleName
+		try{
+			script.runInContext(context, {timeout: 1000})
+		}
+		catch
+		{
+			timeout = true
+			return
+		}
+		for(const result of context_vars.matches) {
 			if(!matches[ModuleName])
 				matches[ModuleName] = new RegexStore(value, [])
 			let MatchList = [result.index, result.index + result[0].length, result[0]]
@@ -75,6 +93,8 @@ function GetMatching(regex, MIndex = 0, MaxMatches = {}) {
 				matches[ModuleName].Matches.push(MatchList)
 		}
 	})
+	if(timeout)
+		return null
 	let m = 0
 	Object.keys(matches).forEach(ModuleName => {
 		let module = matches[ModuleName]
@@ -99,7 +119,7 @@ async function GetMessageData(regex, page, match, channel, client)
 	let MaxMatches = {"max":0}
 	let res = GetMatching(ConvertToFull(regex), match, MaxMatches)
 	if (!res || res.length == 0) res = GetMatching(regex, match, MaxMatches)
-	if(!res) return
+	if(!res) return res
 	let lines = []
 	for(let i = page*10; i < (page+1)*10; i++)
 	{
@@ -173,9 +193,12 @@ module.exports.run = async(client, message, args) => {
 	if (args._.length == 0) return message.channel.send("🚫 You need to specify a regular expression!")
 	let regex = args._.join(" ")
 	let res = await GetMessageData(regex, 0, 0, message.channel, client)
+	if(res === null)
+		return message.channel.send("Regular expression timeout")
 	if(!res)
 		return message.channel.send("Invalid regex")
 	const { data, files, send } = res
+	//data.message_reference = {message_id: message.id, fail_if_not_exists: client.options.failIfNotExists}
 	if(message.slash)
 	{
 		if(data.components)
