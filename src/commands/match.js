@@ -45,8 +45,9 @@ const ConvertToFull = simple => {
 }
 
 function GetMatching(regex, MIndex = 0, MaxMatches = {}) {
-	if (regex.startsWith("/")) regex = regex.substring(1)
-	let i = regex.lastIndexOf("/")
+	let has_flags = regex.startsWith("/")
+	if (has_flags) regex = regex.substring(1)
+	let i = has_flags ? regex.lastIndexOf("/") : -1
 	let flags = ""
 	if (i > -1) {
 		flags = regex.substring(i + 1, regex.length)
