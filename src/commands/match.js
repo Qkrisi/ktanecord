@@ -191,7 +191,7 @@ async function GetMessageData(regex, page, match, channel, client)
 
 
 module.exports.run = async(client, message, args) => {
-	args._ = message.content.split(" ").slice(1)
+	args._ = message.content.split(" ").slice(!message.slash)
 	if (args._.length == 0) return message.channel.send("🚫 You need to specify a regular expression!")
 	let regex = args._.join(" ")
 	let res = await GetMessageData(regex, 0, 0, message.channel, client)
@@ -205,7 +205,7 @@ module.exports.run = async(client, message, args) => {
 	{
 		if(data.components)
 			data.embeds[0].components = data.components
-		message.channel.send(data.embeds[0])
+		message.channel.send(data)
 	}
 	else return await send(data)
 }
