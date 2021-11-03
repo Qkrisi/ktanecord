@@ -13,7 +13,7 @@ module.exports.run = (client, message, args) => {
 		getcs: `\`${config.token}getcs <module>\``
 	})]})
 	let body = main.getCooldown()
-	let Slash = `Slash commands are currently ${!body.SlashCommands || !body.SlashCommands.includes(message.guild.id) ? "disabled" : "enabled"} on this server.`
+	let Slash = `Slash commands are currently ${message.guild && (!body.SlashCommands || !body.SlashCommands.includes(message.guild.id)) ? "disabled" : "enabled"} on this server.`
 	if (args.admin) return message.channel.send({embeds: [embed.getEmbed(main.Enable_Cooldown ? "AdminHelp" : "AdminHelpNoCooldown", {
 		SCCMD: `\`${config.token}sc <enable/disable>\``,
 		cooldownCMD: `\`${config.token}setcooldown <seconds>\``,

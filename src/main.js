@@ -1,7 +1,16 @@
 const Discord = require('discord.js')
-let intents = new Discord.Intents(Discord.Intents.NON_PRIVILEGED)
-intents.add("GUILD_MEMBERS")
-const client = new Discord.Client({intents:[intents, Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES]})
+const client = new Discord.Client({
+    intents: [
+	Discord.Intents.FLAGS.GUILD_MESSAGES,
+	Discord.Intents.FLAGS.GUILDS,
+	Discord.Intents.FLAGS.GUILD_MESSAGES,
+	Discord.Intents.FLAGS.DIRECT_MESSAGES
+    ],
+    partials: [
+	'MESSAGE',
+	'CHANNEL'
+    ]
+})
 const config = require('../config.json')
 var savefile = {}
 try
