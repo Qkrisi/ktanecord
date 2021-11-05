@@ -378,7 +378,6 @@ module.exports.run = async(client, message, args) => {
 module.exports.component = async(client, interaction, custom_id, channel, message) => {
 	client.guilds.fetch(interaction.guild_id).then(guild => {
 		guild.members.fetch(interaction.member.user.id).then(member => {
-			let length = interaction.data.values.length
 			let current_roles = member.roles.cache.map(r => r.id)
 			let i = 0
 			let roles_add = []
@@ -389,27 +388,24 @@ module.exports.component = async(client, interaction, custom_id, channel, messag
 						let role = roles.find(r => r.id == role_id)
 						if(current_roles.includes(role_id))
 							roles_remove.push(role)
-						else roles_add.push(role)
-						if(++i == length)
-						{
-							member.roles.add(roles_add).then(async(_) => {
-								member.roles.remove(roles_remove).then(async(__) => {
-									let datas = await GetMessages(roles, {channel: channel}, client, false)
-									let msg = ""
-									if(roles_add.length > 0)
-										msg += `**Added roles:** ${roles_add.map(r => r.name).join(", ")}`
-									if(roles_remove.length > 0)
-										msg += `${msg ? "\n\n" : ""}**Removed roles:** ${roles_remove.map(r => r.name).join(", ")}`
-									client.api.interactions(interaction.id, interaction.token).callback.post({data: {type: 4, data: {content: msg, flags: 1 << 6}}}).then(async(___) => {
-										let d = datas[parseInt(custom_id.split("_")[2])-1]
-										let data = d[0]
-										let files = d[1]
-										await client.api.channels[channel.id].messages[message.id].patch({data, files})		//Reset dropdown
-									})
-							})
-						})	
-					}
+						else roles_add.push(role)		
 				}
+				member.roles.add(roles_add).then(async(_) => {
+					_.roles.remove(roles_remove).then(async(__) => {
+						let datas = await GetMessages(roles, {channel: channel}, client, false)
+						let msg = ""
+						if(roles_add.length > 0)
+							msg += `**Added roles:** ${roles_add.map(r => r.name).join(", ")}`
+						if(roles_remove.length > 0)
+							msg += `${msg ? "\n\n" : ""}**Removed roles:** ${roles_remove.map(r => r.name).join(", ")}`
+						client.api.interactions(interaction.id, interaction.token).callback.post({data: {type: 4, data: {content: msg, flags: 1 << 6}}}).then(async(___) => {
+							let d = datas[parseInt(custom_id.split("_")[2])-1]
+							let data = d[0]
+							let files = d[1]
+							await client.api.channels[channel.id].messages[message.id].patch({data, files})		//Reset dropdown
+						})
+					})
+				})	
 			})
 		})
 	})
