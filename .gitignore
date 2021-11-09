@@ -6,3 +6,4 @@ stats_server/credentials.json
 stats_server/__pycache__
 stats_server/stats.json
 stats_server/__main__.py.backup
+ecosystem.config.js
