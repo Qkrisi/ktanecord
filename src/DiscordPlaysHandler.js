@@ -44,7 +44,7 @@ function GenerateToken(channel, author)
 	{
 		token = randomBytes(15).toString("hex")
 	} while(Tokens[token])
-	Tokens[token] = [channel.id, `${author.username} (${author.id})`, author.id]
+	Tokens[token] = [channel.id, `${author.username} (${author.id})`, author.id, author.tag]
 	if(!ChannelIDs[channel.id])
 		ChannelIDs[channel.id] = channel
 	return token
@@ -128,12 +128,13 @@ WSServer.on("connection", (client, req) => {
 		client.close(1003, "Game version mismatch")
 		return
 	}
-	console.log("connected")
+	console.log("DiscordPlays connected")
 	let token
 	let ChannelID
 	let Channel
 	let Thread
 	let info
+	let Streamer
 	client.on("message", message => {
 		try
 		{
@@ -150,6 +151,7 @@ WSServer.on("connection", (client, req) => {
 					info = Tokens[token]
 					ChannelID = info[0]
 					Channel = ChannelIDs[ChannelID]
+					Streamer = info[3]
 					let ThreadCallback = thread => {
 						let EditCallback = () => {
 							Thread = thread
@@ -173,6 +175,8 @@ WSServer.on("connection", (client, req) => {
 						if(ThreadTypes.includes(Channel.type))
 							ThreadCallback(Channel)
 						else GetThread(info[1], info[2], Channel, ThreadCallback)
+						if(Streamer)
+							client.send(`streamer ${Streamer}`)
 					}
 					if(!Channel)
 					{
@@ -214,7 +218,7 @@ WSServer.on("connection", (client, req) => {
 		}
 	})
 	client.on("close", () => {
-		console.log("Disconnected")
+		console.log("DiscordPlays disconnected")
 		delete Clients[ChannelID]
 		delete ChannelUsers[ChannelID]
 		delete TokenSave[token]
