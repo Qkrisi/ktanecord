@@ -5,7 +5,7 @@ const Discord = require('discord.js')
 const axios = require('axios')
 const save = require('./save.js')
 const { CreateAPIMessage } = require('../utils.js')
-const { profileWhitelist } = require('../map.js')
+const { profileWhitelist, MessageFlags } = require('../map.js')
 
 const Roles_MaxModules = 15
 const Roles_MaxRows = 5
@@ -398,7 +398,7 @@ module.exports.component = async(client, interaction, custom_id, channel, messag
 							msg += `**Added roles:** ${roles_add.map(r => r.name).join(", ")}`
 						if(roles_remove.length > 0)
 							msg += `${msg ? "\n\n" : ""}**Removed roles:** ${roles_remove.map(r => r.name).join(", ")}`
-						client.api.interactions(interaction.id, interaction.token).callback.post({data: {type: 4, data: {content: msg, flags: 1 << 6}}}).then(async(___) => {
+						client.api.interactions(interaction.id, interaction.token).callback.post({data: {type: 4, data: {content: msg, flags: MessageFlags.EPHEMERAL}}}).then(async(___) => {
 							let d = datas[parseInt(custom_id.split("_")[2])-1]
 							let data = d[0]
 							let files = d[1]

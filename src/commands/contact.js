@@ -27,15 +27,30 @@ const PlatformAlias = {
 		"Github":"GitHub"
 }
 
-module.exports.run = async(client, message, args) => {
+module.exports.run = async(client, message, args, searchByDiscord = false) => {
 	let Contacts = main.CreatorContacts()
 	let CreatorName = args._.join(" ")
 	if(!CreatorName) return message.channel.send("Please specify a creator!")
-	let Creator = Contacts[CreatorName]
-	if(!Creator)
+	let Creator
+	if(searchByDiscord)
 	{
-		let similar = mostSimilarModule(CreatorName, Contacts)
-		Creator = Contacts[similar]
+		for(const info of Object.values(Contacts))
+		{
+			if(info.Discord == CreatorName)
+			{
+				Creator = info
+				break
+			}
+		}
+	}
+	else
+	{
+		let Creator = Contacts[CreatorName]
+		if(!Creator)
+		{
+			let similar = mostSimilarModule(CreatorName, Contacts)
+			Creator = Contacts[similar]
+		}
 	}
 	if(!Creator) return message.channel.send("Couldn't find creator!")
 	
@@ -53,23 +68,26 @@ module.exports.run = async(client, message, args) => {
 		})
 		return ConstructedBody
 	}
-	let msg = await message.channel.send({embeds: [embed.getEmbed("ContactInfo", HandlePlatforms())]})
-	if(ContactInfo.Discord && message.guild){
+	let AddMention = async(callback) => {
 		let Complete = false
 		let Edit = false
-		message.guild.members.fetch().then(members => {
-			for(const member of members.values())
-			{
-				if(!Complete && member.user.tag==ContactInfo.Discord){
-					Complete = true
-					Edit = true
-					ContactInfo.Discord=`<@${member.id}>`
-				}
-				if(Edit){
-					Edit = false
-					msg.edit({embeds: [embed.getEmbed("ContactInfo", HandlePlatforms())]})
-				}
+		members = await message.guild.members.fetch()
+		for(const member of members.values())
+		{
+			if(!Complete && member.user.tag==ContactInfo.Discord){
+				Complete = true
+				Edit = true
+				ContactInfo.Discord=`<@${member.id}>`
 			}
-		})
+			if(Edit){
+				Edit = false
+				callback()
+			}
+		}
 	}
+	if(message.app)
+		await AddMention(() => {})
+	let msg = await message.channel.send({embeds: [embed.getEmbed("ContactInfo", HandlePlatforms())]})
+	if(!message.app && ContactInfo.Discord && message.guild)
+		await AddMention(() => msg.edit({embeds: [embed.getEmbed("ContactInfo", HandlePlatforms())]}))
 }

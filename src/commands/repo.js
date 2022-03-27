@@ -21,7 +21,7 @@ module.exports.run = async (client, message, args) => {
 	let Enable_Cooldown = main.Enable_Cooldown
 
     // why the fuck is this here?
-    if (Enable_Cooldown && cooldown.get(message.author.id) <= Date.now())
+    if (Enable_Cooldown && cooldown.get(message.author.id) <=    Date.now())
         cooldown.delete(message.author.id)
 
     //defining the module
@@ -43,7 +43,17 @@ module.exports.run = async (client, message, args) => {
     let links = []
     inputmodule.SteamID ? links.push(`[Workshop](http://steamcommunity.com/sharedfiles/filedetails/?id=${inputmodule.SteamID})`) : doNothing()
     inputmodule.SourceUrl ? links.push(`[Source code](${inputmodule.SourceUrl})`) : doNothing()
-    inputmodule.TutorialVideoUrl ? links.push(`[Tutorial video](${inputmodule.TutorialVideoUrl.default})`) : doNothing()
+    if(inputmodule.TutorialVideos)
+    {
+        for(const video of inputmodule.TutorialVideos)
+        {
+            if(video.Language == "English")
+            {
+                links.push(`[Tutorial video](${video.Url})`)
+                break
+            }
+        }
+    }
     if (links.length == 0) {
         links.push('No links')
     }

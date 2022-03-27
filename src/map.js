@@ -338,8 +338,8 @@ const Interactions = [
 	},
 	{
 		data:{
-			name:"idea",
-			description:"Show a random or specified mod idea",
+			name: "idea",
+			description: "Show a random or specified mod idea",
 			options:[
 				{
 					type:3,
@@ -368,8 +368,38 @@ const Interactions = [
 				}
 			]
 		}
+	},
+	{
+	    data: {
+		name: "profile",
+		description: "Show profile statistics",
+		options: [
+		    {
+			type: 11,
+			name: "profile",
+			description: "The JSON file of the profile",
+			required: true
+		    }
+		]
+	    }
+	},
+	{
+	    data:{
+		type: 3,
+		name: "Contact info",
+	    }
+	},
+	{
+	    data: {
+		type: 2,
+		name: "Contact info"
+	    }
 	}
 ]
+
+const MessageFlags = {
+    EPHEMERAL: 1 << 6	//Only the person who sent the interaction can see the response
+}
 
 module.exports.aliases = aliases
 module.exports.manualOverride = manualOverride
@@ -377,3 +407,4 @@ module.exports.subjectOverrides = subjectOverrides
 module.exports.profileWhitelist = profileWhitelist
 module.exports.ScoreWhitelist = ScoreWhitelist
 module.exports.Interactions = Interactions
+module.exports.MessageFlags = MessageFlags

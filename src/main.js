@@ -4,6 +4,7 @@ const client = new Discord.Client({
 	Discord.Intents.FLAGS.GUILD_MESSAGES,
 	Discord.Intents.FLAGS.GUILDS,
 	Discord.Intents.FLAGS.GUILD_MESSAGES,
+	Discord.Intents.FLAGS.GUILD_MEMBERS,
 	Discord.Intents.FLAGS.DIRECT_MESSAGES
     ],
     partials: [
@@ -54,7 +55,7 @@ const CreateDataFromObject = obj => {
 
 const CSCommands = ["setcs", "setbosscs", "comment", "clearcs"]
 
-const CreateMessageFromOptions = (name, options, base) => {
+const CreateMessageFromOptions = (name, options, resolved, base) => {
 	if(options==undefined) return base
 	let CurrentOptions = options
 	CurrentOptions.sort((a, b) => a.value-b.value)
@@ -89,6 +90,7 @@ const CreateMessageFromOptions = (name, options, base) => {
 	}
 	if(content.startsWith(" ")) content = content.substr(1)
 	base.content = content
+	base.attachments = resolved ? (resolved.attachments ? Object.values(resolved.attachments) : []) : []
 	return base
 }
 
@@ -203,25 +205,58 @@ client.on('ready', () => {
 				case 1:		//Ping
 				    client.api.interactions(int.id, int.token).callback.post({data: {type: 1}})
 				    break
-				case 2:		//Slash commands
-					let CommandFile = require(`./commands/${int.data.name}.js`)
-					let run = MSG => {
-						let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
-						MSG.slash = true
-						MSG.interaction = int
-						CommandFile.run(client, MSG, args)
-					}
-					int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
-					if(CSCommands.includes(int.data.name)){
-						client.channels.fetch(int.channel_id).then(channel => {
-							let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, channel:channel})
-							client.api.interactions(int.id, int.token).callback.post({data:{type:4, data:{content:`Running command: ${config.token}${int.data.name} ${MSG.content}`}}})
+				case 2:		//Slash commands and app commands
+					switch(int.data.type)
+					{
+					    case 1:	//Slash commands
+						let CommandFile = require(`./commands/${int.data.name}.js`)
+						let run = MSG => {
+							let args = MSG.content ? larg(MSG.content.split(' ')) : {_:[]}
+							MSG.slash = true
+							MSG.interaction = int
+							CommandFile.run(client, MSG, args)
+						}
+						int.member.user.tag = `${int.member.user.username}#${int.member.user.discriminator}`
+						if(CSCommands.includes(int.data.name)){
+							client.channels.fetch(int.channel_id).then(channel => {
+								let MSG = CreateMessageFromOptions(int.data.name, int.data.options, int.data.resolved, {author:int.member.user, channel:channel})
+								client.api.interactions(int.id, int.token).callback.post({data:{type:4, data:{content:`Running command: ${config.token}${int.data.name} ${MSG.content}`}}})
+								run(MSG)
+							})
+						}
+						else{
+							let MSG = CreateMessageFromOptions(int.data.name, int.data.options, int.data.resolved, {author:int.member.user, guild:{id:int.guild_id}, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
 							run(MSG)
+						}
+						break
+					    case 2:	//User commands
+						let AppFile = require(`./apps/${int.data.name.toLowerCase().replaceAll(" ", "_")}.js`)
+						let user = Object.values(int.data.resolved.users)[0]
+						user.tag = `${user.username}#${user.discriminator}`
+						client.guilds.fetch(int.guild_id).then(guild => {
+						    AppFile.onUser(client, user, guild, (msg, flags) => {
+							data = CreateDataFromObject(msg)
+							data.data.data.flags = flags
+							client.api.interactions(int.id, int.token).callback.post(data)
+						    })
 						})
-					}
-					else{
-						let MSG = CreateMessageFromOptions(int.data.name, int.data.options, {author:int.member.user, guild:{id:int.guild_id}, channel:{id:int.channel_id,send:obj => { client.api.interactions(int.id, int.token).callback.post(CreateDataFromObject(obj))}}})
-						run(MSG)
+						break
+					    case 3:	//Message commands
+						let _AppFile = require(`./apps/${int.data.name.toLowerCase().replaceAll(" ", "_")}.js`)
+						let _msg = Object.values(int.data.resolved.messages)[0]
+						_msg.app = true
+						_msg.author.tag = `${_msg.author.username}#${_msg.author.discriminator}`
+						client.guilds.fetch(int.guild_id).then(guild => {
+						    _msg.guild = guild
+						    _AppFile.onMessage(client, _msg, (msg, flags) => { 
+							data = CreateDataFromObject(msg)
+							data.data.data.flags = flags
+							client.api.interactions(int.id, int.token).callback.post(data)
+						    })
+						})
+						break
+					    default:	//Just in case
+						break
 					}
 					break
 				case 3:		//Components
