@@ -45,7 +45,7 @@ module.exports.run = async(client, message, args, searchByDiscord = false) => {
 	}
 	else
 	{
-		let Creator = Contacts[CreatorName]
+		Creator = Contacts[CreatorName]
 		if(!Creator)
 		{
 			let similar = mostSimilarModule(CreatorName, Contacts)
