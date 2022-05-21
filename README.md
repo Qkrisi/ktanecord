@@ -51,6 +51,7 @@ Paste these lines in it, and replace the values with the proper ones:
     "SimPort": "port",
     "EnableSimulator": false,
     "DPPort": 6000,
+    "DPSalts": ["a", "b", "c"],
     "TPBounds": [0, 0],
     "TPAdmins": 0,
     "TPServer": 0
@@ -73,6 +74,7 @@ Paste these lines in it, and replace the values with the proper ones:
 | SimPort | Port of the WebSocket server in the KTaNE Simulator |
 | EnableSimulator | Boolean value indicating the usage of the KTaNE Simulator bot |
 | DPPort | Port of the Discord Plays server |
+| DPSalts | Salts to use when encoding the Discord Plays token (any 3 string) |
 | TPBounds | A list of 2 role IDs: the IDs of the roles denoting the start and the end of the TP role list |
 | TPAdmins | The role ID of the admin role on the TP server |
 | TPServer | The ID of the TP server |

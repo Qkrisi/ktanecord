@@ -39,13 +39,10 @@ module.exports.run = (client, message, args) => {
 		return message.channel.send("Please finish your running session before starting a new one!")
 	message.author.createDM().then(channel => {
 		let token = dp.GenerateToken(message.channel, message.author)
-		channel.send(`Token: \`${token}\``)
+		channel.send(`Token (expires in ${dp.ExpirationMinutes} minutes): \`${token}\``)
 		message.channel.send("Sent token in DM")
 	}).catch(err => {
 		console.log(err)
 		message.channel.send("An error occurred. Please make sure you have DMs enabled on this server!")
 	})
 }
-
-module.exports.save = dp.GetSave
-module.exports.load = dp.SetSave
