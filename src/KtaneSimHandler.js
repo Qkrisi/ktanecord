@@ -23,6 +23,8 @@ if(config.EnableSimulator){
 			messagebody = {embeds:[embed], files: files}
 		}
 		else if(body.file) messagebody = {files: [new Discord.MessageAttachment(body.file.path, body.file.filename)]}
+		if(!body.message)
+			body.message = "⠀"
 		if(messagebody)
 			messagebody.content = body.message
 		else messagebody = {content: body.message}
