@@ -9,18 +9,22 @@ const Emojis = {
 	"Discord":"<:Discord:821731910866436116>",
 	"YouTube":"<:YouTube:821733572598562836>",
 	"Twitter":"<:Twitter:821732818865618975>",
+	"Newgrounds": "<:Newgrounds:1005851569331388518>",
+	"DeviantArt": "<:DeviantArt:1005851734586957875>",
 	"Email":":e_mail:",
 	"Website":":earth_africa:"
 }
 
 const PlatformURLs = {
-	"Twitch":"https://twitch.tv/",
-	"GitHub":"https://github.com/",
-	"Reddit":"https://reddit.com/",
-	"Steam":"https://steamcommunity.com/",
-	"YouTube":"https://youtube.com/",
-	"Twitter":"https://twitter.com/",
-	"Website":"https://"
+	"Twitch":"https://twitch.tv/{}",
+	"GitHub":"https://github.com/{}",
+	"Reddit":"https://reddit.com/{}",
+	"Steam":"https://steamcommunity.com/{}",
+	"YouTube":"https://youtube.com/{}",
+	"Twitter":"https://twitter.com/{}",
+	"Newgrounds": "https://{}.newgrounds.com",
+	"DeviantArt": "https://deviantart.com/{}",
+	"Website":"https://{}"
 }
 
 const PlatformAlias = {
@@ -31,6 +35,7 @@ module.exports.run = async(client, message, args, searchByDiscord = false) => {
 	let Contacts = main.CreatorContacts()
 	let CreatorName = args._.join(" ")
 	if(!CreatorName) return message.channel.send("Please specify a creator!")
+	CreatorName = CreatorName.toLowerCase()
 	let Creator
 	if(searchByDiscord)
 	{
@@ -62,7 +67,7 @@ module.exports.run = async(client, message, args, searchByDiscord = false) => {
 	let HandlePlatforms = () => {
 		let ConstructedBody = {Title:`Contact information of ${Creator.CreatorName}`, Contacts:""}
 		Object.keys(ContactInfo).forEach(platform => {
-				let MainPlatform = PlatformURLs[platform ] ? `[${platform}](${PlatformURLs[platform]}${ContactInfo[platform]})` : ContactInfo[platform]
+				let MainPlatform = PlatformURLs[platform] ? `[${platform}](${PlatformURLs[platform].replace(/\{\}/g, ContactInfo[platform])})` : ContactInfo[platform]
 				ConstructedBody.Contacts+=`${Emojis[platform] ? Emojis[platform] : platform+":"} ${MainPlatform}\n`
 				
 		})
