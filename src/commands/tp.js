@@ -6,6 +6,7 @@ const axios = require('axios')
 const save = require('./save.js')
 const { CreateAPIMessage } = require('../utils.js')
 const { profileWhitelist, MessageFlags } = require('../map.js')
+const qs = require("querystring")
 
 const Roles_MaxModules = 15
 const Roles_MaxRows = 5
@@ -270,7 +271,7 @@ module.exports.run = async(client, message, args) => {
 	if(["current","data", "stats"].includes(argList[0])) {
 		let token
 		let ClientID = config.TwitchID
-		await axios.post(`https://id.twitch.tv/oauth2/token?client_id=${ClientID}&client_secret=${config.TwitchSecret}&grant_type=client_credentials`, {}).then(async(response) => token = response.data.access_token)
+		await axios.post(`https://id.twitch.tv/oauth2/token`, qs.stringify({client_id: ClientID, client_secret: config.TwitchSecret, grant_type: "client_credentials"}), {headers: {"Content-Type": "application/x-www-form-urlencoded"}}).then(async(response) => token = response.data.access_token)
 		if(!token) return message.channel.send("Failed to get Twitch token")
 		let msg = ""
 		let StreamerInfo = {}
@@ -290,7 +291,7 @@ module.exports.run = async(client, message, args) => {
 					FetchStatus.forEach(streamer => msg+=`\n[${streamer}](https://twitch.tv/${streamer}): ${StreamerInfo[streamer]}`)
 					message.channel.send({embeds: [embed.getEmbed("CurrentStreamers", {streamers:msg})]})
 				}
-			})	
+			})
 		}
 		else if(argList[0]=="data")
 		{
@@ -308,7 +309,7 @@ module.exports.run = async(client, message, args) => {
 					thumbnail: body["thumbnail_url"].replace("{width}", "1920").replace("{height}", "1080")+`?${new Date().getMilliseconds()}`,
 					streamer: `Statistics of ${streamer}'s stream`,
 					name: body["title"]
-				})]})		
+				})]})
 			})
 		}
 		else
