@@ -35,7 +35,7 @@ let CreatorContacts = {}
 
 function getCooldown() {
     let path = [__dirname, "cooldown.json"].join("/")
-    return fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, "utf8")) : {}
+    return fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, "utf8")) : {DPChannels: []}
 }
 
 const CreateDataFromObject = obj => {
@@ -116,14 +116,20 @@ function getKtaneModules() {
 					CreatorContacts[LowerName]=res.body[creator]
 					CreatorContacts[LowerName].CreatorName=creator
 				})
-			fetch({url:"https://ktane.onpointcoding.net/ideas-old/getmeta.php", parse:'json'}).send().then(res => {
+			fetch({url:"https://ktane-ideas.mrmelon54.com/getmeta.php", parse:'json'}).send().then(res => {
 				let response = res.body
 				Ideas = response.ideas ? response.ideas : []
 				console.log("Ideas fetched!")
 			}).catch(console.log)
 			console.log("Contacts fetched!")
 		})
-        fetch({ url: `http://${config.tpServerIP}:${config.tpServerPort}/fetchScores` }).send().catch(err => console.log("Failed to connect to the TP server"))
+	try
+	{
+	    fetch({ url: `http://${config.tpServerIP}:${config.tpServerPort}/fetchScores` }).send().catch(err => console.log("Failed to connect to the TP server"))
+	}
+	catch
+	{
+	}
         console.log('fetching complete')
     })
 }
@@ -325,8 +331,8 @@ client.on('messageCreate', message => {
         args._.shift()
         commandFile.run(client, message, args)
     } catch (err) {
-        console.log(err)
-		SimHandler.send(message)
+        console.error(err)
+	SimHandler.send(message)
     }
 })
 
