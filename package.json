@@ -1,7 +1,7 @@
 {
   "main": "src/main.js",
   "dependencies": {
-    "axios": "^0.21.2",
+    "axios": "^0.28.0",
     "dblapi.js": "^2.4.0",
     "discord.js": "^13.0.1",
     "enum": "^3.0.4",
