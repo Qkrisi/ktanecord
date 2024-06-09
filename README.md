@@ -1,6 +1,6 @@
 # KTaNE Discord Bot
 
-[Invite](https://top.gg/bot/546017180865789962)
+[Invite](https://discord.com/api/oauth2/authorize?client_id=546017180865789962&permissions=397553290240&scope=bot)
 
 ## Setup
 
