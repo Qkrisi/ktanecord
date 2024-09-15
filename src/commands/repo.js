@@ -90,6 +90,22 @@ module.exports.run = async (client, message, args) => {
         manuals.push('And more...')
     }
 
+	if(!inputmodule.Description)
+	{
+        if(!inputmodule.Descriptions)
+                inputmodule.Description = ""
+        else
+        {
+                for({Description, language} of inputmodule.Descriptions)
+                {
+                        if(language == "English")
+                                inputmodule.Description = Description
+                }
+                if(!inputmodule.Description)
+                        inputmodule.Description = inputmodule.Descriptions[0].Description
+        }
+	}
+
    message.channel.send({embeds: [embed.getEmbed("Repo", {
         moduleName: `${subjectOverrides.get(inputmodule.Name) || `On the Subject of ${inputmodule.Name}`} ${inputmodule.TwitchPlays ? inputmodule.TwitchPlays.Score ? ` \u00B7 <:Twitch:702495822281048129> ${inputmodule.TwitchPlays.Score}` : '' : ''}${inputmodule.RuleSeedSupport === 'Supported' ? ' \u00B7 <:RuleSeed:702495784716992583>' : ''}${inputmodule.Souvenir ? inputmodule.Souvenir.Status == 'Supported' ? ' \u00B7 S' : '' : ''}${inputmodule.MysteryModule == undefined ? " \u00B7 MM" : ""}`,
         moduleDesc: `${inputmodule.Description.split('Tags')[0].trim()}`,
