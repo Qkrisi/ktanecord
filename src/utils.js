@@ -51,8 +51,7 @@ const levenshteinRatio = (target, source) => {
 }
 
 exports.GetModule = (message, args, send = true) => {
-	if(args._.join(' ').includes("`"))
-	{
+	if (args._.join(' ').includes("`")) {
 		message.channel.send("Please don't use backticks in the input!")
 		return undefined
 	}
@@ -116,7 +115,7 @@ exports.CreateAPIMessage = async(channel, client, content) => {
 	let send = async(dataOverride = null, callback = _ => {}, ChannelOverride = null) => {
 		if(dataOverride != null)
 			data = dataOverride
-		return await client.api.channels[ChannelOverride ?? channel.id].messages.post({data, files}).then(async(d) => await callback(client.actions.MessageCreate.handle(d).message))
+		return await client.api.channels[ChannelOverride ?? channel.id].messages.post({ data, files }).then(async (d) => await callback(client.actions.MessageCreate.handle(d).message))
 	}
 	return { data, files, send }
 }
@@ -124,14 +123,14 @@ exports.CreateAPIMessage = async(channel, client, content) => {
 
 const colors = [0x53FF00, 0x13FF00, 0x15B300, 0xFFFF00, 0xF91515, 0xA81313, 0x000000, 0x7289DA]
 const difficulties = new Map([
-        ['Trivial', 0],
-        ['VeryEasy', 1],
-        ['Easy', 2],
-        ['Medium', 3],
-        ['Hard', 4],
-        ['VeryHard', 5],
-        ['Extreme', 6],
-        ['General', 7]
+	['Trivial', 0],
+	['VeryEasy', 1],
+	['Easy', 2],
+	['Medium', 3],
+	['Hard', 4],
+	['VeryHard', 5],
+	['Extreme', 6],
+	['General', 7]
 ])
 
 exports.FakeArg = FakeArg
