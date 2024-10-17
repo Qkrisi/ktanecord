@@ -1,3 +1,5 @@
+const { categories } = require('./utilsFaq');
+
 const aliases = new Map([
     ['fmn', 'MemoryV2'],
     ['fe', 'HexiEvilFMN'],
@@ -116,6 +118,21 @@ const Interactions = [
 		data:{
 			name:"ping",
 			description:"Show bot ping"
+		}
+	},
+	{
+		data:{
+			name:"faq",
+			description:"Check to see if your question related to mod creation is answered",
+			options: [
+				{
+					type: 3,
+					name: "category",
+					description: "The name of the category the question falls under",
+					choices: categories.map(c =>  { return {name: c.name, value: c.id} })
+				}
+			],
+			autocomplete: true
 		}
 	},
 	{
