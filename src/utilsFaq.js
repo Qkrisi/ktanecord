@@ -288,8 +288,8 @@ async function setSelections(categoryId, message, client, SendMessages = true) {
 
 	if(SendMessages)
 	{
-		RoleSelect_ChannelID = message.channel.id
-		RoleSelect_MessageID = []
+		CommandSelect_ChannelID = message.channel.id
+		CommandSelect_ChannelID = []
 	}
 	const categoryObj = categories.find(c => c.id === categoryId);
 	const targetedQuestions = questions.filter(q => q.categoryId === categoryId);
