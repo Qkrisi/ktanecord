@@ -279,7 +279,7 @@ CommandSelect_MessageID = []
  * @param SendMessages if the the string selection(s) will be sent
  * @returns the string selection(s)
  */
-async function setSelections(categoryId, message, client, SendMessages = true) {
+async function setSelections(categoryId, message, client, SendMessages = true, isCommand = true) {
     const maxQuestions = 25;
     let messages = [];
     let rows = [];
@@ -318,7 +318,7 @@ async function setSelections(categoryId, message, client, SendMessages = true) {
             await send(data, msg => CommandSelect_MessageID.push(msg.id))
     }
 
-	if(SendMessages)
+	if(SendMessages && !isCommand)
 		await message.delete()
 	return datas
 }
