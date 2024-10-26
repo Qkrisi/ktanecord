@@ -129,7 +129,7 @@ const Interactions = [
 					type: 3,
 					name: "category",
 					description: "The name of the category the question falls under",
-					choices: categories.map(c =>  { return {name: c.name, value: c.id} })
+					choices: categories.map(c =>  { return {name: c.name.toLowerCase().replaceAll(" ", "-"), value: c.id} })
 				}
 			],
 			autocomplete: true
