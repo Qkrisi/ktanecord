@@ -1,17 +1,22 @@
-const { embed } = require('../utils')
-const { ktaneModules } = require('../main')
-const { categories, setSelections, questions, sendQuestion } = require('../utilsFaq')
+const { setSelections, questions, sendQuestion } = require('../utilsFaq')
 
 module.exports.run = async (client, message, args) => {
-    await setSelections(message.content, message, client);
+    console.log("message.content", message.content);
 }
 
 module.exports.component = async (client, interaction, custom_id, channel, message) => {
-    const value = interaction.data.values[0];
-    const m = client.api.interactions(interaction.id, interaction.token).callback.post({data: {type: 6, with_response: true}}).then(async(response) => {
-        const desiredObj = questions.find(q => q.commandId === value);
-		await sendQuestion({channel}, desiredObj);
+    
+    client.api.interactions(interaction.id, interaction.token).callback.post({ data: { type: 6 } }).then(async (__) => {
+        //get the question object
+        const desiredObj = questions.find(q => q.commandId === interaction.data.values[0]); 
 
+        //send the answer to the question
+        await sendQuestion({ channel }, desiredObj);
+        
         //todo reset the dropdown
+        let datas = await setSelections(custom_id, message, client, false);
+        let data = datas[0][0];
+        let files = datas[0][1];
+        await client.api.channels[channel.id].messages[message.id].patch({ data, files })		//Reset dropdown
     })
 }

@@ -212,11 +212,11 @@ const replacePlaceholders = (text) => {
     
     //get rid of the any command ids with their actual name
     const commandObjects = questions.map(q => {return {id: q.commandId, name: q.commandName, question: q.question, categoryId: q.categoryId}});
-    const categoryObject = categories.map(q => {return {id: q.id, commandName: q.commandName, name: q.name}});
+    const categoryObject = categories.map(q => {return {id: q.id, name: q.name}});
     for(const obj of commandObjects) {
 		const questionMax = 30;
 		const shortQuestion = truncateText(obj.question, questionMax);
-        text = text.replaceAll(`{${obj.id}}`, `**'${shortQuestion}' command (in ${categoryObject.find(c => c.id === obj.categoryId).name}) category**`);
+        text = text.replaceAll(`{${obj.id}}`, `**'${shortQuestion}' command** in **${categoryObject.find(c => c.id === obj.categoryId).name}** category`);
     }
 
     for(const obj of categoryObject) {
@@ -268,8 +268,6 @@ async function sendQuestion(interaction, desiredObj) {
 }
 
 
-CommandSelect_ChannelID = 0;
-CommandSelect_MessageID = []
 
 /**
  * Creates string selection object(s) with the values being the question(s) within a certain category. The same as GetMessages in tp.js
@@ -279,18 +277,15 @@ CommandSelect_MessageID = []
  * @param SendMessages if the the string selection(s) will be sent
  * @returns the string selection(s)
  */
-async function setSelections(categoryId, message, client, SendMessages = true, isCommand = true) {
+async function setSelections(categoryId, message, client, SendMessages = true) {
     const maxQuestions = 25;
     let messages = [];
     let rows = [];
     let datas = [];
     let modules = [];
 
-	if(SendMessages)
-	{
-		CommandSelect_ChannelID = message.channel.id
-		CommandSelect_ChannelID = []
-	}
+	console.log("Category Id", categoryId);
+
 	const categoryObj = categories.find(c => c.id === categoryId);
 	const targetedQuestions = questions.filter(q => q.categoryId === categoryId);
 
@@ -308,18 +303,20 @@ async function setSelections(categoryId, message, client, SendMessages = true, i
         const { data, files, send } = await CreateAPIMessage(message.channel, client, ++i == 1 ? `Here are the questions under the **${categoryObj.name}** category` : "⠀")
         data.components = []
         for (const row of msg) {
-            let action_row = { "type": 1, "components": [{ "type": 3, "custom_id": `faq ${categoryObj.name.replaceAll(" ", "")} ${row_i++}_${i}`, "options": [], "placeholder": "Choose a question"}] }
+            let action_row = { "type": 1, "components": [{ "type": 3, "custom_id": `faq ${categoryId} ${row_i++}_${i}`, "options": [], "placeholder": "Choose a question"}] }
             for (const module of row)
                 action_row.components[0].options.push(module)
             data.components.push(action_row)
         }
         datas.push([data, files, send])
-        if (SendMessages)
-            await send(data, msg => CommandSelect_MessageID.push(msg.id))
+        if(SendMessages)
+		{
+			if(!message.slash)
+			await send(data, msg => CommandSelect_MessageID.push(msg.id))
+			else await message.channel.send(data)
+		}
     }
 
-	if(SendMessages && !isCommand)
-		await message.delete()
 	return datas
 }
 
