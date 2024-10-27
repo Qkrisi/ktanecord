@@ -308,7 +308,7 @@ async function setSelections(categoryId, message, client, SendMessages = true, i
         const { data, files, send } = await CreateAPIMessage(message.channel, client, ++i == 1 ? `Here are the questions under the **${categoryObj.name}** category` : "⠀")
         data.components = []
         for (const row of msg) {
-            let action_row = { "type": 1, "components": [{ "type": 3, "custom_id": `faq${categoryObj.name.replaceAll(" ", "")} ${row_i++}_${i}`, "options": [], "placeholder": "Choose a question"}] }
+            let action_row = { "type": 1, "components": [{ "type": 3, "custom_id": `faq ${categoryObj.name.replaceAll(" ", "")} ${row_i++}_${i}`, "options": [], "placeholder": "Choose a question"}] }
             for (const module of row)
                 action_row.components[0].options.push(module)
             data.components.push(action_row)
