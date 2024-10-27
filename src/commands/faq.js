@@ -1,7 +1,7 @@
 const { setSelections, questions, sendQuestion } = require('../utilsFaq')
 
 module.exports.run = async (client, message, args) => {
-    console.log("message.content", message.content);
+    await setSelections(message.content, message, client);
 }
 
 module.exports.component = async (client, interaction, custom_id, channel, message) => {
