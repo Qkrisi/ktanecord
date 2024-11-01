@@ -13,10 +13,10 @@ module.exports.component = async (client, interaction, custom_id, channel, messa
         //send the answer to the question
         await sendQuestion({ channel }, desiredObj);
         
-        //todo reset the dropdown
+        //reset the dropdown
         let datas = await setSelections(custom_id, message, client, false);
         let data = datas[0][0];
         let files = datas[0][1];
-        await client.api.channels[channel.id].messages[message.id].patch({ data, files })		//Reset dropdown
+        await client.api.channels[channel.id].messages[message.id].patch({ data, files })
     })
 }
