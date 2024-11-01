@@ -284,11 +284,8 @@ async function setSelections(categoryId, message, client, SendMessages = true) {
     let datas = [];
     let modules = [];
 
-	console.log("Category Id", categoryId);
-
-	const categoryObj = categories.find(c => c.id === categoryId);
 	const targetedQuestions = questions.filter(q => q.categoryId === categoryId);
-
+	const categoryObj = categories.find(c => c.id === categoryId);
     for (const q of targetedQuestions) {
         modules.push({ "label": truncateText(q.question, 100), "custom_id": q.commandId, "value": q.commandId, description: "" })
     }
@@ -300,8 +297,8 @@ async function setSelections(categoryId, message, client, SendMessages = true) {
     let i = 0
     let row_i = 0
     for (const msg of messages) {
-        const { data, files, send } = await CreateAPIMessage(message.channel, client, `Here are the questions under the **${categoryObj.name}** category`)
-        data.components = []
+        const { data, files, send } = await CreateAPIMessage(message.channel, client, ++i == 1 ? `Here are the questions under the **${categoryObj.name}** category` : "⠀")
+		data.components = []
         for (const row of msg) {
             let action_row = { "type": 1, "components": [{ "type": 3, "custom_id": `faq ${categoryId} ${row_i++}_${i}`, "options": [], "placeholder": "Choose a question"}] }
             for (const module of row)
@@ -311,9 +308,13 @@ async function setSelections(categoryId, message, client, SendMessages = true) {
         datas.push([data, files, send])
         if(SendMessages)
 		{
-			if(!message.slash)
-			await send(data, msg => CommandSelect_MessageID.push(msg.id))
-			else await message.channel.send(data)
+			if(!message.slash) {
+				await send(data, msg => {})
+			}
+
+			else {
+				await message.channel.send(data)
+			}
 		}
     }
 
