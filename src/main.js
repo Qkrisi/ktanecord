@@ -51,6 +51,7 @@ const CreateDataFromObject = obj => {
 			delete obj.components
 		}
 		body.data.data.embeds=obj.embeds
+		body.data.data.content = obj.content
 	}
 	return body
 }
