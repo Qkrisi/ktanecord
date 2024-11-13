@@ -99,19 +99,26 @@ const questions = [
 		"commandName": "BecomeMaintainer"
 	},
 	{
-		"question": "My mod works fine in Unity, but doesn’t in the game.",
-		"categoryId": "errors",
-		"answer": "Open the log in the [Logfile Analyzer](https://ktane.timwi.de/More/Logfile%20Analyzer.html) and check if there is a button in the top left called “View Exceptions”. If there is, clicking on said button will show you an exception that was thrown while the mod was running. Fixing the exception will most likely make the mod work in the game.\nSome common exceptions:\n- **Exception: NullReferenceException: Object reference not set to an instance of an object at: SelectableManager.HandleInteract()**\n    - Verify that none of your buttons (objects that have the KMSelectable component, excluding the mod itself) have any children in the inspector.  The children variable should have a size of 0. The only time your buttons should have a size greater than 0 is if their OnInteract delegate returns true. See {on-interact-delegate} for more info.    \n**Good**{breakMessage}\n**Bad**{breakMessage}\nOnce you fix the issue(s), update the prefab and rebuild your mod and retest. If you don’t see anything wrong with your project in Unity, update the prefab and rebuild anyway. It’s possible that you changed something without building again. If you are still having issues, ask for help in <#{modCreationId}>.",
-		"commandId": "mod-not-working",
-		"commandName": "ModNotWorking",
-		"images": [{"name": "children.png", "index": 1}, {"name": "noChildren.png", "index": 0}]
-	},
-	{
 		"question": "My text is going through the back of the bomb",
 		"categoryId": "errors",
 		"answer": "* [Text Version of answer](<https://discord.com/channels/160061833166716928/726791283007291474/726794741168996443>)\n* [Video Version of answer](<https://www.youtube.com/watch?v=YobuGSBl3i0&t=1554s>)",
 		"commandId": "text-see-through",
 		"commandName": "TextSeeThrough"
+	},
+	{
+		"question": "My logs aren't appearing in the Log File Analyzer",
+		"categoryId": "errors",
+		"answer": "If you want the following to be shown in the LFA:\n\n- Hello World\n\nVerify that your print statement looks like this:\n```cs\nDebug.Log(\"[{InsertModNameHere} #{InsertModuleIdHere}] Hellow World\");```\nOR\n\n```cs\nDebug.LogFormat(\"[{0} #{1}] Hellow World\", InsertModNameHere, InsertModuleIdHere);\n```\nThe `[{InsertModNameHere} #{InsertModuleIdHere}]` format is what the LFA looks for in order to parse the information into the correct section.\n\nIt's highly recommend making your own log function, so you don't have to spell the mod name and id every single time:\n```cs\npublic void Log(string message) \n{\n\tDebug.Log($\"[InsertModNameHere #{InsertModuleIdHere}] {message}\"); \n}\n```\nOf course replace `InsertModNameHere` with the name of your module and `InsertModuleIdHere` with the actual variable name that holds your mod id",
+		"commandId": "lfa-not-showing",
+		"commandName": "lfaNotShowing"
+	},
+	{
+		"question": "My mod works fine in Unity, but doesn’t in the game.",
+		"categoryId": "errors",
+		"answer": "Open the log in the {logFileAnalyzerLink} and check if there is a button in the top left called “View Exceptions”. If there is, clicking on said button will show you an exception that was thrown while the mod was running. Fixing the exception will most likely make the mod work in the game.\nSome common exceptions:\n- **Exception: NullReferenceException: Object reference not set to an instance of an object at: SelectableManager.HandleInteract()**\n    - Verify that none of your buttons (objects that have the KMSelectable component, excluding the mod itself) have any children in the inspector.  The children variable should have a size of 0. The only time your buttons should have a size greater than 0 is if their OnInteract delegate returns true. See {on-interact-delegate} for more info.    \n**Good**{breakMessage}\n**Bad**{breakMessage}\nOnce you fix the issue(s), update the prefab and rebuild your mod and retest. If you don’t see anything wrong with your project in Unity, update the prefab and rebuild anyway. It’s possible that you changed something without building again. If you are still having issues, ask for help in <#{modCreationId}>.",
+		"commandId": "mod-not-working",
+		"commandName": "ModNotWorking",
+		"images": [{"name": "children.png", "index": 1}, {"name": "noChildren.png", "index": 0}]
 	},
 	{
 		"question": "I’m trying to build my mod, but I'm getting the error- Failed to build AssetBundle: No assets have been tagged for inclusion in the mod.bundle AssetBundle.",
@@ -136,7 +143,14 @@ const questions = [
 		"commandId": "on-interact-delegate",
 		"commandName": "OnInteractDelegate",
 		"images": [{"name": "tree.png", "index": 0}]
-
+	},
+	{
+		"question": 'How do I get my logging to be "fancy" to have images and dropdowns?',
+		"categoryId": "misc",
+		"answer": "The {logFileAnalyzerLink} (\"LFA\" for short) is a section on the {manualRepositoryLink} that parses the `output_log.txt` file. The txt file is commonly called the \"log\" as it pertains all of the log printed statements from each mod. By default it will take each log line and make them their own bullet point. See {lfa-not-showing} for more info. For example, the following debug lines:\n```Debug.Log(\"[The Simpleton #1] a\");\nDebug.Log(\"[Simpleton #1] b\");\nDebug.Log(\"[The Simpleton #1] c\");```\nWill be shown as the following in the LFA:\n- a\n- b\n- c\n\nAnything else you see in a log is done by the LFA parser and needs to be added through the {ktaneContentRepositoryLink}, specifically {logFileAnalyzerDataJsLink} and [Logfile Analyzer Styling Data.css](<https://github.com/Timwi/KtaneContent/blob/master/More/Logfile%20Analyzer%20Styling%20Data.css>)\n\n**Note**: Although LFA support is a neat feature that improves digestion of information, it should not be relied on as an alternative of good logging. If your mod does not provide the necessary information (e.g calculation numbers, when someone strikes/solves), it cannot be added though LFA. Rule of thumb: Your logs should be easily readable and understandable by anyone who knows the mod without LFA.\n- **Bad**{breakMessage}- **Good**{breakMessage}- **Good (/w LFA)**{breakMessage}### If you would like to request a mod to have LFA support\n- Go to the <#{lfaSupportThread}>\n- Write the name of the module you want LFA support added to. Bonus points if you provide any of the following as that makes the contributor's job easier:\n\t- Explanation of what you want to lfa to look like\n   - Sketches of the lfa\n   - Any logs files (txts). Preferably of all the variations of what can happen (including strikes and resets)\n- Do note that LFA is a niche portion of contribution, so do expect long wait times before your request gets done\n### If you would like to implement LFA support to a mod\n-  Adding LFA support counts as being a repo contributor (see {become-maintainer} for more details), so you will claim the request in <#{lfaSupportThread}>.\n-  Open {logFileAnalyzerDataJsLink} in your IDE and find where the mod will go **based on the module name** in alphabetical order (excluding the word `The` in the title). \n-  Once you find where the module goes create an object like so:\n   - `moduleID` is the id of the mod\n   - `loggingTag` is the the name of the module in the square brackets. In the `Debug.Log` example above, the logging tag would be `The Simpleton`.\n\t- There is an optional property called `displayName` which can be seen for the mods `ASCII Art` and `Binary Cipher`. This should be only added to the object if the preferred display name is different than the `moduleID`\n```\n{\n\tmoduleID: \"insertModIdHere\",\n\tloggingTag: \"insertLoggingTagHere\",\n\tmatches: [\n\t\t{\n\t\t\tregex: /.+/,\n\t\t\thandler: function (matches, module) {\n\t\t\t\tmodule.push(\"test\");\n\t\t\t\treturn true;\n\t\t\t}\n\t\t},\n\t\t{ regex: /.+/ },\n\t]\n}```{breakMessage}- Running a log including the targeted module should show all of it's content as a bullet point with the word `test`. \n   - The variable `regex` is a sequence of characters that defines a search pattern, primarily used for string matching and manipulation. If something is captured in that regex it will be held in the `matches` variable as an array. The first element will be the entire string while subsequent elements will be the separated matches. If nothing is caught, it will be undefined.\n    - [Regex tutorial](<https://www.youtube.com/watch?v=rhzKDrUiJVk>)\n    - [regex 101](<https://regex101.com>): Site used to test regex. Highly recommended to paste the content of the log in the bottom textbox, and test what regex targets what you're looking for \n   - The regex object in `matches` will work in order of top to bottom. The `return true` statement at the end will make sure that none of the other regex objects are ran through (so no duplicate lines are repeated). It's recommended to **always have `return true` at the end of each handler method**\n   - The `{ regex: /.+/ }` object is a catch all so the the line appears as a bullet point just like the default. So pretty much doing the same as the first regex object. You should keep this if there are some logs that you want to be just bullet points, and replace the first object with a different regex statement.\n- There are many things you can do for LFA, but the main ones are adding dropdowns and making svgs. It's recommended you ctrl + f and look at other examples in order to figure out what you want to do. Here are some examples to get you started:\n   - Add dropdowns: `Directional Button`\n   - Add nested drop down: `Character Slots`\n   - Add grid of squares in a svg: `Directional Button`\n   - Editing a dropdown that has already been pushed: `Forget Us Not`",
+		"commandId": "add-lfa",
+		"commandName": "AddLfa",
+		"images": [{"name": "bad logging.png", "index": 0}, {"name": "good logging.png", "index": 1}, {"name": "good logging with lfa.png", "index": 2}]
 	}
 ]
 
@@ -180,9 +194,12 @@ const placeholderInfo = {
     repoDiscussionId: "640557658482540564",
     repoRequestsId: "612414629179817985",
     logBotId: "317798455110139916",
+	lfaSupportThread: "1018575584009400350",
+	logFileAnalyzerDataJsLink: "[Logfile Analyzer Data.js](<https://github.com/Timwi/KtaneContent/blob/master/More/Logfile%20Analyzer%20Data.js>)",
     ktaneContentRepositoryLink: "[Ktane Content repository](<https://github.com/Timwi/KtaneContent>)",
     manualRepositoryLink: "[Repository of Manual Pages](<https://ktane.timwi.de>)",
     maintainerResponsibilities: "[Repo Maintainer Responsibilities](<https://docs.google.com/document/d/10rabFJES6avb8ime3Cw5LCd9p0663PbqVqzUrfehYac/edit?usp=sharing>)",
+	logFileAnalyzerLink: "[Logfile Analyzer](<https://ktane.timwi.de/More/Logfile%20Analyzer.html>)"
 }
 
 /**
@@ -192,22 +209,20 @@ const placeholderInfo = {
  * @returns {string} The new text without the placeholders
  */
 const replacePlaceholders = (text) => {
+    text = text
     //replace channel ids
-    text = text.replaceAll("{modCreationId}", placeholderInfo.modCreationId);
-
-    text = text.replaceAll("{repoDiscussionId}", placeholderInfo.repoDiscussionId);
-
-    text = text.replaceAll("{repoRequestsId}", placeholderInfo.repoRequestsId);
-
+		.replaceAll("{modCreationId}", placeholderInfo.modCreationId)
+		.replaceAll("{repoDiscussionId}", placeholderInfo.repoDiscussionId)
+		.replaceAll("{repoRequestsId}", placeholderInfo.repoRequestsId)
+		.replaceAll("{lfaSupportThread}", placeholderInfo.lfaSupportThread)
     //replace links
-    text = text.replaceAll("{ktaneContentRepositoryLink}", placeholderInfo.ktaneContentRepositoryLink);
-
-    text = text.replaceAll("{manualRepositoryLink}", placeholderInfo.manualRepositoryLink);
-
-    text = text.replaceAll("{maintainerResponsibilities}", placeholderInfo.maintainerResponsibilities);
-
+		.replaceAll("{logFileAnalyzerDataJsLink}", placeholderInfo.logFileAnalyzerDataJsLink)
+		.replaceAll("{ktaneContentRepositoryLink}", placeholderInfo.ktaneContentRepositoryLink)
+		.replaceAll("{manualRepositoryLink}", placeholderInfo.manualRepositoryLink)
+		.replaceAll("{maintainerResponsibilities}", placeholderInfo.maintainerResponsibilities)
+		.replaceAll("{logFileAnalyzerLink}", placeholderInfo.logFileAnalyzerLink)
     //ping roles/people
-    text = text.replaceAll("{logBotId}", placeholderInfo.logBotId);
+    	.replaceAll("{logBotId}", placeholderInfo.logBotId);
 
     
     //get rid of the any command ids with their actual name
