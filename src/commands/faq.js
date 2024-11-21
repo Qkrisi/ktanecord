@@ -141,7 +141,7 @@ async function setSelections(categoryId, message, client, SendMessages = true) {
     let datas = [];
     let modules = [];
 
-	const targetedQuestions = questions.filter(q => q.categoryId === categoryId);
+	const targetedQuestions = questions.filter(q => q.categoryId === categoryId).sort((q1, q2) => q1.priority - q2.priority);
 	const categoryObj = categories.find(c => c.id === categoryId);
     for (const q of targetedQuestions) {
         modules.push({ "label": truncateText(q.question, 100), "custom_id": q.commandId, "value": q.commandId, description: "" })
