@@ -1,4 +1,4 @@
-const { categories } = require('./utilsFaq');
+const { categories } = require('./questions');
 
 const aliases = new Map([
     ['fmn', 'MemoryV2'],
