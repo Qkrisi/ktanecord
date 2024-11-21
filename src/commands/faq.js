@@ -1,9 +1,16 @@
-const { setSelections, questions, sendQuestion } = require('../utilsFaq')
+const { setSelections, questions, categories, sendQuestion } = require('../utilsFaq')
 
 module.exports.run = async (client, message, args) => {
     if(args._.length == 0)
         return
-    await setSelections(args._[0], message, client);
+
+    const categoryId = args._[0];
+    const validArgs = categories.map(c => c.id);
+    if(!validArgs.includes(categoryId))  {
+        message.channel.send(`Error: "${categoryId}" is an invalid category id. The valid list of categories are **${validArgs.join(", ")}**`)
+        return;
+    }
+    await setSelections(categoryId, message, client);
 }
 
 module.exports.component = async (client, interaction, custom_id, channel, message) => {
