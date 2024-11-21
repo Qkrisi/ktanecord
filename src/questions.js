@@ -182,7 +182,15 @@ const questions = [
 		"commandId": "add-lfa",
 		"commandName": "AddLfa",
 		"images": [{"name": "bad logging.png", "index": 0}, {"name": "good logging.png", "index": 1}, {"name": "good logging with lfa.png", "index": 2}]
-	}
+	},
+    {
+        "question": "What is colorblind support, and how do I add it to my mod?",
+        "categoryId": "misc",
+        "answer": "Colorblind support allows players with different types of color vision to play the game without visual impairments hindering their experience. While it's not required for a mod to have colorblind support, it's recommended as not having it will limit its visibility.\n\nTo add support, you must add a component called `KMColorblindMode` to the game object that has your mod script. You will be able to access a boolean called `ColorblindModeActive`. This boolean tells if the colorblind mode is enabled. You can then use it to make checks if certain game object (such as text) should appear. Example:\n```cs\n//assume objects has been assigned through the inspector\n[SerializeField]\nTextMesh colorBlindText;\n[SerializeField]\nKMColorblindMode colorblindScript;\n void Awake()\n{\n  //shows the text if it's true, hides it if it's false\n  colorBlindText.SetActive(colorblindScript.ColorblindModeActive);\n}```",
+        "commandId": "colorblind-support",
+		"commandName": "colorblindSupport",
+
+    }
 ]
 
 module.exports.categories = categories
