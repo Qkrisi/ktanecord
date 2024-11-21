@@ -42,7 +42,8 @@ const placeholderInfo = {
     ktaneContentRepositoryLink: "[Ktane Content repository](<https://github.com/Timwi/KtaneContent>)",
     manualRepositoryLink: "[Repository of Manual Pages](<https://ktane.timwi.de>)",
     maintainerResponsibilities: "[Repo Maintainer Responsibilities](<https://docs.google.com/document/d/10rabFJES6avb8ime3Cw5LCd9p0663PbqVqzUrfehYac/edit?usp=sharing>)",
-	logFileAnalyzerLink: "[Logfile Analyzer](<https://ktane.timwi.de/More/Logfile%20Analyzer.html>)"
+	logFileAnalyzerLink: "[Logfile Analyzer](<https://ktane.timwi.de/More/Logfile%20Analyzer.html>)",
+    contributorTutorial: "[repo contributor video tutorial](<https://youtu.be/2Lxl7OAafIg>)"
 }
 
 /**
@@ -64,6 +65,7 @@ const replacePlaceholders = (text) => {
 		.replaceAll("{manualRepositoryLink}", placeholderInfo.manualRepositoryLink)
 		.replaceAll("{maintainerResponsibilities}", placeholderInfo.maintainerResponsibilities)
 		.replaceAll("{logFileAnalyzerLink}", placeholderInfo.logFileAnalyzerLink)
+		.replaceAll("{contributor-tutorial}", placeholderInfo.contributorTutorial)
     //ping roles/people
     	.replaceAll("{logBotId}", placeholderInfo.logBotId);
 
