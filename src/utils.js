@@ -122,14 +122,16 @@ exports.CreateAPIMessage = async(channel, client, content) => {
 }
 
 
-const colors = [0x53FF00, 0x13FF00, 0xFFFF00, 0xF91515, 0xA81313, 0x7289DA]
+const colors = [0x53FF00, 0x13FF00, 0x15B300, 0xFFFF00, 0xF91515, 0xA81313, 0x000000, 0x7289DA]
 const difficulties = new Map([
-	['VeryEasy', 0],
-	['Easy', 1],
-	['Medium', 2],
-	['Hard', 3],
-	['VeryHard', 4],
-	['General', 5]
+        ['Trivial', 0],
+        ['VeryEasy', 1],
+        ['Easy', 2],
+        ['Medium', 3],
+        ['Hard', 4],
+        ['VeryHard', 5],
+        ['Extreme', 6],
+        ['General', 7]
 ])
 
 exports.FakeArg = FakeArg
