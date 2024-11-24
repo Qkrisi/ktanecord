@@ -2,6 +2,7 @@ const main = require("../main.js")
 const SimHandler = require("../KtaneSimHandler.js")
 const { embed } = require('../utils')
 const config = require('../../config.json')
+const { categories } = require('../questions.js')
 
 module.exports.run = (client, message, args) => {
 	if(args.sim) return SimHandler.send(message)
@@ -28,6 +29,7 @@ module.exports.run = (client, message, args) => {
 		DiscordPlaysCMD: `\`${config.token}dp\``,
 		DiscordPlaysValue: `<:DiscordPlays:872414252596596748> Gets token for a Discord Plays: KTaNE session (${DP})`,
 		pingCMD: `\`${config.token}ping\``,
+		faqCMD: `\`${config.token}faq <${categories.map(c => c.id).join(", ")}>\``,
 		repoCMD: `\`${config.token}repo <module or --random>\``,
 		statsCMD: `\`${config.token}tp stats [player] [streamer]\``,
 		statsValue: `<:Twitch:702495822281048129> Shows player statistics on Twitch Plays (For a list of streamers use \`${config.token}tp streamers\`)`,

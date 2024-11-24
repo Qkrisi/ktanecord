@@ -28,6 +28,12 @@
   @end
   @field
     @name
+      |faqCMD
+    @value
+      🛠️ Answers frequently asked questions about modding KTaNE
+  @end
+  @field
+    @name
       |repoCMD
     @value
       📕 Shows information about a given (or random) entry from the [Repository of KTaNE Manuals](https://ktane.timwi.de)
