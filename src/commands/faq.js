@@ -2,11 +2,14 @@ const { questions, categories } = require('../questions.js')
 const { CreateAPIMessage } = require('../utils.js');
 
 module.exports.run = async (client, message, args) => {
-    if(args._.length == 0)
-        return
+    const validArgs = categories.map(c => c.id);
+    if(args._.length == 0) {
+        message.channel.send(`Error: no category id argument was given. The valid list of categories are **${validArgs.join(", ")}**`)
+        return;
+    }
 
     const categoryId = args._[0];
-    const validArgs = categories.map(c => c.id);
+    
     if(!validArgs.includes(categoryId))  {
         message.channel.send(`Error: "${categoryId}" is an invalid category id. The valid list of categories are **${validArgs.join(", ")}**`)
         return;
