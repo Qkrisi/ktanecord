@@ -29,6 +29,8 @@ const { embed, CreateAPIMessage } = require("./utils.js")
 const dp = require("./DiscordPlaysHandler.js")
 
 let ktaneModules = new Map()
+let missions = new Map()
+let missionPacks = new Map()
 let modIDs = []
 
 let CreatorContacts = {}
@@ -120,7 +122,11 @@ function getKtaneModules() {
 				let response = res.body
 				Ideas = response.ideas ? response.ideas : []
 				console.log("Ideas fetched!")
-			}).catch(console.log)
+				getMissions()
+			}).catch(err => {
+					console.error(err)
+					getMissions()
+			})
 			console.log("Contacts fetched!")
 		})
 	try
@@ -132,6 +138,27 @@ function getKtaneModules() {
 	}
         console.log('fetching complete')
     })
+}
+
+function getMissions() {
+	fetch({url: "https://bombs.samfun.dev/json/missionpacks", parse: "json"}).send().then(res => {
+		for(const missionpack of res.body)
+		{
+			let _missions = []
+			for(const mission of missionpack.missions)
+			{
+				_missions.push(mission.name)
+				missions.set(mission.name.toLowerCase(), {...mission, ...{missionpack: missionpack.name}})
+			}
+			missionPacks.set(missionpack.name.toLowerCase(), {
+					name: missionpack.name,
+					dateAdded: missionpack.dateAdded,
+					steamID: missionpack.steamID,
+					missions: _missions
+				})
+		}
+		console.log("Missions fetched!")
+	})
 }
 
 const SetInteractions = (GuildID, enable, callback) => {
@@ -345,6 +372,8 @@ module.exports.WriteSave = () => {
 }
 module.exports.Bot = () => client
 module.exports.ktaneModules = () => ktaneModules
+module.exports.missions = () => missions
+module.exports.missionPacks = () => missionPacks
 module.exports.CreatorContacts = () => CreatorContacts
 module.exports.Ideas = () => Ideas
 module.exports.modIDs = modIDs

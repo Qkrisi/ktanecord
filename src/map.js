@@ -218,6 +218,24 @@ const Interactions = [
 	},
 	{
 		data:{
+			name:"mission",
+			description:"Get information about the specified mission",
+			options:[
+				{
+					type:3,
+					name:"mission",
+					description:"Name of the mission"
+				},
+				{
+					type:5,
+					name:"random",
+					description:"Shows information about a random mission"
+				}
+			]
+		}
+	},
+	{
+		data:{
 			name:"contact",
 			description:"Shows contact information of a modder",
 			options:[

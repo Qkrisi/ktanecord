@@ -5,11 +5,13 @@ const fetch = require('wumpfetch')
 const { mostSimilarModule } = require('./repo.js')
 const aliases = require('../map.js').aliases
 const difficulties2 = [
+	"Trivial",
 	"Very Easy",
 	"Easy",
 	"Medium",
 	"Hard",
-	"Very Hard"
+	"Very Hard",
+	"Extreme"
 ]
 
 module.exports.run = async (client, message, args) => {

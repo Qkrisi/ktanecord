@@ -1,23 +1,40 @@
 const { GetIdeaEmbed } = require('./commands/idea')
+const { getMissionEmbed } = require('./commands/mission')
 const { aliases, manualOverride } = require('./map')
 const { levenshteinRatio, parseDifficulty, embed, getColor, months, GetModule, FakeArg, mostSimilarModule } = require('./utils')
 const main = require("./main")
 const axios = require('axios')
 const d = /\[\[([^}]+)]]/g
 const IdeaPattern = /i\[\[([^}]+)]]/gi
+const MissionPattern = /m\[\[([^}]+)]]/gi
 const CodeExclude = /`.*?`/g
 
 module.exports = async (modules, message) => {
     message.content = message.content.replace(CodeExclude, '')
     let m = IdeaPattern.exec(message.content)
     let idea = true
+    let mission = false
     if (m == null) {
 		idea = false
-		m = d.exec(message.content)
-		if(m==null) return
+		mission = true
+		m = MissionPattern.exec(message.content)
+		if(m == null)
+		{
+			mission = false
+			m = d.exec(message.content)
+			if(m == null)
+				return
+		}
 	}
     m = m[1]
     if(!idea){
+		if(mission)
+		{
+			let missionEmbed = await getMissionEmbed(message, new FakeArg(m), true)
+			if(missionEmbed)
+				message.channel.send({embeds: [missionEmbed]})
+			return
+		}
 		let inputmodule = modules.get(aliases.get(m)) ||
 			modules.get(m) ||
 			modules.get(mostSimilarModule(m)) || GetModule(message, new FakeArg(m), false)

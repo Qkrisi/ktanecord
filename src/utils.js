@@ -13,7 +13,7 @@ class FakeArg {
 const cleanseDiscordText = (text) => text.replace(/`/g, "");
 
 function mostSimilarModule(searchItem, obj = undefined) {
-	let keys = obj==undefined ? Array.from(main.ktaneModules().keys()) : Object.keys(obj).filter(key => key!=undefined)
+	let keys = obj==undefined ? Array.from(main.ktaneModules().keys()) : (obj instanceof Map) ? Array.from(obj.keys()) : Object.keys(obj).filter(key => key!=undefined)
 	let module = keys.sort((entry1, entry2) =>
 		levenshteinRatio(entry2.toLowerCase(), searchItem) - levenshteinRatio(entry1.toLowerCase(), searchItem)
 	)[0]
@@ -89,6 +89,26 @@ exports.GetModule = (message, args, send = true) => {
 		}
 	}
 	return module
+}
+
+exports.GetMission = (message, args, send = true) => {
+	if(args._.join(' ').includes("`"))
+	{
+		message.channel.send("Please don't use backticks in the input!")
+		return undefined
+	}
+	let missions = main.missions()
+	let mission = missions.get(args._.join(' ').toLowerCase())
+	if(!mission) mission = missions.get(args._[0])
+	if(!mission) mission = missions.get(mostSimilarModule(args._.join(' ').toLowerCase(), missions))
+	if(!mission)
+	{
+		if(send)
+			message.channel.send(`🚫 Couldn't find a mission by the ID of \`${cleanseDiscordText(args._[0])}\` (case-sensitive), name of \`${cleanseDiscordText(args._.join(' '))}\` (not case-sensitive)`)
+		return undefined
+	}
+	return mission
+	
 }
 
 exports.CreateAPIMessage = async(channel, client, content) => {

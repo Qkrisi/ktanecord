@@ -34,9 +34,15 @@
   @end
   @field
     @name
+      |missionCMD
+    @value
+      :bomb: Shows information about the specified mission
+  @end
+  @field
+    @name
       |scoreCMD
     @value
-      🧮 Shows the scores of the specified module (Time Mode and Twitch Plays) - Use `--mobile` for a mobile-compatible view.
+      🧮 Shows the scores of the specified module (Time Mode and Twitch Plays) - Use `--mobile` for a mobile-compatible view
   @end
   @field
     @name
@@ -347,6 +353,97 @@
     |creator
   @thumbnail
     |moduleIcon
+#end
+
+#Mission
+  @title
+    |missionName
+  @url
+	|cbsURL
+  @thumbnail
+	|packImg
+  @color
+    |diffColor
+  @footer
+    |creator
+  @field
+	@name
+		Mission pack
+	@value
+		|mpack
+	@inline
+		true
+  @end
+  @field
+    @name
+      ​
+    @value
+      ​
+    @inline
+      true
+    @comment
+      Empty field just for alignment
+  @end
+  @field
+	@name
+		Release date
+	@value
+		|rdate
+	@inline
+		true
+  @end
+  @field
+	@name
+		Bombs (M/W/S)
+	@value
+		|bombs
+	@inline
+		true
+  @end
+  @field
+    @name
+      ​
+    @value
+      ​
+    @inline
+      true
+    @comment
+      Empty field just for alignment
+  @end
+  @field
+	@name
+		Top completion
+	@value
+		|top
+	@inline
+		true
+  @end
+  @field
+    @name
+        Average defuser difficulty
+    @value
+        |avgDef
+    @inline
+        true
+  @end
+  @field
+      @name
+        ​
+      @value
+        ​
+      @inline
+        true
+      @comment
+        Empty field just for alignment
+  @end
+  @field
+      @name
+          Average expert difficulty
+      @value
+          |avgExp
+      @inline
+          true
+  @end
 #end
 
 #Profile

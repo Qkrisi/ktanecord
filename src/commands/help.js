@@ -29,6 +29,7 @@ module.exports.run = (client, message, args) => {
 		DiscordPlaysValue: `<:DiscordPlays:872414252596596748> Gets token for a Discord Plays: KTaNE session (${DP})`,
 		pingCMD: `\`${config.token}ping\``,
 		repoCMD: `\`${config.token}repo <module or --random>\``,
+		missionCMD: `\`${config.token}mission <mission or --random>\``,
 		statsCMD: `\`${config.token}tp stats [player] [streamer]\``,
 		statsValue: `<:Twitch:702495822281048129> Shows player statistics on Twitch Plays (For a list of streamers use \`${config.token}tp streamers\`)`,
 		streamCMD: `\`${config.token}tp current/data [streamer]\``,
