@@ -102,6 +102,8 @@ async function getMissionEmbed(message, args, lookup = false)
 			let length = 0
 			for(const module of pool.modules)
 			{
+				if(["ALL_SOLVABLE","ALL_NEEDY","ALL_VANILLA","ALL_MODS","ALL_VANILLA_NEEDY","ALL_MODS_NEEDY","ALL_VANILLA_SOLVABLE","ALL_MODS_SOLVABLE"].includes(module.toUpperCase()))
+					continue
 				let inputmodule = GetModule(message, new FakeArg(module), false)
 				if(!inputmodule)
 					continue
