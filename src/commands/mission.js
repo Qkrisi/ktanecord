@@ -83,7 +83,7 @@ async function getMissionEmbed(message, args, lookup = false)
 	let topValue = "**-**"
 	if(topCompletion)
 		topValue = `[[${formatTime(topCompletion.time)}] ${topCompletion.solo ? "(S) " : ""}${topCompletion.team.join(', ')}](${topCompletion.proofs[0]})`
-	let bombs = []
+	let bombs = {}
 
 	let avg = 0
 	let missionAvgDef = 0
@@ -91,7 +91,12 @@ async function getMissionEmbed(message, args, lookup = false)
 	let bombCount = 0
 	for(const bomb of mission.bombs)
 	{
-		bombs.push(`[${formatTime(bomb.time)}] ${bomb.modules} **/** ${bomb.widgets} **/** ${bomb.strikes}`)
+		let b = `[${formatTime(bomb.time)}] ${bomb.modules} **/** ${bomb.widgets} **/** ${bomb.strikes}`
+		if(b in bombs)
+		{
+			bombs[b]++
+		}
+		else bombs[b]=1
 		let poolCount = 0
 		let bombAvgDef = 0
 		let bombAvgExp = 0
@@ -151,7 +156,7 @@ async function getMissionEmbed(message, args, lookup = false)
 		creator: `Mission by ${mission.authors.join(", ")}`,
 		mpack: `[${missionpack.name}](https://steamcommunity.com/sharedfiles/filedetails/?id=${missionpack.steamID})`,
 		rdate: mission.dateAdded.substring(0, 10).replace(/-/g, '.'),
-		bombs: bombs.join("\n"),
+		bombs: Object.keys(bombs).map(b => `${b} (x${bombs[b]})`).join("\n"),
 		top: topValue,
 		avgDef: avgDefStr,
 		avgExp: avgExpStr
