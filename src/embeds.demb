@@ -28,12 +28,6 @@
   @end
   @field
     @name
-      |faqCMD
-    @value
-      🛠️ Answers frequently asked questions about modding KTaNE
-  @end
-  @field
-    @name
       |repoCMD
     @value
       📕 Shows information about a given (or random) entry from the [Repository of KTaNE Manuals](https://ktane.timwi.de)
@@ -61,6 +55,12 @@
       |streamCMD
     @value
       <:Twitch:702495822281048129> Shows the currently active Twitch Plays streamers (`current`) or the statistics of a specified stream (`data [streamer]`)
+  @end
+  @field
+    @name
+      |faqCMD
+    @value
+      🛠️ Answers frequently asked questions about modding KTaNE
   @end
   @field
     @name
