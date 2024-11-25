@@ -8,7 +8,7 @@ module.exports.run = async (client, message, args) => {
         return;
     }
 
-    const categoryId = args._[0];
+    const categoryId = args._[0].toLowerCase();
     
     if(!validArgs.includes(categoryId))  {
         message.channel.send(`Error: "${categoryId}" is an invalid category id. The valid list of categories are **${validArgs.join(", ")}**`)
