@@ -1,5 +1,6 @@
 const { questions, categories } = require('../questions.js')
 const { CreateAPIMessage } = require('../utils.js');
+const { Bot } = require('../main.js');
 
 module.exports.run = async (client, message, args) => {
     const validArgs = categories.map(c => c.id);
@@ -109,24 +110,94 @@ const truncateText = (text, maxCharacters) => {
  * @param commandId The id of the question that is being asked
  */
 async function sendQuestion(interaction, desiredObj) {
+    const disabledServers = ['702194117030969344'];
+    const whiteListedChannels = [{serverId: '702194117030969344', allowedChannels: ['702506351305293956']}]
+
+    let client = await Bot();
+    const channel = interaction.channel;
+
+    //todo if this command is being send in a "disabled" server and this is
+    //todo not one of the whitelisted channels, send an error message 
+    if(disabledServers.includes(channel.guild.id))
+    {
+        const validChannel = whiteListedChannels.find(obj => obj.serverId == channel.guild.id);
+        if(validChannel)
+        {
+            const channelString = validChannel.allowedChannels.map(id => `https://discordapp.com/channels/${channel.guild.id}/${id}`).join(', ');
+            channel.send(`The bot is disabled from running faq commands in this channel. This is only allowed in the following channels: ${channelString}`)
+        }
+        else
+        {
+            channel.send('The bot is disabled from running faq commands in this server');
+        }
+        return;
+    }
+
+    //how many messages that need to past in order to send a new link
+    //?Note: maybe these could be configs
+    const messageLimit = 10;
+    const messageFluff = 20;
 
     //break the answer into different messages
     const answers = replacePlaceholders(desiredObj.answer).split('{breakMessage}');
-    for(let i = 0; i < answers.length; i++) {
-        if(i === 0) {
-            await interaction.channel.send(`## ${desiredObj.question}\n${answers[i]}`);
-        } 
-        else {
-            await interaction.channel.send(answers[i]);
-        }
 
-        if(desiredObj.images) {
-            const files = desiredObj.images.filter(img => img.index === i).map(obj => `src/img/${obj.name}`);
-            if(files.length > 0) {
-                await interaction.channel.send({files: files});
+    //the number of messages that will be sent to answer this question
+    const answerCount = getAnswerCount(answers, desiredObj.images); 
+
+    //get the last (messageLimit + answerCount + messageFluff) messages to see if the player has asked this question before 
+    //adding messageFluff to make sure we don't track deleted messages and interaction events
+    let messages = await channel.messages.fetch({ limit: messageLimit + answerCount + messageFluff  });
+    let newMessages = messages.filter(m => m.content && !m.deleted && m.author.id == client.user.id);
+
+    //check if the questions has been asked before
+    let duplicateAnswer = newMessages.find(m => m.content.includes(`## ${desiredObj.question}`))
+
+    //if it has link to the answer
+    if(duplicateAnswer)
+    {
+        await channel.send(`**${desiredObj.question}** has been answered here: https://discordapp.com/channels/${duplicateAnswer.guildId}/${duplicateAnswer.channelId}/${duplicateAnswer.id}`)
+    }
+
+    //Otherwise send the answer 
+    else
+    {
+        for(let i = 0; i < answers.length; i++) {
+            if(i === 0) {
+                await channel.send(`## ${desiredObj.question}\n${answers[i]}`);
+            } 
+            else {
+                await channel.send(answers[i]);
+            }
+    
+            if(desiredObj.images) {
+                const files = desiredObj.images.filter(img => img.index === i).map(obj => `src/img/${obj.name}`);
+                if(files.length > 0) {
+                    await channel.send({files: files});
+                }
             }
         }
     }
+}
+
+/**
+ * Says how many messages will be sent to say the entire answer
+ * @param {string[]} answers An array of the answer. Each element will be its own message
+ * @param {{index: number, name:string}[]} images All of the image that will be sent in the answer.
+ * @returns {number} The number of total messages that will be sent to say this answer
+ */
+function getAnswerCount(answers, images)
+{
+    //get the images that will be sent in separate files (if they exist)
+    if(!images)
+        return answers.length;
+    const indices = [];
+    for(const img of images) {
+        if(!indices.includes(img.index)) {
+            indices.push(img.index);
+        }
+    }
+
+    return answers.length + indices.length;
 }
 
 /**
