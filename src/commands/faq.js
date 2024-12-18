@@ -2,12 +2,23 @@ const { questions, categories } = require('../questions.js')
 const { CreateAPIMessage } = require('../utils.js');
 const { Bot } = require('../main.js');
 
+const disabledServers = ['702194117030969344'];
+const whiteListedChannels = [{serverId: '702194117030969344', allowedChannels: ['702506351305293956']}]
+
 module.exports.run = async (client, message, args) => {
+    const validator = validateCommand(message);
+    if(validator)
+    {
+        message.channel.send(validator);
+        return;
+    }
+
     const validArgs = categories.map(c => c.id);
     if(args._.length == 0) {
         message.channel.send(`Error: no category id argument was given. The valid list of categories are **${validArgs.join(", ")}**`)
         return;
     }
+
 
     const categoryId = args._[0].toLowerCase();
     
@@ -105,31 +116,48 @@ const truncateText = (text, maxCharacters) => {
 }
 
 /**
+ * Checks if the server and channel allows faq commands
+ * @param interaction The interaction object
+ * @returns {number|undefined} A string as to why the faq command can't be ran. Undefined if it can be ran
+ */
+function validateCommand(interaction)
+{
+    console.log(interaction);
+    const guild = interaction.channel.guild ?? interaction.guild;
+    const guildId = guild.id;
+
+    //if this command is being send in a "disabled" server and this is
+    //not one of the whitelisted channels, send an error message 
+    if(disabledServers.includes(guildId))
+    {
+        const validChannel = whiteListedChannels.find(obj => obj.serverId == guildId);
+        if(validChannel)
+        {
+            
+            const channelString = validChannel.allowedChannels.map(id => `https://discordapp.com/channels/${guildId}/${id}`).join(', ');
+            return `The bot is disabled from running faq commands in this channel. This is only allowed in the following channels: ${channelString}`;
+        }
+        else
+        {
+            return 'The bot is disabled from running faq commands in this server';
+        }
+    }
+}
+
+/**
  * Sends the answer of a specific question
  * @param interaction The interaction object
  * @param commandId The id of the question that is being asked
  */
 async function sendQuestion(interaction, desiredObj) {
-    const disabledServers = ['702194117030969344'];
-    const whiteListedChannels = [{serverId: '702194117030969344', allowedChannels: ['702506351305293956']}]
-
     let client = await Bot();
     const channel = interaction.channel;
 
-    //todo if this command is being send in a "disabled" server and this is
-    //todo not one of the whitelisted channels, send an error message 
-    if(disabledServers.includes(channel.guild.id))
+    const validator = validateCommand(interaction);
+
+    if(validator)
     {
-        const validChannel = whiteListedChannels.find(obj => obj.serverId == channel.guild.id);
-        if(validChannel)
-        {
-            const channelString = validChannel.allowedChannels.map(id => `https://discordapp.com/channels/${channel.guild.id}/${id}`).join(', ');
-            channel.send(`The bot is disabled from running faq commands in this channel. This is only allowed in the following channels: ${channelString}`)
-        }
-        else
-        {
-            channel.send('The bot is disabled from running faq commands in this server');
-        }
+        channel.send(validator);
         return;
     }
 
