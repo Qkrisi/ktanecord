@@ -2,8 +2,9 @@ const { questions, categories } = require('../questions.js')
 const { CreateAPIMessage } = require('../utils.js');
 const { Bot } = require('../main.js');
 
-const disabledServers = ['702194117030969344'];
-const whiteListedChannels = [{serverId: '702194117030969344', allowedChannels: ['702506351305293956']}]
+const disabledServers = ['702194117030969344', '160061833166716928'];
+const whiteListedChannels = [{serverId: '702194117030969344', allowedChannels: ['702506351305293956']},
+                             {serverId: '160061833166716928', allowedChannels: ['394275199509594113']}]
 
 module.exports.run = async (client, message, args) => {
     const validator = validateCommand(message);
@@ -133,7 +134,6 @@ function validateCommand(interaction)
         const validChannel = whiteListedChannels.find(obj => obj.serverId == guildId);
         if(validChannel)
         {
-            
             const channelString = validChannel.allowedChannels.map(id => `https://discordapp.com/channels/${guildId}/${id}`).join(', ');
             return `The bot is disabled from running faq commands in this channel. This is only allowed in the following channels: ${channelString}`;
         }
