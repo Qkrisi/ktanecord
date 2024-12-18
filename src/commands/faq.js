@@ -46,7 +46,10 @@ const placeholderInfo = {
     manualRepositoryLink: "[Repository of Manual Pages](<https://ktane.timwi.de>)",
     maintainerResponsibilities: "[Repo Maintainer Responsibilities](<https://docs.google.com/document/d/10rabFJES6avb8ime3Cw5LCd9p0663PbqVqzUrfehYac/edit?usp=sharing>)",
 	logFileAnalyzerLink: "[Logfile Analyzer](<https://ktane.timwi.de/More/Logfile%20Analyzer.html>)",
-    contributorTutorial: "[repo contributor video tutorial](<https://youtu.be/2Lxl7OAafIg>)"
+    contributorTutorial: "[repo contributor video tutorial](<https://youtu.be/2Lxl7OAafIg>)",
+    solvedReaction: "<:solved:504047360436076545>",
+    bipReaction: "<:bip:645138234858536970>",
+
 }
 
 /**
@@ -70,7 +73,10 @@ const replacePlaceholders = (text) => {
 		.replaceAll("{logFileAnalyzerLink}", placeholderInfo.logFileAnalyzerLink)
 		.replaceAll("{contributor-tutorial}", placeholderInfo.contributorTutorial)
     //ping roles/people
-    	.replaceAll("{logBotId}", placeholderInfo.logBotId);
+    	.replaceAll("{logBotId}", placeholderInfo.logBotId)
+    //emoji
+        .replaceAll(":solved:", placeholderInfo.solvedReaction)
+        .replaceAll(":bip:", placeholderInfo.bipReaction)
 
     
     //get rid of the any command ids with their actual name
