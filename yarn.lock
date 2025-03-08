@@ -28,19 +28,19 @@
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
-"@discordjs/rest@^2.4.0":
-  version "2.4.0"
-  resolved "https://registry.npmjs.org/@discordjs/rest/-/rest-2.4.0.tgz"
+"@discordjs/rest@^2.4.3":
+  version "2.4.3"
+  resolved "https://registry.yarnpkg.com/@discordjs/rest/-/rest-2.4.3.tgz#44cf066113f5ad6e7cee3f827d0815a6b1e0f843"
   dependencies:
     "@discordjs/collection" "^2.1.1"
     "@discordjs/util" "^1.1.1"
     "@sapphire/async-queue" "^1.5.3"
     "@sapphire/snowflake" "^3.5.3"
     "@vladfrangu/async_event_emitter" "^2.4.6"
-    discord-api-types "0.37.97"
+    discord-api-types "^0.37.119"
     magic-bytes.js "^1.10.0"
     tslib "^2.6.3"
-    undici "6.19.8"
+    undici "6.21.1"
 
 "@discordjs/util@^1.1.1":
   version "1.1.1"
@@ -102,17 +102,13 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz"
 
-discord-api-types@0.37.97:
-  version "0.37.97"
-  resolved "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.97.tgz"
-
 discord-api-types@^0.22.0:
   version "0.22.0"
   resolved "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.22.0.tgz"
 
-discord-api-types@^0.37.103:
-  version "0.37.103"
-  resolved "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.103.tgz"
+discord-api-types@^0.37.103, discord-api-types@^0.37.119:
+  version "0.37.119"
+  resolved "https://registry.yarnpkg.com/discord-api-types/-/discord-api-types-0.37.119.tgz#29e32f635351da32dd4c92defcafdeb65156ad33"
 
 discord.js@^13.0.1:
   version "13.0.1"
@@ -216,9 +212,9 @@ type-fest@^1.2.1:
   version "1.4.0"
   resolved "https://registry.npmjs.org/type-fest/-/type-fest-1.4.0.tgz"
 
-undici@6.19.8:
-  version "6.19.8"
-  resolved "https://registry.npmjs.org/undici/-/undici-6.19.8.tgz"
+undici@6.21.1:
+  version "6.21.1"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-6.21.1.tgz#336025a14162e6837e44ad7b819b35b6c6af0e05"
 
 vali-date@^1.0.0:
   version "1.0.0"
