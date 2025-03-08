@@ -17,9 +17,8 @@
   resolved "https://registry.npmjs.org/@discordjs/collection/-/collection-0.2.1.tgz"
 
 "@discordjs/collection@^2.1.1":
-  "integrity" "sha512-LiSusze9Tc7qF03sLCujF5iZp7K+vRNEDBZ86FT9aQAv3vxMLihUvKvpsCWiQ2DJq1tVckopKm1rxomgNUc9hg=="
-  "resolved" "https://registry.npmjs.org/@discordjs/collection/-/collection-2.1.1.tgz"
-  "version" "2.1.1"
+  version "2.1.1"
+  resolved "https://registry.npmjs.org/@discordjs/collection/-/collection-2.1.1.tgz"
 
 "@discordjs/form-data@^3.0.1":
   version "3.0.1"
@@ -30,34 +29,30 @@
     mime-types "^2.1.12"
 
 "@discordjs/rest@^2.4.0":
-  "integrity" "sha512-Xb2irDqNcq+O8F0/k/NaDp7+t091p+acb51iA4bCKfIn+WFWd6HrNvcsSbMMxIR9NjcMZS6NReTKygqiQN+ntw=="
-  "resolved" "https://registry.npmjs.org/@discordjs/rest/-/rest-2.4.0.tgz"
-  "version" "2.4.0"
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/@discordjs/rest/-/rest-2.4.0.tgz"
   dependencies:
     "@discordjs/collection" "^2.1.1"
     "@discordjs/util" "^1.1.1"
     "@sapphire/async-queue" "^1.5.3"
     "@sapphire/snowflake" "^3.5.3"
     "@vladfrangu/async_event_emitter" "^2.4.6"
-    "discord-api-types" "0.37.97"
-    "magic-bytes.js" "^1.10.0"
-    "tslib" "^2.6.3"
-    "undici" "6.19.8"
+    discord-api-types "0.37.97"
+    magic-bytes.js "^1.10.0"
+    tslib "^2.6.3"
+    undici "6.19.8"
 
 "@discordjs/util@^1.1.1":
-  "integrity" "sha512-eddz6UnOBEB1oITPinyrB2Pttej49M9FZQY8NxgEvc3tq6ZICZ19m70RsmzRdDHk80O9NoYN/25AqJl8vPVf/g=="
-  "resolved" "https://registry.npmjs.org/@discordjs/util/-/util-1.1.1.tgz"
-  "version" "1.1.1"
+  version "1.1.1"
+  resolved "https://registry.npmjs.org/@discordjs/util/-/util-1.1.1.tgz"
 
 "@sapphire/async-queue@^1.1.4", "@sapphire/async-queue@^1.5.3":
-  "integrity" "sha512-x7zadcfJGxFka1Q3f8gCts1F0xMwCKbZweM85xECGI0hBTeIZJGGCrHgLggihBoprlQ/hBmDR5LKfIPqnmHM3w=="
-  "resolved" "https://registry.npmjs.org/@sapphire/async-queue/-/async-queue-1.5.3.tgz"
-  "version" "1.5.3"
+  version "1.5.3"
+  resolved "https://registry.npmjs.org/@sapphire/async-queue/-/async-queue-1.5.3.tgz"
 
 "@sapphire/snowflake@^3.5.3":
-  "integrity" "sha512-jjmJywLAFoWeBi1W7994zZyiNWPIiqRRNAmSERxyg93xRGzNYvGjlZ0gR6x0F4gPRi2+0O6S71kOZYyr3cxaIQ=="
-  "resolved" "https://registry.npmjs.org/@sapphire/snowflake/-/snowflake-3.5.3.tgz"
-  "version" "3.5.3"
+  version "3.5.3"
+  resolved "https://registry.npmjs.org/@sapphire/snowflake/-/snowflake-3.5.3.tgz"
 
 "@sindresorhus/is@^4.0.1":
   version "4.0.1"
@@ -74,20 +69,18 @@
     "@types/node" "*"
 
 "@vladfrangu/async_event_emitter@^2.4.6":
-  "integrity" "sha512-RaI5qZo6D2CVS6sTHFKg1v5Ohq/+Bo2LZ5gzUEwZ/WkHhwtGTCB/sVLw8ijOkAUxasZ+WshN/Rzj4ywsABJ5ZA=="
-  "resolved" "https://registry.npmjs.org/@vladfrangu/async_event_emitter/-/async_event_emitter-2.4.6.tgz"
-  "version" "2.4.6"
+  version "2.4.6"
+  resolved "https://registry.npmjs.org/@vladfrangu/async_event_emitter/-/async_event_emitter-2.4.6.tgz"
 
-"asynckit@^0.4.0":
-  "integrity" "sha1-x57Zf380y48robyXkLzDZkdLS3k="
-  "resolved" "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz"
-  "version" "0.4.0"
+asynckit@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.npmjs.org/asynckit/-/asynckit-0.4.0.tgz"
 
-axios@^0.28.0:
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.28.0.tgz#801a4d991d0404961bccef46800e1170f8278c89"
+axios@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.8.2.tgz#fabe06e241dfe83071d4edfbcaa7b1c3a40f7979"
   dependencies:
-    follow-redirects "^1.15.0"
+    follow-redirects "^1.15.6"
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
@@ -109,24 +102,21 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz"
 
+discord-api-types@0.37.97:
+  version "0.37.97"
+  resolved "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.97.tgz"
+
 discord-api-types@^0.22.0:
   version "0.22.0"
   resolved "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.22.0.tgz"
 
-"discord-api-types@^0.37.103":
-  "integrity" "sha512-r+qitxXKe2l6KFw5odPdZSSqdEou+7eNC7BfbZ7mny5Me/K06wCTeKUMVeH/YsI9+4QQudskeQ307kr/7ppQ1A=="
-  "resolved" "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.103.tgz"
-  "version" "0.37.103"
+discord-api-types@^0.37.103:
+  version "0.37.103"
+  resolved "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.103.tgz"
 
-"discord-api-types@0.37.97":
-  "integrity" "sha512-No1BXPcVkyVD4ZVmbNgDKaBoqgeQ+FJpzZ8wqHkfmBnTZig1FcH3iPPersiK1TUIAzgClh2IvOuVUYfcWLQAOA=="
-  "resolved" "https://registry.npmjs.org/discord-api-types/-/discord-api-types-0.37.97.tgz"
-  "version" "0.37.97"
-
-"discord.js@^13.0.1":
-  "integrity" "sha512-pEODCFfxypBnGEYpSgjkn1jt70raCS1um7Zp0AXEfW1DcR29wISzQ/WeWdnjP5KTXGi0LTtkRiUjOsMgSoukxA=="
-  "resolved" "https://registry.npmjs.org/discord.js/-/discord.js-13.0.1.tgz"
-  "version" "13.0.1"
+discord.js@^13.0.1:
+  version "13.0.1"
+  resolved "https://registry.npmjs.org/discord.js/-/discord.js-13.0.1.tgz"
   dependencies:
     "@discordjs/builders" "^0.4.0"
     "@discordjs/collection" "^0.2.1"
@@ -147,14 +137,13 @@ enum@^3.0.4:
   version "3.0.4"
   resolved "https://registry.npmjs.org/enum/-/enum-3.0.4.tgz"
 
-follow-redirects@^1.15.0:
-  version "1.15.6"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.6.tgz#7f815c0cda4249c74ff09e95ef97c23b5fd0399b"
+follow-redirects@^1.15.6:
+  version "1.15.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
 
-"form-data@^4.0.0", "form-data@^4.0.1":
-  "integrity" "sha512-tzN8e4TX8+kkxGPK8D5u0FNmjPUjw3lwC9lSLxxoB/+GtsJG91CO8bSWy73APlgAZzZbXEYZJuxjkHH2w+Ezhw=="
-  "resolved" "https://registry.npmjs.org/form-data/-/form-data-4.0.1.tgz"
-  "version" "4.0.1"
+form-data@^4.0.0, form-data@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npmjs.org/form-data/-/form-data-4.0.1.tgz"
   dependencies:
     asynckit "^0.4.0"
     combined-stream "^1.0.8"
@@ -176,15 +165,13 @@ lodash@^4.17.15:
   version "4.17.21"
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
 
-"magic-bytes.js@^1.10.0":
-  "integrity" "sha512-/k20Lg2q8LE5xiaaSkMXk4sfvI+9EGEykFS4b0CHHGWqDYU0bGUFSwchNOMA56D7TCs9GwVTkqe9als1/ns8UQ=="
-  "resolved" "https://registry.npmjs.org/magic-bytes.js/-/magic-bytes.js-1.10.0.tgz"
-  "version" "1.10.0"
+magic-bytes.js@^1.10.0:
+  version "1.10.0"
+  resolved "https://registry.npmjs.org/magic-bytes.js/-/magic-bytes.js-1.10.0.tgz"
 
-"mime-db@1.49.0":
-  "integrity" "sha512-CIc8j9URtOVApSFCQIF+VBkX1RwXp/oMMOrqdyXSBXq5RWNEsRfyj1kiRnQgmNXmHxPoFIxOroKA3zcU9P+nAA=="
-  "resolved" "https://registry.npmjs.org/mime-db/-/mime-db-1.49.0.tgz"
-  "version" "1.49.0"
+mime-db@1.49.0:
+  version "1.49.0"
+  resolved "https://registry.npmjs.org/mime-db/-/mime-db-1.49.0.tgz"
 
 mime-types@^2.1.12:
   version "2.1.32"
@@ -221,24 +208,21 @@ ts-mixer@^6.0.0:
   version "6.0.0"
   resolved "https://registry.npmjs.org/ts-mixer/-/ts-mixer-6.0.0.tgz"
 
-"tslib@^2.3.0", "tslib@^2.6.3":
-  "integrity" "sha512-jWVzBLplnCmoaTr13V9dYbiQ99wvZRd0vNWaDRg+aVYRcjDF3nDksxFDE/+fkXnKhpnUUkmx5pK/v8mCtLVqZA=="
-  "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.8.0.tgz"
-  "version" "2.8.0"
+tslib@^2.3.0, tslib@^2.6.3:
+  version "2.8.0"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.8.0.tgz"
 
 type-fest@^1.2.1:
   version "1.4.0"
   resolved "https://registry.npmjs.org/type-fest/-/type-fest-1.4.0.tgz"
 
-"undici@6.19.8":
-  "integrity" "sha512-U8uCCl2x9TK3WANvmBavymRzxbfFYG+tAu+fgx3zxQy3qdagQqBLwJVrdyO1TBfUXvfKveMKJZhpvUYoOjM+4g=="
-  "resolved" "https://registry.npmjs.org/undici/-/undici-6.19.8.tgz"
-  "version" "6.19.8"
+undici@6.19.8:
+  version "6.19.8"
+  resolved "https://registry.npmjs.org/undici/-/undici-6.19.8.tgz"
 
-"vali-date@^1.0.0":
-  "integrity" "sha1-G5BKWWCfsyjvB4E4Qgk09rhnCaY="
-  "resolved" "https://registry.npmjs.org/vali-date/-/vali-date-1.0.0.tgz"
-  "version" "1.0.0"
+vali-date@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/vali-date/-/vali-date-1.0.0.tgz"
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
