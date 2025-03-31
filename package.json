@@ -1,8 +1,8 @@
 {
   "main": "src/main.js",
   "dependencies": {
-    "@discordjs/rest": "^2.4.0",
-    "axios": "^0.28.0",
+    "@discordjs/rest": "^2.4.3",
+    "axios": "^1.8.2",
     "dblapi.js": "^2.4.0",
     "discord-api-types": "^0.37.103",
     "discord.js": "^13.0.1",

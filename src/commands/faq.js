@@ -116,22 +116,22 @@ const truncateText = (text, maxCharacters) => {
  */
 async function sendQuestion(interaction, desiredObj) {
 
-    //break the answer into different messages
-    const answers = replacePlaceholders(desiredObj.answer).split('{breakMessage}');
-    for(let i = 0; i < answers.length; i++) {
-        if(i === 0) {
-            await interaction.channel.send(`## ${desiredObj.question}\n${answers[i]}`);
-        } 
-        else {
-            await interaction.channel.send(answers[i]);
-        }
+    const wikiUrl = "https://github.com/BlckHawker/ktane-faq-bot-wiki/blob/main/README.md";
 
-        if(desiredObj.images) {
-            const files = desiredObj.images.filter(img => img.index === i).map(obj => `src/img/${obj.name}`);
-            if(files.length > 0) {
-                await interaction.channel.send({files: files});
-            }
+    const answer = replacePlaceholders(desiredObj.answer);
+    await interaction.channel.send(`## ${desiredObj.question}\n${answer}`)
+
+    // if the message is long, look for the full answer on the wiki page
+    const invalidCharacters = ['?', '.', ',', '’', ':', '"']
+    if(desiredObj.longAnswer)
+    {
+        let octothorpe = desiredObj.question.toLowerCase().replaceAll(" ", "-");
+        
+        for(let char of invalidCharacters)
+        {
+            octothorpe = octothorpe.replaceAll(char, "");
         }
+        await interaction.channel.send(`See full answer on the [wiki page](<${wikiUrl}#${octothorpe}>)`)
     }
 }
 
