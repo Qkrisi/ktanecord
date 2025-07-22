@@ -7,7 +7,7 @@
     "discord-api-types": "^0.37.103",
     "discord.js": "^13.0.1",
     "enum": "^3.0.4",
-    "form-data": "^4.0.1",
+    "form-data": "^4.0.4",
     "larg": "0.0.4",
     "lodash": "^4.17.15",
     "wumpfetch": "^0.2.13"
